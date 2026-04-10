@@ -1,8 +1,18 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import DashboardLayout from "../components/layout/DashboardLayout";
 
 export default function PrivateRoute() {
-    const token = localStorage.getItem("token");
+    const { user, loading } = useAuth();
     
-    // Utilize Outlet to render matching child routes, enabling nested routing across multiple future pages
-    return token ? <Outlet /> : <Navigate to="/" replace />;
+    if (loading) return null; // Or a spinner/skeleton
+    
+    // Utilize Outlet to render matching child routes within the DashboardLayout 
+    return user ? (
+        <DashboardLayout>
+            <Outlet />
+        </DashboardLayout>
+    ) : (
+        <Navigate to="/" replace />
+    );
 }

@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
+    const { login } = useAuth();
     const {
         register,
         handleSubmit,
@@ -15,12 +16,11 @@ export default function Login() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
-    // Prevent 'super admin' from lingering on login page if already authenticated.
+    // Prevent authenticated users from lingering on login page.
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                // Decode JWT payload properly (Base64url decoded)
                 const base64Url = token.split('.')[1];
                 if (base64Url) {
                     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -29,8 +29,7 @@ export default function Login() {
                     }).join(''));
 
                     const payload = JSON.parse(jsonPayload);
-                    // Checking payload containing user roles
-                    if (payload?.role === "super admin" || payload?.user?.role === "super admin") {
+                    if (payload) {
                         navigate("/dashboard", { replace: true });
                     }
                 }
@@ -46,11 +45,10 @@ export default function Login() {
         try {
             const res = await api.post("/auth/login", data);
             if (res.data && res.data.token) {
-                localStorage.setItem("token", res.data.token);
-                localStorage.setItem("user", JSON.stringify(res.data.user));
+                // Use the centralized login function to update state immediately
+                login(res.data.user, res.data.token);
                 toast.success("Login successful!");
                 navigate("/dashboard", { replace: true });
-                // window.location.href = "/dashboard";
             }
         } catch (err) {
             // Error is handled globally by axios interceptor
