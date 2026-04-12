@@ -45,7 +45,7 @@ const SubMenu = ({ item }) => {
                             transition={{ duration: 0.2 }}
                             className="flex-1 overflow-hidden"
                         >
-                            <span className="text-sm font-medium whitespace-nowrap ml-1 flex items-center justify-between">
+                            <span className="text-xs font-medium whitespace-nowrap ml-1 flex items-center justify-between">
                                 {item.label}
                                 <ChevronDown
                                     size={14}

@@ -102,7 +102,7 @@ const Sidebar = () => {
                                     exit={{ opacity: 0, x: -10 }}
                                     className="flex flex-col overflow-hidden"
                                 >
-                                    <span className="font-bold text-gray-900 dark:text-gray-100 whitespace-nowrap text-sm">Mahallu CRM</span>
+                                    <span className="font-bold text-gray-900 dark:text-gray-100 whitespace-nowrap text-xs">Mahallu CRM</span>
                                     <span className="text-[10px] text-gray-400 font-medium">v1.2.0</span>
                                 </motion.div>
                             )}
@@ -115,7 +115,7 @@ const Sidebar = () => {
                     {filteredMenu.map((section, idx) => (
                         <div key={idx} className="space-y-2">
                             {!isCollapsed && (
-                                <h3 className="text-[10px] font-bold text-gray-400 px-3 tracking-widest uppercase mb-3 text-sm">
+                                <h3 className="text-[10px] font-bold text-gray-400 px-3 tracking-widest uppercase mb-3 text-xs">
                                     {section.title}
                                 </h3>
                             )}
@@ -147,7 +147,7 @@ const Sidebar = () => {
                         </div>
                         {!isCollapsed && (
                             <div className="flex-1 overflow-hidden">
-                                <p className="text-sm font-bold text-gray-900 dark:text-gray-100 truncate">{user?.name || 'User'}</p>
+                                <p className="text-xs font-bold text-gray-900 dark:text-gray-100 truncate">{user?.name || 'User'}</p>
                                 <p className="text-[10px] text-gray-500 truncate">{user?.email || 'user@example.com'}</p>
                             </div>
                         )}
