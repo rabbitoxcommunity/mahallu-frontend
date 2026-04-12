@@ -12,12 +12,22 @@ export default function FamilyRegistration() {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [totalEntries, setTotalEntries] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
 
     const fetchFamilies = async () => {
         try {
             setLoading(true);
-            const { data } = await axios.get('/family');
-            setFamilies(data);
+            const { data } = await axios.get('/family', {
+                params: {
+                    page: currentPage,
+                    limit: itemsPerPage,
+                    search: searchTerm
+                }
+            });
+            setFamilies(data.families || []);
+            setTotalEntries(data.total || 0);
+            setTotalPages(data.pages || 0);
         } catch (error) {
             // error is handled by global axios interceptor
         } finally {
@@ -26,23 +36,11 @@ export default function FamilyRegistration() {
     };
 
     useEffect(() => {
-        fetchFamilies();
-    }, []);
-
-    // Derived Data
-    const filteredFamilies = useMemo(() => {
-        return families.filter(item => 
-            item.family_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            item.family_code?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [families, searchTerm]);
-
-    const totalPages = Math.ceil(filteredFamilies.length / itemsPerPage);
-    
-    const paginatedFamilies = useMemo(() => {
-        const start = (currentPage - 1) * itemsPerPage;
-        return filteredFamilies.slice(start, start + itemsPerPage);
-    }, [filteredFamilies, currentPage, itemsPerPage]);
+        const timeoutId = setTimeout(() => {
+            fetchFamilies();
+        }, 500); // Debounce search
+        return () => clearTimeout(timeoutId);
+    }, [currentPage, itemsPerPage, searchTerm]);
 
     // Handle Page Resets
     useEffect(() => {
@@ -126,7 +124,7 @@ export default function FamilyRegistration() {
                                         </div>
                                     </td>
                                 </tr>
-                            ) : paginatedFamilies.length === 0 ? (
+                            ) : families.length === 0 ? (
                                 <tr>
                                     <td colSpan="5" className="px-6 py-20 text-center">
                                         <div className="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400">
@@ -136,7 +134,7 @@ export default function FamilyRegistration() {
                                     </td>
                                 </tr>
                             ) : (
-                                paginatedFamilies.map((family) => (
+                                families.map((family) => (
                                     <tr key={family._id} className="bg-white dark:bg-[#1e1f25] hover:bg-gray-50 dark:hover:bg-[#252731] border-b border-gray-50 dark:border-gray-800/50 transition-colors">
                                         <td className="px-6 py-4 font-semibold text-gray-900 dark:text-white whitespace-nowrap">
                                             {family.family_code}
@@ -176,10 +174,10 @@ export default function FamilyRegistration() {
                 </div>
 
                 {/* Pagination Details and Controls */}
-                {!loading && filteredFamilies.length > 0 && (
+                {!loading && families.length > 0 && (
                     <div className="p-4 md:p-6 border-t border-gray-100 dark:border-gray-800 flex flex-col sm:flex-row items-center justify-between gap-4">
                         <span className="text-xs text-gray-500 dark:text-gray-400">
-                            Showing <span className="font-semibold text-gray-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-semibold text-gray-900 dark:text-white">{Math.min(currentPage * itemsPerPage, filteredFamilies.length)}</span> of <span className="font-semibold text-gray-900 dark:text-white">{filteredFamilies.length}</span> Entries
+                            Showing <span className="font-semibold text-gray-900 dark:text-white">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-semibold text-gray-900 dark:text-white">{Math.min(currentPage * itemsPerPage, totalEntries)}</span> of <span className="font-semibold text-gray-900 dark:text-white">{totalEntries}</span> Entries
                         </span>
 
                         <div className="inline-flex rounded-lg shadow-sm overflow-hidden border border-gray-200 dark:border-gray-700">
