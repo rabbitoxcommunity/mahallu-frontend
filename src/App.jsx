@@ -12,6 +12,8 @@ import AddFamily from "./pages/Family/AddFamily";
 import AddHouse from "./pages/Family/AddHouse";
 import MemberRegistration from "./pages/Family/MemberRegistration";
 import AddMember from "./pages/Family/AddMember";
+import HouseDetailedView from "./pages/Family/HouseDetailedView";
+import MemberDetailedView from "./pages/Family/MemberDetailedView";
 import Analytics from "./pages/Analytics";
 
 function App() {
@@ -37,13 +39,14 @@ function App() {
                             <Route path="/family/register" element={<FamilyRegistration />} />
                             <Route path="/family/register/create" element={<AddFamily />} />
                             
-                            {/* House Routes */}
                             <Route path="/family/house/register" element={<HouseRegistration />} />
                             <Route path="/family/house/add" element={<AddHouse />} />
+                            <Route path="/family/house/:id" element={<HouseDetailedView />} />
                             
                             {/* Member Routes */}
                             <Route path="/family/member/register" element={<MemberRegistration />} />
                             <Route path="/family/member/add" element={<AddMember />} />
+                            <Route path="/family/member/:id" element={<MemberDetailedView />} />
                             
                             {/* Add other protected pages here */}
                         </Route>

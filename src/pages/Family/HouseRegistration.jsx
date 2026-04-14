@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Edit, Eye, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
 import SlideOver from '../../components/ui/SlideOver';
 import HouseForm from './HouseForm';
 
 export default function HouseRegistration() {
+    const navigate = useNavigate();
     const [houses, setHouses] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -98,8 +100,12 @@ export default function HouseRegistration() {
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
-                    <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors">
-                        <Eye size={16} />
+                    <button 
+                        onClick={() => navigate(`/family/house/${row._id}`)}
+                        className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
+                        title="View Details"
+                    >
+                        <Eye size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
                     <button
                         onClick={() => handleEdit(row)}
