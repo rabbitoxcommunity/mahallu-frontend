@@ -25,11 +25,12 @@ export const menuConfig = [
             {
                 label: "കുടുംബ വിവരങ്ങൾ",
                 icon: Box,
-                path: "/products",
+                path: "/family",
                 roles: ["superAdmin"],
                 subItems: [
                     { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["superAdmin"] },
-                    { label: "വീടിൻ്റെ രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["superAdmin"] }
+                    { label: "വീടിൻ്റെ രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["superAdmin"] },
+                    { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["superAdmin"] }
                 ]
             },
             // {

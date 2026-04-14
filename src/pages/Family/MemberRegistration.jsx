@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Eye, Home, User, Users } from 'lucide-react';
+import { Edit, Eye, User, Home, UserCheck } from 'lucide-react';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
 
-export default function HouseRegistration() {
-    const [houses, setHouses] = useState([]);
+export default function MemberRegistration() {
+    const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Pagination & Search states
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [totalEntries, setTotalEntries] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
-    const fetchHouses = async () => {
+    const fetchMembers = async () => {
         try {
             setLoading(true);
-            const { data } = await axios.get('/house', {
+            const { data } = await axios.get('/member/all', { // Assuming /member/all or similar exists for list
                 params: {
                     page: currentPage,
                     limit: itemsPerPage,
                     search: searchTerm
                 }
             });
-            setHouses(data.houses || []);
+            setMembers(data.members || []);
             setTotalEntries(data.total || 0);
             setTotalPages(data.pages || 0);
         } catch (error) {
-            console.error("Error fetching houses", error);
+            console.error("Error fetching members", error);
         } finally {
             setLoading(false);
         }
@@ -35,7 +36,7 @@ export default function HouseRegistration() {
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {
-            fetchHouses();
+            fetchMembers();
         }, 500);
         return () => clearTimeout(timeoutId);
     }, [currentPage, itemsPerPage, searchTerm]);
@@ -46,41 +47,49 @@ export default function HouseRegistration() {
 
     const columns = [
         {
-            header: "കോഡ് (Code)",
-            accessor: "house_code",
-            cellClassName: "font-semibold text-gray-900 dark:text-white"
-        },
-        {
-            header: "വീട്ടുടമയുടെ പേര് (Householder Name)",
-            accessor: "householder_name",
+            header: "പേര് (Name)",
+            accessor: "full_name",
             cell: (row) => (
                 <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-[#0B65F6]/10 flex items-center justify-center text-[#0B65F6]">
+                    <div className="w-8 h-8 rounded-full bg-[#0B65F6]/10 flex items-center justify-center text-[#0B65F6]">
                         <User size={14} />
                     </div>
-                    <span className="font-medium text-gray-800 dark:text-gray-200">{row.householder_name}</span>
+                    <div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{row.full_name}</div>
+                        <div className="text-[10px] text-gray-500 uppercase tracking-wider">{row.relation_to_head || "Member"}</div>
+                    </div>
                 </div>
             )
         },
         {
-            header: "കുടുംബം (Family)",
+            header: "വീട് (House)",
             cell: (row) => (
                 <div className="flex flex-col">
-                    <span className="text-gray-800 dark:text-gray-200">{row.family_id?.family_name || "-"}</span>
-                    <span className="text-[10px] text-gray-500 uppercase">{row.family_id?.family_code}</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{row.house_id?.house_name || "N/A"}</span>
+                    <span className="text-[10px] text-gray-500">{row.house_id?.house_code}</span>
                 </div>
             )
         },
         {
-            header: "സാമ്പത്തിക നില (Status)",
-            cell: (row) => (
-                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${row.economic_status === 'Poor' ? 'bg-red-100 text-red-700' :
-                    row.economic_status === 'Miskeen' ? 'bg-orange-100 text-orange-700' :
-                        'bg-blue-100 text-blue-700'
-                    }`}>
-                    {row.economic_status}
+            header: "ലിംഗം (Gender)",
+            accessor: "gender",
+            cellClassName: "text-gray-600 dark:text-gray-400"
+        },
+        {
+            header: "വയസ്സ് (Age)",
+            cell: (row) => {
+                if (!row.dob) return "-";
+                const age = new Date().getFullYear() - new Date(row.dob).getFullYear();
+                return age;
+            }
+        },
+        {
+            header: "Head",
+            cell: (row) => row.is_family_head ? (
+                <span className="flex items-center gap-1 text-[#0B65F6] font-medium text-[11px]">
+                    <UserCheck size={14} /> Head
                 </span>
-            )
+            ) : null
         },
         {
             header: "Actions",
@@ -100,10 +109,10 @@ export default function HouseRegistration() {
 
     return (
         <DataTable
-            title="വീട് വിവരങ്ങൾ (Houses)"
-            subtitle="Manage and view all registered houses."
+            title="അംഗങ്ങൾ (Members)"
+            subtitle="Manage and view all registered members."
             columns={columns}
-            data={houses}
+            data={members}
             loading={loading}
             pagination={{
                 currentPage,
@@ -116,11 +125,11 @@ export default function HouseRegistration() {
             search={{
                 value: searchTerm,
                 onChange: setSearchTerm,
-                placeholder: "വീട് തിരയുക (Search house...)"
+                placeholder: "അംഗത്തെ തിരയുക (Search member...)"
             }}
             createButton={{
-                label: "പുതിയ വീട് (Add House)",
-                path: "/family/house/add"
+                label: "പുതിയ അംഗം (Add Member)",
+                path: "/family/member/add"
             }}
         />
     );
