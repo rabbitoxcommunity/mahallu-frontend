@@ -69,8 +69,8 @@ export default function FamilyRegistration() {
             header: "സ്റ്റാറ്റസ് (Status)",
             cell: (row) => (
                 <span className={`px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider rounded-full ${row.is_active
-                        ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
-                        : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
+                    ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
+                    : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
                     }`}>
                     {row.is_active ? 'Active' : 'Inactive'}
                 </span>
@@ -81,9 +81,6 @@ export default function FamilyRegistration() {
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
-                    <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 dark:hover:bg-[#0B65F6]/10 rounded-lg transition-colors group">
-                        <Eye size={16} className="group-hover:scale-110 transition-transform" />
-                    </button>
                     <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 dark:hover:bg-[#0B65F6]/10 rounded-lg transition-colors group">
                         <Edit size={16} className="group-hover:scale-110 transition-transform" />
                     </button>

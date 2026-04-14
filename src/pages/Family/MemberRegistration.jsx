@@ -62,10 +62,10 @@ export default function MemberRegistration() {
             )
         },
         {
-            header: "വീട് (House)",
+            header: "വീട്ടുടമ (Householder)",
             cell: (row) => (
                 <div className="flex flex-col">
-                    <span className="font-medium text-gray-800 dark:text-gray-200">{row.house_id?.house_name || "N/A"}</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200">{row.house_id?.householder_name || "N/A"}</span>
                     <span className="text-[10px] text-gray-500">{row.house_id?.house_code}</span>
                 </div>
             )
