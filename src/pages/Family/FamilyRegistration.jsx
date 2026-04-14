@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Eye } from 'lucide-react';
+import { Edit } from 'lucide-react';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
+import SlideOver from '../../components/ui/SlideOver';
+import FamilyForm from './FamilyForm';
 
 export default function FamilyRegistration() {
     const [families, setFamilies] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Pagination & Search states
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [totalEntries, setTotalEntries] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+
+    // Edit state
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [selectedFamily, setSelectedFamily] = useState(null);
 
     const fetchFamilies = async () => {
         try {
@@ -41,10 +46,14 @@ export default function FamilyRegistration() {
         return () => clearTimeout(timeoutId);
     }, [currentPage, itemsPerPage, searchTerm]);
 
-    // Reset page when search or limit changes
     useEffect(() => {
         setCurrentPage(1);
     }, [searchTerm, itemsPerPage]);
+
+    const handleEdit = (family) => {
+        setSelectedFamily(family);
+        setIsEditOpen(true);
+    };
 
     const columns = [
         {
@@ -81,7 +90,10 @@ export default function FamilyRegistration() {
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
-                    <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 dark:hover:bg-[#0B65F6]/10 rounded-lg transition-colors group">
+                    <button 
+                        onClick={() => handleEdit(row)}
+                        className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 dark:hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
+                    >
                         <Edit size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
                 </div>
@@ -90,29 +102,47 @@ export default function FamilyRegistration() {
     ];
 
     return (
-        <DataTable
-            title="കുടുംബ വിവരങ്ങൾ (Families)"
-            subtitle="Manage and view all registered families."
-            columns={columns}
-            data={families}
-            loading={loading}
-            pagination={{
-                currentPage,
-                totalPages,
-                totalEntries,
-                itemsPerPage,
-                onPageChange: setCurrentPage,
-                onItemsPerPageChange: setItemsPerPage
-            }}
-            search={{
-                value: searchTerm,
-                onChange: setSearchTerm,
-                placeholder: "കുടുംബം അന്വേഷിക്കുക (Search...)"
-            }}
-            createButton={{
-                label: "പുതിയ കുടുംബം (Add Family)",
-                path: "/family/register/create"
-            }}
-        />
+        <>
+            <DataTable
+                title="കുടുംബ വിവരങ്ങൾ (Families)"
+                subtitle="Manage and view all registered families."
+                columns={columns}
+                data={families}
+                loading={loading}
+                pagination={{
+                    currentPage,
+                    totalPages,
+                    totalEntries,
+                    itemsPerPage,
+                    onPageChange: setCurrentPage,
+                    onItemsPerPageChange: setItemsPerPage
+                }}
+                search={{
+                    value: searchTerm,
+                    onChange: setSearchTerm,
+                    placeholder: "കുടുംബം അന്വേഷിക്കുക (Search...)"
+                }}
+                createButton={{
+                    label: "പുതിയ കുടുംബം (Add Family)",
+                    path: "/family/register/create"
+                }}
+            />
+
+            <SlideOver
+                isOpen={isEditOpen}
+                onClose={() => setIsEditOpen(false)}
+                title="കുടുംബ വിവരങ്ങൾ മാറ്റുക (Edit Family)"
+                subtitle={`Editing details for ${selectedFamily?.family_name}`}
+            >
+                <FamilyForm 
+                    initialData={selectedFamily} 
+                    onSuccess={() => {
+                        setIsEditOpen(false);
+                        fetchFamilies();
+                    }}
+                    onCancel={() => setIsEditOpen(false)}
+                />
+            </SlideOver>
+        </>
     );
 }

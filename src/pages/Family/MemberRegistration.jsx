@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Eye, User, Home, UserCheck } from 'lucide-react';
+import { Edit, Eye, User, UserCheck } from 'lucide-react';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
+import SlideOver from '../../components/ui/SlideOver';
+import MemberForm from './MemberForm';
 
 export default function MemberRegistration() {
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // Pagination & Search states
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [totalEntries, setTotalEntries] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
 
+    // Edit state
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [selectedMember, setSelectedMember] = useState(null);
+
     const fetchMembers = async () => {
         try {
             setLoading(true);
-            const { data } = await axios.get('/member/all', { // Assuming /member/all or similar exists for list
+            const { data } = await axios.get('/member/all', {
                 params: {
                     page: currentPage,
                     limit: itemsPerPage,
@@ -45,6 +50,11 @@ export default function MemberRegistration() {
         setCurrentPage(1);
     }, [searchTerm, itemsPerPage]);
 
+    const handleEdit = (member) => {
+        setSelectedMember(member);
+        setIsEditOpen(true);
+    };
+
     const columns = [
         {
             header: "പേര് (Name)",
@@ -55,7 +65,7 @@ export default function MemberRegistration() {
                         <User size={14} />
                     </div>
                     <div>
-                        <div className="font-semibold text-gray-900 dark:text-white">{row.full_name}</div>
+                        <div className="font-semibold text-gray-900 dark:text-white whitespace-nowrap">{row.full_name}</div>
                         <div className="text-[10px] text-gray-500 uppercase tracking-wider">{row.relation_to_head || "Member"}</div>
                     </div>
                 </div>
@@ -65,7 +75,7 @@ export default function MemberRegistration() {
             header: "വീട്ടുടമ (Householder)",
             cell: (row) => (
                 <div className="flex flex-col">
-                    <span className="font-medium text-gray-800 dark:text-gray-200">{row.house_id?.householder_name || "N/A"}</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">{row.house_id?.householder_name || "N/A"}</span>
                     <span className="text-[10px] text-gray-500">{row.house_id?.house_code}</span>
                 </div>
             )
@@ -99,8 +109,11 @@ export default function MemberRegistration() {
                     <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors">
                         <Eye size={16} />
                     </button>
-                    <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors">
-                        <Edit size={16} />
+                    <button 
+                        onClick={() => handleEdit(row)}
+                        className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
+                    >
+                        <Edit size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
                 </div>
             )
@@ -108,29 +121,47 @@ export default function MemberRegistration() {
     ];
 
     return (
-        <DataTable
-            title="അംഗങ്ങൾ (Members)"
-            subtitle="Manage and view all registered members."
-            columns={columns}
-            data={members}
-            loading={loading}
-            pagination={{
-                currentPage,
-                totalPages,
-                totalEntries,
-                itemsPerPage,
-                onPageChange: setCurrentPage,
-                onItemsPerPageChange: setItemsPerPage
-            }}
-            search={{
-                value: searchTerm,
-                onChange: setSearchTerm,
-                placeholder: "അംഗത്തെ തിരയുക (Search member...)"
-            }}
-            createButton={{
-                label: "പുതിയ അംഗം (Add Member)",
-                path: "/family/member/add"
-            }}
-        />
+        <>
+            <DataTable
+                title="അംഗങ്ങൾ (Members)"
+                subtitle="Manage and view all registered members."
+                columns={columns}
+                data={members}
+                loading={loading}
+                pagination={{
+                    currentPage,
+                    totalPages,
+                    totalEntries,
+                    itemsPerPage,
+                    onPageChange: setCurrentPage,
+                    onItemsPerPageChange: setItemsPerPage
+                }}
+                search={{
+                    value: searchTerm,
+                    onChange: setSearchTerm,
+                    placeholder: "അംഗത്തെ തിരയുക (Search member...)"
+                }}
+                createButton={{
+                    label: "പുതിയ അംഗം (Add Member)",
+                    path: "/family/member/add"
+                }}
+            />
+
+            <SlideOver
+                isOpen={isEditOpen}
+                onClose={() => setIsEditOpen(false)}
+                title="അംഗത്തിന്റെ വിവരങ്ങൾ മാറ്റുക (Edit Member)"
+                subtitle={`Editing details for ${selectedMember?.full_name}`}
+            >
+                <MemberForm 
+                    initialData={selectedMember}
+                    onSuccess={() => {
+                        setIsEditOpen(false);
+                        fetchMembers();
+                    }}
+                    onCancel={() => setIsEditOpen(false)}
+                />
+            </SlideOver>
+        </>
     );
 }

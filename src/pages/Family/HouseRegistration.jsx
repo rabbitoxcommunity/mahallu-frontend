@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Edit, Eye, Home, User, Users } from 'lucide-react';
+import { Edit, Eye, User } from 'lucide-react';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
+import SlideOver from '../../components/ui/SlideOver';
+import HouseForm from './HouseForm';
 
 export default function HouseRegistration() {
     const [houses, setHouses] = useState([]);
@@ -12,6 +14,10 @@ export default function HouseRegistration() {
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const [totalEntries, setTotalEntries] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+
+    // Edit state
+    const [isEditOpen, setIsEditOpen] = useState(false);
+    const [selectedHouse, setSelectedHouse] = useState(null);
 
     const fetchHouses = async () => {
         try {
@@ -44,11 +50,16 @@ export default function HouseRegistration() {
         setCurrentPage(1);
     }, [searchTerm, itemsPerPage]);
 
+    const handleEdit = (house) => {
+        setSelectedHouse(house);
+        setIsEditOpen(true);
+    };
+
     const columns = [
         {
             header: "കോഡ് (Code)",
             accessor: "house_code",
-            cellClassName: "font-semibold text-gray-900 dark:text-white"
+            cellClassName: "font-semibold text-gray-900 dark:text-white whitespace-nowrap"
         },
         {
             header: "വീട്ടുടമയുടെ പേര് (Householder Name)",
@@ -58,7 +69,7 @@ export default function HouseRegistration() {
                     <div className="w-8 h-8 rounded-lg bg-[#0B65F6]/10 flex items-center justify-center text-[#0B65F6]">
                         <User size={14} />
                     </div>
-                    <span className="font-medium text-gray-800 dark:text-gray-200">{row.householder_name}</span>
+                    <span className="font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">{row.householder_name}</span>
                 </div>
             )
         },
@@ -66,7 +77,7 @@ export default function HouseRegistration() {
             header: "കുടുംബം (Family)",
             cell: (row) => (
                 <div className="flex flex-col">
-                    <span className="text-gray-800 dark:text-gray-200">{row.family_id?.family_name || "-"}</span>
+                    <span className="text-gray-800 dark:text-gray-200 whitespace-nowrap">{row.family_id?.family_name || "-"}</span>
                     <span className="text-[10px] text-gray-500 uppercase">{row.family_id?.family_code}</span>
                 </div>
             )
@@ -90,8 +101,11 @@ export default function HouseRegistration() {
                     <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors">
                         <Eye size={16} />
                     </button>
-                    <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors">
-                        <Edit size={16} />
+                    <button 
+                        onClick={() => handleEdit(row)}
+                        className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
+                    >
+                        <Edit size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
                 </div>
             )
@@ -99,29 +113,47 @@ export default function HouseRegistration() {
     ];
 
     return (
-        <DataTable
-            title="വീട് വിവരങ്ങൾ (Houses)"
-            subtitle="Manage and view all registered houses."
-            columns={columns}
-            data={houses}
-            loading={loading}
-            pagination={{
-                currentPage,
-                totalPages,
-                totalEntries,
-                itemsPerPage,
-                onPageChange: setCurrentPage,
-                onItemsPerPageChange: setItemsPerPage
-            }}
-            search={{
-                value: searchTerm,
-                onChange: setSearchTerm,
-                placeholder: "വീട് തിരയുക (Search house...)"
-            }}
-            createButton={{
-                label: "പുതിയ വീട് (Add House)",
-                path: "/family/house/add"
-            }}
-        />
+        <>
+            <DataTable
+                title="വീട് വിവരങ്ങൾ (Houses)"
+                subtitle="Manage and view all registered houses."
+                columns={columns}
+                data={houses}
+                loading={loading}
+                pagination={{
+                    currentPage,
+                    totalPages,
+                    totalEntries,
+                    itemsPerPage,
+                    onPageChange: setCurrentPage,
+                    onItemsPerPageChange: setItemsPerPage
+                }}
+                search={{
+                    value: searchTerm,
+                    onChange: setSearchTerm,
+                    placeholder: "വീട് തിരയുക (Search house...)"
+                }}
+                createButton={{
+                    label: "പുതിയ വീട് (Add House)",
+                    path: "/family/house/add"
+                }}
+            />
+
+            <SlideOver
+                isOpen={isEditOpen}
+                onClose={() => setIsEditOpen(false)}
+                title="വീട് വിവരങ്ങൾ മാറ്റുക (Edit House)"
+                subtitle={`Editing details for ${selectedHouse?.householder_name}`}
+            >
+                <HouseForm 
+                    initialData={selectedHouse}
+                    onSuccess={() => {
+                        setIsEditOpen(false);
+                        fetchHouses();
+                    }}
+                    onCancel={() => setIsEditOpen(false)}
+                />
+            </SlideOver>
+        </>
     );
 }
