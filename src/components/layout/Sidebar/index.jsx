@@ -89,10 +89,10 @@ const Sidebar = () => {
                 `}
             >
                 {/* Logo Section */}
-                <div className="p-6 flex items-center justify-between">
+                <div className="p-6 flex items-center justify-between border-b border-gray-200 dark:border-gray-800 mb-5">
                     <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-[#0B65F6] rounded-xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-blue-500/20">
-                            <div className="w-3 h-3 bg-white rounded-md" />
+                        <div className="w-10 h-10  flex items-center justify-center">
+                            <img src="/logo.png" alt="" className="w-full h-full object-cover" />
                         </div>
                         <AnimatePresence mode="wait">
                             {!isCollapsed && (
@@ -102,8 +102,8 @@ const Sidebar = () => {
                                     exit={{ opacity: 0, x: -10 }}
                                     className="flex flex-col overflow-hidden"
                                 >
-                                    <span className="font-bold text-gray-900 dark:text-gray-100 whitespace-nowrap text-xs">Mahallu CRM</span>
-                                    <span className="text-[10px] text-gray-400 font-medium">v1.2.0</span>
+                                    <span className="font-bold whitespace-nowrap text-xl leading-none text-[#0B65F6]">Mahallu</span>
+                                    <span className="font-light whitespace-nowrap text-md leading-none text-gray-900 dark:text-gray-400">Connect</span>
                                 </motion.div>
                             )}
                         </AnimatePresence>

@@ -64,10 +64,13 @@ export default function Login() {
                 <div className="w-full max-w-md mx-auto">
                     {/* Logo area */}
                     <div className="flex items-center gap-2 mb-12">
-                        <div className="w-8 h-8 bg-[#0B65F6] rounded-md flex items-center justify-center">
-                            <div className="w-3 h-3 bg-white rounded-full"></div>
+                        <div className="w-14 h-14  flex items-center justify-center">
+                            <img src="/logo.png" alt="" className="w-full h-full object-cover" />
                         </div>
-                        <span className="text-xl font-bold text-gray-900">Mahallu CRM</span>
+                        <div>
+                            <div className="text-2xl font-bold text-gray-900 leading-none">Mahallu</div>
+                            <div className="font-light text-gray-900 dark:text-gray-400 leading-none">Connect</div>
+                        </div>
                     </div>
 
                     <h2 className="text-3xl font-bold text-gray-900 mb-2">Log in to your Account</h2>

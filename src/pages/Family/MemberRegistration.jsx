@@ -109,7 +109,7 @@ export default function MemberRegistration() {
                     <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors">
                         <Eye size={16} />
                     </button>
-                    <button 
+                    <button
                         onClick={() => handleEdit(row)}
                         className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
                     >
@@ -152,8 +152,9 @@ export default function MemberRegistration() {
                 onClose={() => setIsEditOpen(false)}
                 title="അംഗത്തിന്റെ വിവരങ്ങൾ മാറ്റുക (Edit Member)"
                 subtitle={`Editing details for ${selectedMember?.full_name}`}
+                width='max-w-4xl'
             >
-                <MemberForm 
+                <MemberForm
                     initialData={selectedMember}
                     onSuccess={() => {
                         setIsEditOpen(false);

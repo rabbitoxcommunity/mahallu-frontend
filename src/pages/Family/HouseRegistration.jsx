@@ -101,7 +101,7 @@ export default function HouseRegistration() {
                     <button className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors">
                         <Eye size={16} />
                     </button>
-                    <button 
+                    <button
                         onClick={() => handleEdit(row)}
                         className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
                     >
@@ -144,8 +144,9 @@ export default function HouseRegistration() {
                 onClose={() => setIsEditOpen(false)}
                 title="വീട് വിവരങ്ങൾ മാറ്റുക (Edit House)"
                 subtitle={`Editing details for ${selectedHouse?.householder_name}`}
+                width="max-w-3xl"
             >
-                <HouseForm 
+                <HouseForm
                     initialData={selectedHouse}
                     onSuccess={() => {
                         setIsEditOpen(false);
