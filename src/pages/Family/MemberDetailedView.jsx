@@ -162,10 +162,10 @@ export default function MemberDetailedView() {
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
-                                    <Mail size={16} className="text-gray-400 mt-0.5 shrink-0" />
+                                    <Phone size={16} className="text-gray-400 mt-0.5 shrink-0" />
                                     <div className="min-w-0 break-all">
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">Email</p>
-                                        <p className="text-sm text-gray-900 dark:text-gray-200 font-medium">{member.email || "-"}</p>
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">ഫോൺ നമ്പർ (Contact No)</p>
+                                        <p className="text-sm text-gray-900 dark:text-gray-200 font-medium">{member.contact_number || "-"}</p>
                                     </div>
                                 </div>
                             </div>

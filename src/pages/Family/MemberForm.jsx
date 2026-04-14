@@ -10,6 +10,8 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
     const [houses, setHouses] = useState([]);
     const [loadingHouses, setLoadingHouses] = useState(true);
 
+    const [isWhatsappSame, setIsWhatsappSame] = useState(false);
+
     const methods = useForm({
         defaultValues: {
             house_id: defaultHouseId || '',
@@ -18,7 +20,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
             gender: 'Male',
             relation_to_head: '',
             whatsapp: '',
-            email: '',
+            contact_number: '',
             yateem_status: false,
             marital_status: 'Single',
             religious_education: '',
@@ -33,7 +35,14 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
         }
     });
 
-    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = methods;
+    const { register, handleSubmit, formState: { errors, isSubmitting }, reset, watch, setValue } = methods;
+    const contactNumber = watch("contact_number");
+
+    useEffect(() => {
+        if (isWhatsappSame) {
+            setValue("whatsapp", contactNumber);
+        }
+    }, [isWhatsappSame, contactNumber, setValue]);
 
     useEffect(() => {
         const fetchHouses = async () => {
@@ -58,7 +67,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 gender: initialData.gender || 'Male',
                 relation_to_head: initialData.relation_to_head || '',
                 whatsapp: initialData.whatsapp || '',
-                email: initialData.email || '',
+                contact_number: initialData.contact_number || '',
                 yateem_status: initialData.yateem_status || false,
                 marital_status: initialData.marital_status || 'Single',
                 religious_education: initialData.religious_education || '',
@@ -196,6 +205,47 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                             label="വൈവാഹിക നില (Marital Status)"
                             options={maritalOptions}
                         />
+                    </div>
+                </div>
+
+                {/* Contact Details */}
+                <div className="bg-white dark:bg-[#1e1f25] pb-2 border-b border-gray-100 dark:border-gray-800">
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">സമ്പർക്ക വിവരങ്ങൾ (Contact Details)</h3>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            ഫോൺ നമ്പർ (Contact Number)
+                        </label>
+                        <input
+                            type="text"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            placeholder="e.g. 9876543210"
+                            {...register("contact_number")}
+                        />
+                    </div>
+
+                    <div className="flex flex-col gap-2 justify-start">
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                            വാട്ട്‌സ്ആപ്പ് നമ്പർ (WhatsApp Number)
+                        </label>
+                        {!isWhatsappSame && (
+                            <input
+                                type="text"
+                                className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                                placeholder="e.g. 9876543210"
+                                {...register("whatsapp")}
+                            />
+                        )}
+                        <label className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 cursor-pointer mt-1">
+                            <input 
+                                type="checkbox" 
+                                checked={isWhatsappSame} 
+                                onChange={(e) => setIsWhatsappSame(e.target.checked)}
+                                className="rounded text-[#0B65F6] focus:ring-[#0B65F6] dark:bg-gray-800 dark:border-gray-700" 
+                            />
+                            ഫോൺ നമ്പർ തന്നെയാണ് വാട്ട്‌സ്ആപ്പ് നമ്പർ (Same as Contact Number)
+                        </label>
                     </div>
                 </div>
 
