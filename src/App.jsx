@@ -6,6 +6,9 @@ import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { SidebarProvider } from "./context/SidebarContext";
+import PlatformAdminDashboard from "./pages/PlatformAdmin/PlatformAdminDashboard";
+import TenantsList from "./pages/PlatformAdmin/TenantsList";
+import CreateTenant from "./pages/PlatformAdmin/CreateTenant";
 import FamilyRegistration from "./pages/Family/FamilyRegistration";
 import HouseRegistration from "./pages/Family/Houseregistration";
 import AddFamily from "./pages/Family/AddFamily";
@@ -34,6 +37,11 @@ function App() {
                         <Route element={<PrivateRoute />}>
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/analytics" element={<Analytics />} />
+                            
+                            {/* Platform Admin Routes */}
+                            <Route path="/platform-admin" element={<PlatformAdminDashboard />} />
+                            <Route path="/platform-admin/tenants" element={<TenantsList />} />
+                            <Route path="/platform-admin/tenants/create" element={<CreateTenant />} />
                             
                             {/* Family Routes */}
                             <Route path="/family/register" element={<FamilyRegistration />} />

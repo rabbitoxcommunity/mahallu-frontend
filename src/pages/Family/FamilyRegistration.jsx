@@ -90,9 +90,9 @@ export default function FamilyRegistration() {
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
-                    <button 
+                    <button
                         onClick={() => handleEdit(row)}
-                        className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 dark:hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
+                        className="p-2 text-gray-400 text-[#0B65F6] cursor-pointer bg-[#0B65F6]/10 dark:hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
                     >
                         <Edit size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
@@ -134,8 +134,8 @@ export default function FamilyRegistration() {
                 title="കുടുംബ വിവരങ്ങൾ മാറ്റുക (Edit Family)"
                 subtitle={`Editing details for ${selectedFamily?.family_name}`}
             >
-                <FamilyForm 
-                    initialData={selectedFamily} 
+                <FamilyForm
+                    initialData={selectedFamily}
                     onSuccess={() => {
                         setIsEditOpen(false);
                         fetchFamilies();

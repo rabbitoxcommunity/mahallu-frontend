@@ -108,16 +108,16 @@ export default function MemberRegistration() {
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
-                    <button 
+                    <button
                         onClick={() => navigate(`/family/member/${row._id}`)}
-                        className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
+                        className="p-2 text-gray-400 text-[#0B65F6] cursor-pointer bg-[#0B65F6]/10 rounded-lg transition-colors group"
                         title="View Details"
                     >
                         <Eye size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
                     <button
                         onClick={() => handleEdit(row)}
-                        className="p-2 text-gray-400 hover:text-[#0B65F6] hover:bg-[#0B65F6]/10 rounded-lg transition-colors group"
+                        className="p-2 text-gray-400 cursor-pointer text-[#0B65F6] bg-[#0B65F6]/10 rounded-lg transition-colors group"
                     >
                         <Edit size={16} className="group-hover:scale-110 transition-transform" />
                     </button>

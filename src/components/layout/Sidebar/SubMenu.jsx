@@ -74,7 +74,7 @@ const SubMenu = ({ item }) => {
                         exit={{ height: 0, opacity: 0 }}
                         className="overflow-hidden bg-gray-50/40 dark:bg-gray-800/10 rounded-b-xl"
                     >
-                        <div className="pl-6 pr-4 py-1 flex flex-col gap-1 border-l-2 border-gray-100 dark:border-gray-800 ml-6 my-1">
+                        <div className="pl-3 pr-0 py-1 flex flex-col gap-1 border-l-2 border-gray-100 dark:border-gray-800 ml-6 my-1">
                             {item.subItems.map((sub, idx) => (
                                 <NavLink
                                     key={idx}
