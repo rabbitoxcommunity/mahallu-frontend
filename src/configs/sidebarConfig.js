@@ -14,25 +14,25 @@ export const menuConfig = [
         title: "MAIN",
         items: [
             {
-                label: "Dashboard",
+                label: "ഡാഷ്ബോർഡ്",
                 icon: LayoutDashboard,
                 path: "/dashboard",
                 roles: ["admin", "superAdmin"],
                 subItems: [
-                    { label: "Services", path: "/dashboard", roles: ["admin", "superAdmin"] },
-                    { label: "Analytics", path: "/analytics", roles: ["admin", "superAdmin"] }
+                    { label: "സേവനങ്ങൾ", path: "/dashboard", roles: ["admin", "superAdmin"] },
+                    { label: "അനലിറ്റിക്സ്", path: "/analytics", roles: ["admin", "superAdmin"] }
                 ]
             },
             {
-                label: "Family Management",
+                label: "കുടുംബ വിവരങ്ങൾ",
                 icon: Box,
                 path: "/family",
                 permission: "family",
                 roles: ["superAdmin"],
                 subItems: [
-                    { label: "Family Registration", path: "/family/register", roles: ["superAdmin"] },
-                    { label: "House Registration", path: "/family/house/register", roles: ["superAdmin"] },
-                    { label: "Member Registration", path: "/family/member/register", roles: ["superAdmin"] }
+                    { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["superAdmin"] },
+                    { label: "വീട് രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["superAdmin"] },
+                    { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["superAdmin"] }
                 ]
             },
             // Dynamically generate menu items from permission modules

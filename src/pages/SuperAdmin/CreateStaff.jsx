@@ -78,7 +78,7 @@ export default function CreateStaff() {
 
   if (createdStaff) {
     return (
-      <div className="max-w-2xl mx-auto">
+      <div className="w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

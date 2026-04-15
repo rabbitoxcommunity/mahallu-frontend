@@ -75,7 +75,7 @@ export default function CreateTenant() {
 
   if (createdCredentials) {
     return (
-      <div className="max-w-2xl mx-auto">
+      <div className="w-full">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -175,7 +175,7 @@ export default function CreateTenant() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="w-full">
       <div className="mb-8">
         <button
           onClick={() => navigate('/platform-admin/tenants')}
