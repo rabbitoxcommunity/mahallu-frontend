@@ -1,15 +1,37 @@
 import { useState, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useSidebar } from "../../../context/SidebarContext";
+import { useAuth } from "../../../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 
 const SubMenu = ({ item }) => {
     const { isCollapsed, closeMobile } = useSidebar();
     const { pathname } = useLocation();
+    const { user } = useAuth();
+    const role = user?.role || "user";
+
+    // Filter subItems based on user role and permissions
+    const filteredSubItems = item.subItems?.filter(subItem => {
+        // SuperAdmin and PlatformAdmin bypass all permission checks
+        if (role === "superAdmin" || role === "platformAdmin") {
+            return subItem.roles?.includes(role);
+        }
+        
+        // For Admin role, check both role AND permissions
+        if (role === "admin") {
+            const hasRoleAccess = subItem.roles?.includes(role);
+            const requiredPermission = subItem.permission;
+            const hasPermission = requiredPermission ? user?.permissions?.[requiredPermission] : true;
+            
+            return hasRoleAccess && hasPermission;
+        }
+        
+        return subItem.roles?.includes(role);
+    }) || [];
 
     // Auto-expand if a child route is active
-    const isChildActive = item.subItems.some(sub => pathname === sub.path);
+    const isChildActive = filteredSubItems.some(sub => pathname === sub.path);
     const [isOpen, setIsOpen] = useState(isChildActive);
 
     useEffect(() => {
@@ -75,7 +97,7 @@ const SubMenu = ({ item }) => {
                         className="overflow-hidden bg-gray-50/40 dark:bg-gray-800/10 rounded-b-xl"
                     >
                         <div className="pl-3 pr-0 py-1 flex flex-col gap-1 border-l-2 border-gray-100 dark:border-gray-800 ml-6 my-1">
-                            {item.subItems.map((sub, idx) => (
+                            {filteredSubItems.map((sub, idx) => (
                                 <NavLink
                                     key={idx}
                                     to={sub.path}

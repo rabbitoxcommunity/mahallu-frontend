@@ -20,7 +20,8 @@ export const menuConfig = [
                 roles: ["admin", "superAdmin"],
                 subItems: [
                     { label: "സേവനങ്ങൾ", path: "/dashboard", roles: ["admin", "superAdmin"] },
-                    { label: "അനലിറ്റിക്സ്", path: "/analytics", roles: ["admin", "superAdmin"] }
+                    { label: "അനുമതി", path: "/super-admin", roles: ["superAdmin"] },
+                    { label: "അനലിറ്റിക്സ്", path: "/analytics", roles: ["superAdmin"] }
                 ]
             },
             {

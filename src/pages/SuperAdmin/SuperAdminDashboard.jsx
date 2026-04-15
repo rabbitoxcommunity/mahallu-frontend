@@ -30,30 +30,6 @@ export default function SuperAdminDashboard() {
       path: "/super-admin/staff/create",
       description: "Add new staff to your tenant"
     },
-    { 
-      name: "Staff Analytics", 
-      icon: BarChart3, 
-      path: "/super-admin/analytics",
-      description: "View staff activity statistics"
-    },
-    { 
-      name: "Tenant Settings", 
-      icon: Settings, 
-      path: "/super-admin/settings",
-      description: "Configure tenant settings"
-    },
-    { 
-      name: "Role Management", 
-      icon: Shield, 
-      path: "/super-admin/roles",
-      description: "Manage staff roles and permissions"
-    },
-    { 
-      name: "Tenant Info", 
-      icon: Building2, 
-      path: "/super-admin/tenant",
-      description: "View tenant information"
-    }
   ];
 
   return (
