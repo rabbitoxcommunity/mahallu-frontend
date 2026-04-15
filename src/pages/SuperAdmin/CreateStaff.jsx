@@ -4,29 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { 
-  Users, 
   Shield, 
   Mail, 
   User, 
   Key, 
   ArrowLeft,
   CheckCircle,
-  Settings,
   Home,
-  FileText,
-  CreditCard,
-  BarChart,
-  Calendar
+  Users,
+  Settings,
+  FileText
 } from 'lucide-react';
 import axios from '../../api/axios';
-
-const permissionModules = [
-  { key: 'family', label: 'Family Management', icon: Users, description: 'Manage family records and members' },
-  { key: 'payments', label: 'Payments', icon: CreditCard, description: 'Handle payments and transactions' },
-  { key: 'campaigns', label: 'Campaigns', icon: Calendar, description: 'Manage campaigns and events' },
-  { key: 'reports', label: 'Reports', icon: BarChart, description: 'View and generate reports' },
-  { key: 'settings', label: 'Settings', icon: Settings, description: 'Access system settings' }
-];
+import { permissionModules } from '../../configs/permissionModules';
 
 export default function CreateStaff() {
   const navigate = useNavigate();

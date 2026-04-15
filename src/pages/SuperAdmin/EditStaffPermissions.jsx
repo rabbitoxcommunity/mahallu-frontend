@@ -4,28 +4,19 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { 
-  Users, 
   Shield, 
   ArrowLeft,
   CheckCircle,
-  Settings,
   Home,
   FileText,
-  CreditCard,
-  BarChart,
-  Calendar,
-  Loader2
+  Loader2,
+  Users,
+  Settings,
+  ShieldAlert
 } from 'lucide-react';
 import axios from '../../api/axios';
 import { useAuth } from '../../context/AuthContext';
-
-const permissionModules = [
-  { key: 'family', label: 'Family Management', icon: Users, description: 'Manage family records and members' },
-  { key: 'payments', label: 'Payments', icon: CreditCard, description: 'Handle payments and transactions' },
-  { key: 'campaigns', label: 'Campaigns', icon: Calendar, description: 'Manage campaigns and events' },
-  { key: 'reports', label: 'Reports', icon: BarChart, description: 'View and generate reports' },
-  { key: 'settings', label: 'Settings', icon: Settings, description: 'Access system settings' }
-];
+import { permissionModules } from '../../configs/permissionModules';
 
 export default function EditStaffPermissions() {
   const navigate = useNavigate();
@@ -249,7 +240,7 @@ export default function EditStaffPermissions() {
             
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/60 rounded-xl">
               <div className="flex items-start gap-3">
-                <Shield size={20} className="text-blue-600 dark:text-blue-400 mt-0.5" />
+                <ShieldAlert size={20} className="text-blue-600 dark:text-blue-400 mt-0.5" />
                 <div className="text-sm text-blue-800 dark:text-blue-200">
                   <strong>Permission Note:</strong> Staff members can only access the modules you enable here. 
                   SuperAdmins and PlatformAdmins bypass all permission restrictions.

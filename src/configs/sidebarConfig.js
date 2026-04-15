@@ -7,61 +7,44 @@ import {
     UserCircle,
     MessageSquare
 } from "lucide-react";
+import { permissionModules } from "./permissionModules";
 
 export const menuConfig = [
     {
         title: "MAIN",
         items: [
             {
-                label: "ഡാഷ്ബോർഡ്",
+                label: "Dashboard",
                 icon: LayoutDashboard,
                 path: "/dashboard",
                 roles: ["admin", "superAdmin"],
                 subItems: [
-                    { label: "സേവനങ്ങൾ", path: "/dashboard", roles: ["admin", "superAdmin"] },
-                    { label: "വിശകലനം", path: "/analytics", roles: ["admin", "superAdmin"] }
+                    { label: "Services", path: "/dashboard", roles: ["admin", "superAdmin"] },
+                    { label: "Analytics", path: "/analytics", roles: ["admin", "superAdmin"] }
                 ]
             },
             {
-                label: "കുടുംബ വിരങ്ങൾ",
+                label: "Family Management",
                 icon: Box,
                 path: "/family",
-                permission: "family", // Add permission key
+                permission: "family",
                 roles: ["superAdmin"],
                 subItems: [
-                    { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["superAdmin"] },
-                    { label: "വീടിൻ്റെ രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["superAdmin"] },
-                    { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["superAdmin"] }
+                    { label: "Family Registration", path: "/family/register", roles: ["superAdmin"] },
+                    { label: "House Registration", path: "/family/house/register", roles: ["superAdmin"] },
+                    { label: "Member Registration", path: "/family/member/register", roles: ["superAdmin"] }
                 ]
             },
-            {
-                label: "Payments",
-                icon: Mail,
-                path: "/payments",
-                permission: "payments", // Admin needs payments permission
-                roles: ["admin", "superAdmin"]
-            },
-            {
-                label: "Campaigns", 
-                icon: Calendar,
-                path: "/campaigns",
-                permission: "campaigns", // Admin needs campaigns permission
-                roles: ["admin", "superAdmin"]
-            },
-            {
-                label: "Reports",
-                icon: MessageSquare,
-                path: "/reports", 
-                permission: "reports", // Admin needs reports permission
-                roles: ["admin", "superAdmin"]
-            },
-            {
-                label: "Settings",
-                icon: Flag,
-                path: "/settings",
-                permission: "settings", // Admin needs settings permission
-                roles: ["admin", "superAdmin"]
-            }
+            // Dynamically generate menu items from permission modules
+            ...permissionModules
+                .filter(module => module.key !== 'family') // Exclude family as it's handled above
+                .map(module => ({
+                    label: module.label,
+                    icon: module.icon,
+                    path: `/${module.key}`,
+                    permission: module.key,
+                    roles: ["admin", "superAdmin"]
+                }))
         ]
     },
 ];
