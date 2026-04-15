@@ -13,12 +13,7 @@ export default function PrivateRoute() {
         return <Navigate to="/platform-admin" replace />;
     }
     
-    // Don't show sidebar for Platform Admin routes
-    if (user?.role === 'platformAdmin') {
-        return user ? <Outlet /> : <Navigate to="/" replace />;
-    }
-    
-    // Utilize Outlet to render matching child routes within the DashboardLayout 
+    // Show sidebar for all users including Platform Admin
     return user ? (
         <DashboardLayout>
             <Outlet />
