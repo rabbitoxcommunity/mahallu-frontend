@@ -29,30 +29,6 @@ export default function PlatformAdminDashboard() {
       icon: Building2, 
       path: "/platform-admin/tenants",
       description: "Manage all tenant organizations"
-    },
-    { 
-      name: "Platform Analytics", 
-      icon: BarChart3, 
-      path: "/platform-admin/analytics",
-      description: "View platform-wide statistics"
-    },
-    { 
-      name: "Platform Settings", 
-      icon: Settings, 
-      path: "/platform-admin/settings",
-      description: "Configure platform settings"
-    },
-    { 
-      name: "User Management", 
-      icon: Users, 
-      path: "/platform-admin/users",
-      description: "Manage platform users"
-    },
-    { 
-      name: "Security Center", 
-      icon: Shield, 
-      path: "/platform-admin/security",
-      description: "Platform security settings"
     }
   ];
 
