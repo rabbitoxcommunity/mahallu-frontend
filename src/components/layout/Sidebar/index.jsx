@@ -20,7 +20,23 @@ const Sidebar = () => {
 
     const filteredMenu = menuConfig.map(section => ({
         ...section,
-        items: section.items.filter(item => item.roles.includes(role))
+        items: section.items.filter(item => {
+            // SuperAdmin and PlatformAdmin bypass all permission checks
+            if (role === "superAdmin" || role === "platformAdmin") {
+                return item.roles.includes(role);
+            }
+            
+            // For Admin role, check both role AND permissions
+            if (role === "admin") {
+                const hasRoleAccess = item.roles.includes(role);
+                const requiredPermission = item.permission;
+                const hasPermission = requiredPermission ? user?.permissions?.[requiredPermission] : true;
+                
+                return hasRoleAccess && hasPermission;
+            }
+            
+            return item.roles.includes(role);
+        })
     })).filter(section => section.items.length > 0);
 
     const handleLogout = () => {

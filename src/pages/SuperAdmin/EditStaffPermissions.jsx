@@ -17,6 +17,7 @@ import {
   Loader2
 } from 'lucide-react';
 import axios from '../../api/axios';
+import { useAuth } from '../../context/AuthContext';
 
 const permissionModules = [
   { key: 'family', label: 'Family Management', icon: Users, description: 'Manage family records and members' },
@@ -29,6 +30,7 @@ const permissionModules = [
 export default function EditStaffPermissions() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { refreshPermissions } = useAuth();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [staff, setStaff] = useState(null);
@@ -78,6 +80,12 @@ export default function EditStaffPermissions() {
       await axios.patch(`/users/${id}/permissions`, {
         permissions: data.permissions
       });
+      
+      // Refresh permissions if editing current user
+      const currentUser = JSON.parse(localStorage.getItem('user'));
+      if (currentUser && currentUser.id === id) {
+        await refreshPermissions();
+      }
       
       toast.success('Permissions updated successfully!');
       navigate('/super-admin/staff');

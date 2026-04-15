@@ -23,9 +23,10 @@ export const menuConfig = [
                 ]
             },
             {
-                label: "കുടുംബ വിവരങ്ങൾ",
+                label: "കുടുംബ വിരങ്ങൾ",
                 icon: Box,
                 path: "/family",
+                permission: "family", // Add permission key
                 roles: ["superAdmin"],
                 subItems: [
                     { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["superAdmin"] },
@@ -33,12 +34,34 @@ export const menuConfig = [
                     { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["superAdmin"] }
                 ]
             },
-            // {
-            //     label: "Calendar",
-            //     icon: Calendar,
-            //     path: "/calendar",
-            //     roles: ["admin", "superAdmin"]
-            // },
+            {
+                label: "Payments",
+                icon: Mail,
+                path: "/payments",
+                permission: "payments", // Admin needs payments permission
+                roles: ["admin", "superAdmin"]
+            },
+            {
+                label: "Campaigns", 
+                icon: Calendar,
+                path: "/campaigns",
+                permission: "campaigns", // Admin needs campaigns permission
+                roles: ["admin", "superAdmin"]
+            },
+            {
+                label: "Reports",
+                icon: MessageSquare,
+                path: "/reports", 
+                permission: "reports", // Admin needs reports permission
+                roles: ["admin", "superAdmin"]
+            },
+            {
+                label: "Settings",
+                icon: Flag,
+                path: "/settings",
+                permission: "settings", // Admin needs settings permission
+                roles: ["admin", "superAdmin"]
+            }
         ]
     },
 ];
