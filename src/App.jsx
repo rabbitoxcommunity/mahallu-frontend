@@ -9,6 +9,10 @@ import { SidebarProvider } from "./context/SidebarContext";
 import PlatformAdminDashboard from "./pages/PlatformAdmin/PlatformAdminDashboard";
 import TenantsList from "./pages/PlatformAdmin/TenantsList";
 import CreateTenant from "./pages/PlatformAdmin/CreateTenant";
+import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
+import StaffList from "./pages/SuperAdmin/StaffList";
+import CreateStaff from "./pages/SuperAdmin/CreateStaff";
+import EditStaffPermissions from "./pages/SuperAdmin/EditStaffPermissions";
 import FamilyRegistration from "./pages/Family/FamilyRegistration";
 import HouseRegistration from "./pages/Family/Houseregistration";
 import AddFamily from "./pages/Family/AddFamily";
@@ -42,6 +46,12 @@ function App() {
                             <Route path="/platform-admin" element={<PlatformAdminDashboard />} />
                             <Route path="/platform-admin/tenants" element={<TenantsList />} />
                             <Route path="/platform-admin/tenants/create" element={<CreateTenant />} />
+                            
+                            {/* SuperAdmin Routes */}
+                            <Route path="/super-admin" element={<SuperAdminDashboard />} />
+                            <Route path="/super-admin/staff" element={<StaffList />} />
+                            <Route path="/super-admin/staff/create" element={<CreateStaff />} />
+                            <Route path="/super-admin/staff/:id/permissions" element={<EditStaffPermissions />} />
                             
                             {/* Family Routes */}
                             <Route path="/family/register" element={<FamilyRegistration />} />
