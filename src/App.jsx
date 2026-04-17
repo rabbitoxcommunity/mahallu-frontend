@@ -22,6 +22,7 @@ import AddMember from "./pages/Family/AddMember";
 import HouseDetailedView from "./pages/Family/HouseDetailedView";
 import MemberDetailedView from "./pages/Family/MemberDetailedView";
 import Analytics from "./pages/Analytics";
+import Varisankhya from "./pages/Finance/Varisankhya";
 
 function App() {
     return (
@@ -65,6 +66,9 @@ function App() {
                             <Route path="/family/member/register" element={<MemberRegistration />} />
                             <Route path="/family/member/add" element={<AddMember />} />
                             <Route path="/family/member/:id" element={<MemberDetailedView />} />
+                            
+                            {/* Finance Routes */}
+                            <Route path="/finance/varisankhya" element={<Varisankhya />} />
                             
                             {/* Add other protected pages here */}
                         </Route>

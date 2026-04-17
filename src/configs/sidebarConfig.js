@@ -5,7 +5,9 @@ import {
     Flag,
     Calendar,
     UserCircle,
-    MessageSquare
+    MessageSquare,
+    Wallet,
+    CreditCard
 } from "lucide-react";
 import { permissionModules } from "./permissionModules";
 
@@ -34,6 +36,16 @@ export const menuConfig = [
                     { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["superAdmin"] },
                     { label: "വീട് രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["superAdmin"] },
                     { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["superAdmin"] }
+                ]
+            },
+            {
+                label: "ഫിനാൻസ്",
+                icon: Wallet,
+                path: "/finance",
+                permission: "finance",
+                roles: ["admin", "superAdmin"],
+                subItems: [
+                    { label: "വരിസംഖ്യ", path: "/finance/varisankhya", roles: ["admin", "superAdmin"] }
                 ]
             },
             // Dynamically generate menu items from permission modules
