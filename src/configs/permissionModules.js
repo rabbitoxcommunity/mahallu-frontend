@@ -41,7 +41,8 @@ export const permissionModules = [
     description: 'Manage finance records and members',
     roles: ["admin", "superAdmin"],
     subItems: [
-      { label: "വരിസംഖ്യ", path: "/finance/varisankhya", roles: ["admin", "superAdmin"] }
+      { label: "വരിസംഖ്യ", path: "/finance/varisankhya", roles: ["admin", "superAdmin"] },
+      { label: "വരുമാനം", path: "/finance/income", roles: ["admin", "superAdmin"] }
     ]
   },
 ];

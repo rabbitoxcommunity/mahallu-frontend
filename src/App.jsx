@@ -23,6 +23,7 @@ import HouseDetailedView from "./pages/Family/HouseDetailedView";
 import MemberDetailedView from "./pages/Family/MemberDetailedView";
 import Analytics from "./pages/Analytics";
 import Varisankhya from "./pages/Finance/Varisankhya";
+import { Income } from "./pages/Finance/Income";
 
 function App() {
     return (
@@ -69,6 +70,7 @@ function App() {
                             
                             {/* Finance Routes */}
                             <Route path="/finance/varisankhya" element={<Varisankhya />} />
+                            <Route path="/finance/income" element={<Income />} />
                             
                             {/* Add other protected pages here */}
                         </Route>
