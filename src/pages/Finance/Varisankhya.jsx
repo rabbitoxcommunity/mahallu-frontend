@@ -896,7 +896,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                                 >
                                   <Eye size={18} />
                                 </button>
-                                <button
+                                {/* <button
                                   onClick={() => {
                                     const printWindow = window.open('', '_blank');
                                     const receiptContent = `
@@ -936,7 +936,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                                   title="Print Receipt"
                                 >
                                   <Printer size={18} />
-                                </button>
+                                </button> */}
                               </div>
                             </td>
                           </tr>
