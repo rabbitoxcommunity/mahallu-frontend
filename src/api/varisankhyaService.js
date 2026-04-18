@@ -55,3 +55,12 @@ export const getPaymentHistory = async (page = 1, limit = 20, search = '', from_
   const response = await axios.get(`/finance/varisankhya/payment-history?${params}`);
   return response.data;
 };
+
+// Get defaulter history for a specific house
+export const getDefaulterHistory = async (houseId, page = 1, limit = 20, year = '') => {
+  const params = new URLSearchParams({ page, limit });
+  if (year) params.append('year', year);
+
+  const response = await axios.get(`/finance/varisankhya/defaulter/${houseId}?${params}`);
+  return response.data;
+};

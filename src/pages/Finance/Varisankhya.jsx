@@ -28,7 +28,8 @@ import {
   generateMonthlyDues,
   getDefaulters,
   getPaymentHistory,
-  getHousePaymentHistory
+  getHousePaymentHistory,
+  getDefaulterHistory
 } from '../../api/varisankhyaService';
 import PaymentModal from './PaymentModal';
 import Receipt from './Receipt';
@@ -75,6 +76,18 @@ const Varisankhya = () => {
     isOpen: false,
     record: null,
     printMode: false
+  });
+  const [defaulterHistoryModal, setDefaulterHistoryModal] = useState({
+    isOpen: false,
+    houseId: null,
+    houseData: null
+  });
+  const [defaulterHistoryData, setDefaulterHistoryData] = useState({
+    history: [],
+    total: 0,
+    page: 1,
+    pages: 1,
+    summary: {}
   });
   const [historyModal, setHistoryModal] = useState({
     isOpen: false,
@@ -177,6 +190,36 @@ console.log(paymentHistoryData,'paymentHistoryData')
       toast.error('Failed to fetch house history');
       setHistoryModal(prev => ({ ...prev, loading: false }));
     }
+  };
+
+  // Fetch defaulter history
+  const fetchDefaulterHistory = async (houseId, page = 1) => {
+    if (!houseId) return;
+    setLoading(true);
+    try {
+      const data = await getDefaulterHistory(houseId, page, 20, year);
+      setDefaulterHistoryData(data);
+    } catch (error) {
+      console.error('Error fetching defaulter history:', error);
+      toast.error('Failed to fetch defaulter history');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Open defaulter history modal
+  const openDefaulterHistoryModal = (defaulter) => {
+    setDefaulterHistoryModal({
+      isOpen: true,
+      houseId: defaulter.house_id,
+      houseData: {
+        house_code: defaulter.house_code,
+        house_name: defaulter.house_name,
+        family_name: defaulter.family_name,
+        contact: defaulter.contact
+      }
+    });
+    fetchDefaulterHistory(defaulter.house_id);
   };
 
   // Debounced search
@@ -750,21 +793,12 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             <td className="py-3 px-4">
                               <div className="flex items-center justify-center gap-2">
                                 <button
-                                  onClick={() => {
-                                    setHistoryModal({
-                                      isOpen: true,
-                                      houseId: defaulter.house_id,
-                                      houseName: `${defaulter.house_code} - ${defaulter.house_name}`,
-                                      data: null,
-                                      loading: true
-                                    });
-                                    fetchHouseHistory(defaulter.house_id);
-                                  }}
-                                  className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                                  title="View History"
-                                >
-                                  <History size={18} />
-                                </button>
+                              onClick={() => openDefaulterHistoryModal(defaulter)}
+                              className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                              title="View Defaulter History"
+                            >
+                              <History size={18} />
+                            </button>
                               </div>
                             </td>
                           </tr>
@@ -797,21 +831,12 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         <div className="flex justify-between items-center pt-2 border-t border-red-200 dark:border-red-800">
                           <span className="text-sm text-gray-500">Due: <span className="font-bold text-red-600">₹{defaulter.pending_amount.toLocaleString()}</span></span>
                           <button
-                            onClick={() => {
-                              setHistoryModal({
-                                isOpen: true,
-                                houseId: defaulter.house_id,
-                                houseName: `${defaulter.house_code} - ${defaulter.house_name}`,
-                                data: null,
-                                loading: true
-                              });
-                              fetchHouseHistory(defaulter.house_id);
-                            }}
-                            className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
-                            title="View History"
-                          >
-                            <History size={18} />
-                          </button>
+                              onClick={() => openDefaulterHistoryModal(defaulter)}
+                              className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
+                              title="View Defaulter History"
+                            >
+                              <History size={18} />
+                            </button>
                         </div>
                       </div>
                     ))}
@@ -1184,6 +1209,117 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     </>
                   ) : (
                     <p className="text-center text-gray-500 py-8">No payment history found for this house.</p>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Defaulter History Modal */}
+      <AnimatePresence>
+        {defaulterHistoryModal.isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setDefaulterHistoryModal({ isOpen: false, houseId: null, houseData: null })}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="fixed inset-0 flex items-center justify-center z-50 p-4"
+            >
+              <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-3xl overflow-hidden max-h-[80vh] flex flex-col">
+                <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-xl">
+                      <AlertCircle size={24} className="text-orange-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">Defaulter History</h2>
+                      <p className="text-sm text-gray-500">
+                        {defaulterHistoryModal.houseData?.house_code} - {defaulterHistoryModal.houseData?.house_name}
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        {defaulterHistoryModal.houseData?.family_name} | {defaulterHistoryModal.houseData?.contact}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setDefaulterHistoryModal({ isOpen: false, houseId: null, houseData: null })}
+                    className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  >
+                    <X size={20} className="text-gray-500" />
+                  </button>
+                </div>
+                <div className="p-6 overflow-y-auto flex-1">
+                  {loading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <RefreshCw size={32} className="text-orange-600 animate-spin" />
+                    </div>
+                  ) : defaulterHistoryData.history?.length > 0 ? (
+                    <>
+                      <div className="mb-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase">Total Due</p>
+                            <p className="text-lg font-bold text-red-600">₹{defaulterHistoryData.summary?.total_due?.toLocaleString() || 0}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase">Total Paid</p>
+                            <p className="text-lg font-bold text-green-600">₹{defaulterHistoryData.summary?.total_paid?.toLocaleString() || 0}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase">Pending</p>
+                            <p className="text-lg font-bold text-orange-600">₹{defaulterHistoryData.summary?.pending_amount?.toLocaleString() || 0}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 uppercase">Pending Months</p>
+                            <p className="text-lg font-bold text-blue-600">{defaulterHistoryData.summary?.pending_months_count || 0}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <table className="w-full">
+                        <thead>
+                          <tr className="border-b border-gray-100 dark:border-gray-800">
+                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Month/Year</th>
+                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Due</th>
+                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Paid</th>
+                            <th className="text-center py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {defaulterHistoryData.history.map((record, index) => (
+                            <tr key={index} className="border-b border-gray-50 dark:border-gray-800/50">
+                              <td className="py-2 px-4 text-sm">{new Date(record.year, record.month - 1).toLocaleDateString('en-US', { month: 'long' })} {record.year}</td>
+                              <td className="py-2 px-4 text-right text-sm">₹{record.amount_due?.toLocaleString() || 0}</td>
+                              <td className="py-2 px-4 text-right text-sm">₹{record.amount_paid?.toLocaleString() || 0}</td>
+                              <td className="py-2 px-4 text-center">
+                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                  record.status === 'paid' 
+                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                    : record.status === 'partial'
+                                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                    : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                                }`}>
+                                  {record.status}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </>
+                  ) : (
+                    <div className="text-center py-8">
+                      <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <p className="text-gray-500 dark:text-gray-400">No defaulter history found for this house.</p>
+                    </div>
                   )}
                 </div>
               </div>

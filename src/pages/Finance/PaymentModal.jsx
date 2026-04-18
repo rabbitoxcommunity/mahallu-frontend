@@ -48,7 +48,14 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
       });
 
       setPaymentResult(result.varisankhya);
-      toast.success('Payment recorded successfully!');
+      
+      // Show detailed success message
+      const details = result.payment_details;
+      if (details.status === 'paid') {
+        toast.success(`Payment completed! Total paid: ₹${details.total_paid.toLocaleString()}`);
+      } else {
+        toast.success(`Payment recorded! This payment: ₹${details.this_payment.toLocaleString()}, Total paid: ₹${details.total_paid.toLocaleString()}, Remaining: ₹${details.remaining_amount.toLocaleString()}`);
+      }
 
       if (printReceipt) {
         setShowReceipt(true);
@@ -57,7 +64,14 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
       }
     } catch (error) {
       console.error('Error marking payment:', error);
-      toast.error('Failed to record payment');
+      
+      // Handle overpayment validation error
+      if (error.response?.data?.message === "Payment exceeds due amount") {
+        const details = error.response.data.details;
+        toast.error(`Payment exceeds due amount by ₹${details.excess_amount.toLocaleString()}. Maximum payment: ₹${details.remaining_amount.toLocaleString()}`);
+      } else {
+        toast.error(error.response?.data?.message || 'Failed to record payment');
+      }
     } finally {
       setLoading(false);
     }
