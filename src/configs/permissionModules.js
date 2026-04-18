@@ -1,43 +1,49 @@
 import {
-  Users,
-  CreditCard,
-  Calendar,
-  BarChart,
-  Settings,
-  ShieldCheck
+  Wallet,
+  LayoutDashboard,
+  Box
 } from 'lucide-react';
 
 export const permissionModules = [
   {
+    key: 'dashboard',
+    label: "ഡാഷ്ബോർഡ്",
+    icon: LayoutDashboard,
+    path: "/dashboard",
+    roles: ["admin", "superAdmin"],
+    description: 'Manage dashboard and analytics',
+    subItems: [
+      { label: "സേവനങ്ങൾ", path: "/dashboard", roles: ["admin", "superAdmin"] },
+      { label: "അനുമതി", path: "/super-admin", roles: ["superAdmin"] },
+      { label: "അനലിറ്റിക്സ്", path: "/analytics", roles: ["superAdmin"] }
+    ]
+  },
+  {
     key: 'family',
-    label: 'കുടുംബ മാനേജ്മെന്റ്',
-    icon: Users,
-    description: 'Manage family records and members'
+    label: "കുടുംബ വിവരങ്ങൾ",
+    description: 'Manage family records and members',
+    icon: Box,
+    path: "/family",
+    permission: "family",
+    roles: ["superAdmin"],
+    subItems: [
+      { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["superAdmin"] },
+      { label: "വീട് രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["superAdmin"] },
+      { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["superAdmin"] }
+    ]
   },
   {
-    key: 'payments',
-    label: 'പേയ്‌മെന്റുകൾ',
-    icon: CreditCard,
-    description: 'Handle payments and transactions'
+    key: 'finance',
+    label: 'ഫിനാൻസ്',
+    icon: Wallet,
+    path: "/finance",
+    permission: "finance",
+    description: 'Manage finance records and members',
+    roles: ["admin", "superAdmin"],
+    subItems: [
+      { label: "വരിസംഖ്യ", path: "/finance/varisankhya", roles: ["admin", "superAdmin"] }
+    ]
   },
-  {
-    key: 'campaigns',
-    label: 'കാമ്പയ്‌നുകൾ',
-    icon: Calendar,
-    description: 'Manage campaigns and events'
-  },
-  {
-    key: 'reports',
-    label: 'റിപ്പോർട്ടുകൾ',
-    icon: BarChart,
-    description: 'View and generate reports'
-  },
-  {
-    key: 'settings',
-    label: 'സെറ്റിംഗുകൾ',
-    icon: Settings,
-    description: 'Access system settings'
-  }
 ];
 
 export default permissionModules;
