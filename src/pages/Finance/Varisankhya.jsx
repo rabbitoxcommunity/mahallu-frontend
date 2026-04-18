@@ -129,13 +129,15 @@ const Varisankhya = () => {
 
   // Calculate total collected from payment history
   const calculateTotalCollected = () => {
-    if (!paymentHistoryData.payments || !Array.isArray(paymentHistoryData.payments)) {
-      return 0;
-    }
-    return paymentHistoryData.payments.reduce((total, payment) => {
-      return total + (payment.amount || 0);
-    }, 0);
-  };
+  if (!paymentHistoryData.payments || !Array.isArray(paymentHistoryData.payments)) {
+    return 0;
+  }
+  return paymentHistoryData.payments.reduce((total, payment) => {
+    return total + (payment.amount_paid || 0);
+  }, 0);
+};
+
+console.log(paymentHistoryData,'paymentHistoryData')
 
   // Fetch payment history
   const fetchPaymentHistory = async (page = 1) => {
@@ -147,9 +149,15 @@ const Varisankhya = () => {
         searchTerm,
         customDateRange.from,
         customDateRange.to,
-        dateFilter
+        dateFilter,
+        year,
       );
       setPaymentHistoryData(data);
+      
+      // Show toast if fallback was used
+      if (data.message) {
+        toast.info(data.message);
+      }
     } catch (error) {
       console.error('Error fetching payment history:', error);
     } finally {
@@ -421,9 +429,10 @@ const Varisankhya = () => {
 
         {/* Search & Filter Bar */}
         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center justify-between">
             {/* Search Input */}
-            <div className="relative flex-1 max-w-md">
+          <div className='flex items-center gap-3 col-span-2'>
+              <div className="relative flex-1 max-w-md">
               <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
@@ -484,6 +493,36 @@ const Varisankhya = () => {
                 )}
               </div>
             )}
+          </div>
+          {
+             activeTab === 'history' && (
+                <div className="flex justify-end mb-6">
+              <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="bg-linear-to-r from-violet-600 via-purple-600 to-indigo-600 rounded-xl p-3 text-white shadow-lg"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="p-1.5 bg-white/20 rounded-lg">
+                            <TrendingUp size={16} className="text-white" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-white/90">Total Collected</p>
+                            <h3 className="text-xl font-bold text-white">
+                              ₹{calculateTotalCollected().toLocaleString()}
+                            </h3>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-white/70">{paymentHistoryData.payments?.length || 0} payments</p>
+                        </div>
+                      </div>
+                    </motion.div>
+            </div>
+             )
+          }
+           
           </div>
         </div>
 
@@ -814,31 +853,6 @@ const Varisankhya = () => {
               {/* Payment History Tab */}
               {activeTab === 'history' && (
                 <>
-                  {/* Total Collected Card - Near Filters */}
-                  <div className="mb-6">
-                    <motion.div
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="bg-linear-to-r from-teal-500 to-cyan-600 rounded-2xl p-4 text-white shadow-lg"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="p-2 bg-white/20 rounded-xl">
-                            <TrendingUp size={20} className="text-white" />
-                          </div>
-                          <div>
-                            <p className="text-sm text-white/90">Total Collected</p>
-                            <h3 className="text-2xl font-bold text-white">
-                              ₹{calculateTotalCollected().toLocaleString()}
-                            </h3>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-xs text-white/70">{paymentHistoryData.payments?.length || 0} payments</p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  </div>
                   {/* Desktop Table */}
                   <div className="hidden md:block overflow-x-auto">
                     <table className="w-full">

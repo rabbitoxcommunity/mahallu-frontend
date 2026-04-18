@@ -44,12 +44,13 @@ export const getHousePaymentHistory = async (houseId, page = 1, limit = 20, year
 };
 
 // Get payment history (all payments across houses)
-export const getPaymentHistory = async (page = 1, limit = 20, search = '', from_date = '', to_date = '', date_filter = '') => {
+export const getPaymentHistory = async (page = 1, limit = 20, search = '', from_date = '', to_date = '', date_filter = '', year='') => {
   const params = new URLSearchParams({ page, limit });
   if (search) params.append('search', search);
   if (from_date) params.append('from_date', from_date);
   if (to_date) params.append('to_date', to_date);
   if (date_filter) params.append('date_filter', date_filter);
+  if (year) params.append('year', year);
 
   const response = await axios.get(`/finance/varisankhya/payment-history?${params}`);
   return response.data;
