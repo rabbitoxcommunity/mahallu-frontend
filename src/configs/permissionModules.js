@@ -25,11 +25,11 @@ export const permissionModules = [
     icon: Box,
     path: "/family",
     permission: "family",
-    roles: ["superAdmin"],
+    roles: ["admin", "superAdmin"],
     subItems: [
-      { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["superAdmin"] },
-      { label: "വീട് രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["superAdmin"] },
-      { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["superAdmin"] }
+      { label: "കുടുംബ രജിസ്ട്രേഷൻ", path: "/family/register", roles: ["admin", "superAdmin"] },
+      { label: "വീട് രജിസ്ട്രേഷൻ", path: "/family/house/register", roles: ["admin", "superAdmin"] },
+      { label: "അംഗങ്ങളുടെ രജിസ്ട്രേഷൻ", path: "/family/member/register", roles: ["admin", "superAdmin"] }
     ]
   },
   {
