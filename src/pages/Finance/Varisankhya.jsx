@@ -44,6 +44,7 @@ const Varisankhya = () => {
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [defaultAmount, setDefaultAmount] = useState('200');
 
   // Data states
   const [monthlyData, setMonthlyData] = useState({
@@ -262,7 +263,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
     if (result.isConfirmed) {
       setGenerating(true);
       try {
-        const response = await generateMonthlyDues(month, year);
+        const response = await generateMonthlyDues(month, year, defaultAmount);
         toast.success(`Generated ${response.summary.created} dues. Skipped ${response.summary.skipped} existing records.`);
         fetchMonthlyData();
       } catch (error) {
@@ -378,6 +379,13 @@ console.log(paymentHistoryData,'paymentHistoryData')
                 <option key={y} value={y}>{y}</option>
               ))}
             </select>
+            <input
+              type="number"
+              value={defaultAmount}
+              onChange={(e) => setDefaultAmount(e.target.value)}
+              placeholder="Default Amount"
+              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] w-32"
+            />
             <button
               onClick={handleGenerateDues}
               disabled={generating}
