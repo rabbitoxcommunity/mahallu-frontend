@@ -8,7 +8,7 @@ import {
   History, Edit2, Trash2, Download, X, CheckCircle, Calendar,
   CreditCard, Banknote, Smartphone, Receipt, AlertCircle, TrendingUp,
   Wallet, Building2, ShoppingBag, Palmtree, Home, MoreHorizontal,
-  DollarSign, PartyPopper, Heart, Box, Eye
+  DollarSign, PartyPopper, Heart, Box, Eye, Printer
 } from 'lucide-react';
 import { getDueIncome, getDirectIncome, createDueIncome, updateDueIncome, deleteDueIncome, createDirectIncome, updateDirectIncome, deleteDirectIncome, getIncomeSummary, markDuePayment, getDuePaymentHistory as getIncomePaymentHistory } from '../../api/incomeService';
 import IncomeReceipt from './IncomeReceipt';
@@ -63,8 +63,8 @@ export const Income = () => {
 
   const fetchSummary = useCallback(async () => {
     try {
-      const { data } = await getIncomeSummary({ month, year });
-      setSummary(data);
+      const res = await getIncomeSummary({ month, year });
+      setSummary(res);
     } catch (error) {
       console.error('Error fetching summary:', error);
     }
@@ -275,98 +275,148 @@ export const Income = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Total Income</p>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{(summary?.total_income || 0).toLocaleString()}</h3>
+      {activeTab === 'due' ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Total Due</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{(summary?.due_based?.total_due || 0).toLocaleString()}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-blue-500">
+                <TrendingUp size={24} className="text-white" />
+              </div>
             </div>
-            <div className="p-3 rounded-xl bg-blue-500">
-              <TrendingUp size={24} className="text-white" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Total Paid</p>
+                <h3 className="text-2xl font-bold text-green-600 mt-1">₹{(summary?.due_based?.total_paid || 0).toLocaleString()}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-green-500">
+                <CheckCircle size={24} className="text-white" />
+              </div>
             </div>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">This Month</p>
-              <h3 className="text-2xl font-bold text-green-600 mt-1">₹{(summary?.this_month_income || 0).toLocaleString()}</h3>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Pending</p>
+                <h3 className="text-2xl font-bold text-orange-600 mt-1">₹{(summary?.due_based?.total_pending || 0).toLocaleString()}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-orange-500">
+                <AlertCircle size={24} className="text-white" />
+              </div>
             </div>
-            <div className="p-3 rounded-xl bg-green-500">
-              <CheckCircle size={24} className="text-white" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Paid Count</p>
+                <h3 className="text-2xl font-bold text-green-600 mt-1">{summary?.due_based?.paid_count || 0}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-green-500">
+                <CheckCircle size={24} className="text-white" />
+              </div>
             </div>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Due Pending</p>
-              <h3 className="text-2xl font-bold text-orange-600 mt-1">₹{(summary?.pending_amount || 0).toLocaleString()}</h3>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Overdue</p>
+                <h3 className="text-2xl font-bold text-red-600 mt-1">{summary?.due_based?.overdue_count || 0}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-red-500">
+                <X size={24} className="text-white" />
+              </div>
             </div>
-            <div className="p-3 rounded-xl bg-orange-500">
-              <AlertCircle size={24} className="text-white" />
+          </motion.div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Total Income</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{(summary?.direct?.total_income || 0).toLocaleString()}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-blue-500">
+                <TrendingUp size={24} className="text-white" />
+              </div>
             </div>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Cash Income</p>
-              <h3 className="text-2xl font-bold text-blue-600 mt-1">₹{(summary?.direct?.cash_income || 0).toLocaleString()}</h3>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Cash Income</p>
+                <h3 className="text-2xl font-bold text-green-600 mt-1">₹{(summary?.direct?.cash_income || 0).toLocaleString()}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-green-500">
+                <Banknote size={24} className="text-white" />
+              </div>
             </div>
-            <div className="p-3 rounded-xl bg-blue-500">
-              <Banknote size={24} className="text-white" />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">UPI Income</p>
+                <h3 className="text-2xl font-bold text-purple-600 mt-1">₹{(summary?.direct?.upi_income || 0).toLocaleString()}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-purple-500">
+                <Smartphone size={24} className="text-white" />
+              </div>
             </div>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">UPI Income</p>
-              <h3 className="text-2xl font-bold text-purple-600 mt-1">₹{(summary?.direct?.upi_income || 0).toLocaleString()}</h3>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Bank Income</p>
+                <h3 className="text-2xl font-bold text-blue-600 mt-1">₹{(summary?.direct?.bank_income || 0).toLocaleString()}</h3>
+              </div>
+              <div className="p-3 rounded-xl bg-blue-500">
+                <CreditCard size={24} className="text-white" />
+              </div>
             </div>
-            <div className="p-3 rounded-xl bg-purple-500">
-              <Smartphone size={24} className="text-white" />
-            </div>
-          </div>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
-        >
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Paid Count</p>
-              <h3 className="text-2xl font-bold text-green-600 mt-1">{summary?.due_based?.paid_count || 0}</h3>
-            </div>
-            <div className="p-3 rounded-xl bg-green-500">
-              <CheckCircle size={24} className="text-white" />
-            </div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
@@ -529,7 +579,7 @@ export const Income = () => {
                               <button onClick={() => openPaymentModal(income)} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="Mark Payment"><IndianRupee size={18} /></button>
                             )}
                             <button onClick={() => viewHistory(income)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View History"><History size={18} /></button>
-                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'due' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Receipt"><Receipt size={18} /></button>
+                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'due' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Receipt"><Printer size={18} /></button>
                             <button onClick={() => openEditDue(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Edit"><Edit2 size={18} /></button>
                             <button onClick={() => handleDeleteDue(income._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={18} /></button>
                           </div>
@@ -607,7 +657,7 @@ export const Income = () => {
                           <div className="flex items-center justify-center gap-2">
                             {/* FIX: Eye was used but not imported — now imported at top */}
                             <button onClick={() => setViewModal({ isOpen: true, income })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View"><Eye size={18} /></button>
-                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'direct' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Receipt"><Receipt size={18} /></button>
+                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'direct' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Receipt"><Printer size={18} /></button>
                             <button onClick={() => openEditDirect(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Edit"><Edit2 size={18} /></button>
                             <button onClick={() => handleDeleteDirect(income._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={18} /></button>
                           </div>
@@ -638,8 +688,8 @@ export const Income = () => {
           <>
             <motion.div key="due-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDueModal({ isOpen: false, income: null, isEdit: false })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
             <motion.div key="due-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
-              <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-lg">
-                <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
+              <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col">
+                <div className="flex-shrink-0 flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
                       <Calendar size={24} className="text-[#0B65F6]" />
@@ -651,7 +701,7 @@ export const Income = () => {
                   </div>
                   <button onClick={() => setDueModal({ isOpen: false, income: null, isEdit: false })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"><X size={20} className="text-gray-500" /></button>
                 </div>
-                <div className="p-6 space-y-4">
+                <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
                     <select value={dueForm.category} onChange={(e) => setDueForm({ ...dueForm, category: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
@@ -693,7 +743,7 @@ export const Income = () => {
                     <textarea value={dueForm.notes} onChange={(e) => setDueForm({ ...dueForm, notes: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" rows="2" placeholder="Optional notes" />
                   </div>
                 </div>
-                <div className="flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
+                <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
                   <button onClick={() => setDueModal({ isOpen: false, income: null, isEdit: false })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
                   <button onClick={dueModal.isEdit ? handleUpdateDue : handleCreateDue} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{dueModal.isEdit ? 'Update' : 'Create'}</button>
                 </div>
@@ -709,8 +759,8 @@ export const Income = () => {
           <>
             <motion.div key="direct-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setDirectModal({ isOpen: false, income: null, isEdit: false })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
             <motion.div key="direct-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
-              <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-lg">
-                <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
+              <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col">
+                <div className="shrink-0 flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-green-100 dark:bg-green-900/30 rounded-xl">
                       <Wallet size={24} className="text-green-600" />
@@ -722,7 +772,7 @@ export const Income = () => {
                   </div>
                   <button onClick={() => setDirectModal({ isOpen: false, income: null, isEdit: false })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"><X size={20} className="text-gray-500" /></button>
                 </div>
-                <div className="p-6 space-y-4">
+                <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
                     <input type="date" value={directForm.date} onChange={(e) => setDirectForm({ ...directForm, date: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
@@ -762,7 +812,7 @@ export const Income = () => {
                     <textarea value={directForm.description} onChange={(e) => setDirectForm({ ...directForm, description: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" rows="2" placeholder="Optional description" />
                   </div>
                 </div>
-                <div className="flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
+                <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
                   <button onClick={() => setDirectModal({ isOpen: false, income: null, isEdit: false })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
                   <button onClick={directModal.isEdit ? handleUpdateDirect : handleCreateDirect} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{directModal.isEdit ? 'Update' : 'Create'}</button>
                 </div>

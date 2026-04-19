@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X, Download, Printer, CheckCircle } from 'lucide-react';
 
 const IncomeReceipt = ({ isOpen, onClose, income, type = 'due' }) => {

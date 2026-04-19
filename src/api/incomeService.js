@@ -55,5 +55,6 @@ export const deleteDirectIncome = async (id) => {
 // Summary API
 export const getIncomeSummary = async (params = {}) => {
   const response = await axios.get('/finance/income/summary', { params });
+  console.log(response,'response')
   return response.data;
 };
