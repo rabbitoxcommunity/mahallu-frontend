@@ -11,10 +11,15 @@ import {
   DollarSign, PartyPopper, Heart, Box, Eye, Printer
 } from 'lucide-react';
 import { getDueIncome, getDirectIncome, createDueIncome, updateDueIncome, deleteDueIncome, createDirectIncome, updateDirectIncome, deleteDirectIncome, getIncomeSummary, markDuePayment, getDuePaymentHistory as getIncomePaymentHistory } from '../../api/incomeService';
+import { getHadiyaSummary } from '../../api/hadiyaService';
 import IncomeReceipt from './IncomeReceipt';
+import QuickHadiya from './QuickHadiya';
 
 export const Income = () => {
-  const [activeTab, setActiveTab] = useState('due');
+  const [activeTab, setActiveTab] = useState(() => {
+    const savedTab = localStorage.getItem('incomeActiveTab');
+    return savedTab || 'due';
+  });
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,6 +31,22 @@ export const Income = () => {
     due_based: {}, direct: {},
     total_income: 0, this_month_income: 0, pending_amount: 0
   });
+
+  const [hadiyaSummary, setHadiyaSummary] = useState({
+    today_total: 0,
+    today_count: 0,
+    month_total: 0,
+    month_count: 0,
+    house_total: 0,
+    house_count: 0,
+    external_total: 0,
+    external_count: 0
+  });
+
+  // Save active tab to localStorage
+  useEffect(() => {
+    localStorage.setItem('incomeActiveTab', activeTab);
+  }, [activeTab]);
 
   const [dueData, setDueData] = useState({ incomes: [], total: 0, page: 1, pages: 1 });
   const [directData, setDirectData] = useState({ incomes: [], total: 0, page: 1, pages: 1 });
@@ -70,6 +91,15 @@ export const Income = () => {
     }
   }, [month, year]);
 
+  const fetchHadiyaSummaryData = useCallback(async () => {
+    try {
+      const res = await getHadiyaSummary();
+      setHadiyaSummary(res);
+    } catch (error) {
+      console.error('Error fetching hadiya summary:', error);
+    }
+  }, []);
+
   const fetchDue = useCallback(async (page = 1) => {
     try {
       const data = await getDueIncome({
@@ -99,8 +129,12 @@ export const Income = () => {
   }, [month, year, fetchSummary]);
 
   useEffect(() => {
+    if (activeTab === 'hadiya') fetchHadiyaSummaryData();
+  }, [activeTab, fetchHadiyaSummaryData]);
+
+  useEffect(() => {
     if (activeTab === 'due') fetchDue(1);
-    else fetchDirect(1);
+    else if (activeTab === 'direct') fetchDirect(1);
   }, [activeTab, fetchDue, fetchDirect]);
 
   const handleCreateDue = async () => {
@@ -248,28 +282,32 @@ export const Income = () => {
       <div className="mb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Income Management</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">Manage due-based and direct income records</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{activeTab === 'hadiya' ? 'Quick Hadiya Collection' : 'Income Management'}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">{activeTab === 'hadiya' ? 'Fast collection flow for voluntary contributions during events' : 'Manage due-based and direct income records'}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            <select
-              value={month}
-              onChange={(e) => setMonth(Number(e.target.value))}
-              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-            >
-              {months.map(m => (
-                <option key={m.value} value={m.value}>{m.label}</option>
-              ))}
-            </select>
-            <select
-              value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
-              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-            >
-              {years.map(y => (
-                <option key={y} value={y}>{y}</option>
-              ))}
-            </select>
+            {activeTab !== 'hadiya' && (
+              <>
+                <select
+                  value={month}
+                  onChange={(e) => setMonth(Number(e.target.value))}
+                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                >
+                  {months.map(m => (
+                    <option key={m.value} value={m.value}>{m.label}</option>
+                  ))}
+                </select>
+                <select
+                  value={year}
+                  onChange={(e) => setYear(Number(e.target.value))}
+                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                >
+                  {years.map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -353,7 +391,7 @@ export const Income = () => {
             </div>
           </motion.div>
         </div>
-      ) : (
+      ) : activeTab === 'direct' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -416,7 +454,74 @@ export const Income = () => {
             </div>
           </motion.div>
         </div>
-      )}
+      ) : activeTab === 'hadiya' ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Today Total</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.today_total.toLocaleString()}</h3>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.today_count} collections</p>
+              </div>
+              <div className="p-3 rounded-xl bg-blue-500">
+                <Calendar size={24} className="text-white" />
+              </div>
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">This Month Total</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.month_total.toLocaleString()}</h3>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.month_count} collections</p>
+              </div>
+              <div className="p-3 rounded-xl bg-green-500">
+                <Wallet size={24} className="text-white" />
+              </div>
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">House Contributions</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.house_total.toLocaleString()}</h3>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.house_count} houses</p>
+              </div>
+              <div className="p-3 rounded-xl bg-purple-500">
+                <Building2 size={24} className="text-white" />
+              </div>
+            </div>
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+          >
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">External Contributions</p>
+                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.external_total.toLocaleString()}</h3>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.external_count} guests</p>
+              </div>
+              <div className="p-3 rounded-xl bg-orange-500">
+                <Heart size={24} className="text-white" />
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      ) : null}
 
       {/* Tabs */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
@@ -447,10 +552,24 @@ export const Income = () => {
               Direct Income
             </div>
           </button>
+          <button
+            onClick={() => setActiveTab('hadiya')}
+            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+              activeTab === 'hadiya'
+                ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
+                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <Heart size={18} />
+              Quick Hadiya Collection
+            </div>
+          </button>
         </div>
 
-        {/* Search & Filter Bar */}
-        <div className="p-4 border-b border-gray-100 dark:border-gray-800">
+        {/* Search & Filter Bar - Hide for hadiya tab */}
+        {activeTab !== 'hadiya' && (
+          <div className="p-4 border-b border-gray-100 dark:border-gray-800">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center justify-between">
             <div className='flex items-center gap-3 col-span-2'>
               <div className="relative flex-1 max-w-md">
@@ -526,6 +645,7 @@ export const Income = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Due Based Income Table */}
         {activeTab === 'due' && (
@@ -679,6 +799,9 @@ export const Income = () => {
             )}
           </>
         )}
+
+        {/* Quick Hadiya Collection */}
+        {activeTab === 'hadiya' && <QuickHadiya onRefresh={fetchHadiyaSummaryData} />}
       </div>
 
       {/* Due Income Modal */}

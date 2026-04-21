@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }) => {
             if (error.response?.status === 404) {
                 // User not found, logout and navigate to login page
                 logout();
-                navigate('/login');
             }
             return null;
         }
