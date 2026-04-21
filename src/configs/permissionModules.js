@@ -1,7 +1,8 @@
 import {
   Wallet,
   LayoutDashboard,
-  Box
+  Box,
+  Settings
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -43,6 +44,17 @@ export const permissionModules = [
     subItems: [
       { label: "വരിസംഖ്യ", path: "/finance/varisankhya", roles: ["admin", "superAdmin"] },
       { label: "വരുമാനം", path: "/finance/income", roles: ["admin", "superAdmin"] }
+    ]
+  },
+  {
+    key: 'settings',
+    label: 'ക്രമീകരണങ്ങൾ',
+    icon: Settings,
+    path: "/settings/general",
+    description: 'Manage general settings',
+    roles: ["admin", "superAdmin"],
+    subItems: [
+      { label: "Income Category", path: "/settings/general", roles: ["admin", "superAdmin"] }
     ]
   },
 ];

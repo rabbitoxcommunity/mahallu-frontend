@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import { motion, AnimatePresence } from 'framer-motion';
+import Select from 'react-select';
+import { useForm } from 'react-hook-form';
 import {
   IndianRupee, Search, Filter, ChevronLeft, ChevronRight, Plus,
   History, Edit2, Trash2, Download, X, CheckCircle, Calendar,
@@ -12,6 +14,7 @@ import {
 } from 'lucide-react';
 import { getDueIncome, getDirectIncome, createDueIncome, updateDueIncome, deleteDueIncome, createDirectIncome, updateDirectIncome, deleteDirectIncome, getIncomeSummary, markDuePayment, getDuePaymentHistory as getIncomePaymentHistory } from '../../api/incomeService';
 import { getHadiyaSummary } from '../../api/hadiyaService';
+import { getIncomeCategories } from '../../api/incomeCategoryService';
 import IncomeReceipt from './IncomeReceipt';
 import QuickHadiya from './QuickHadiya';
 
@@ -26,6 +29,8 @@ export const Income = () => {
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const [paymentMethodFilter, setPaymentMethodFilter] = useState('');
+  const [dueCategories, setDueCategories] = useState([]);
+  const [incomeCategories, setIncomeCategories] = useState([]);
 
   const [summary, setSummary] = useState({
     due_based: {}, direct: {},
@@ -59,15 +64,43 @@ export const Income = () => {
   const [receiptModal, setReceiptModal] = useState({ isOpen: false, income: null, type: '' });
   const [viewModal, setViewModal] = useState({ isOpen: false, income: null });
 
-  // Forms
-  const [dueForm, setDueForm] = useState({
-    category: 'building_rent', source_name: '', month: new Date().getMonth() + 1,
-    year: new Date().getFullYear(), amount_due: '', due_date: '', notes: ''
+  // Forms with react-hook-form
+  const {
+    register: registerDue,
+    handleSubmit: handleSubmitDue,
+    reset: resetDue,
+    trigger: triggerDue,
+    formState: { errors: dueErrors }
+  } = useForm({
+    defaultValues: {
+      date: new Date().toISOString().split('T')[0],
+      category: '',
+      source_name: '',
+      amount_due: '',
+      payment_method: 'cash'
+    }
   });
-  const [directForm, setDirectForm] = useState({
-    category: 'donation', source_name: '', amount: '',
-    date: new Date().toISOString().split('T')[0], payment_method: 'cash', reference_no: '', description: ''
+
+  const {
+    register: registerDirect,
+    handleSubmit: handleSubmitDirect,
+    reset: resetDirect,
+    setValue: setDirectValue,
+    trigger: triggerDirect,
+    formState: { errors: directErrors }
+  } = useForm({
+    defaultValues: {
+      date: new Date().toISOString().split('T')[0],
+      category: 'donation',
+      source_name: '',
+      amount: '',
+      payment_method: 'cash'
+    }
   });
+
+  const [selectedDueCategory, setSelectedDueCategory] = useState(null);
+  const [selectedDirectCategory, setSelectedDirectCategory] = useState(null);
+
   const [paymentForm, setPaymentForm] = useState({
     payment_amount: '', payment_method: 'cash', reference_no: '', notes: ''
   });
@@ -80,7 +113,87 @@ export const Income = () => {
     { value: 9, label: 'September' }, { value: 10, label: 'October' },
     { value: 11, label: 'November' }, { value: 12, label: 'December' }
   ];
+
+  // Common react-select styles
+  const selectStyles = {
+    control: (base, state) => ({
+      ...base,
+      minHeight: '42px',
+      fontSize: '14px',
+      borderColor: state.isFocused ? '#0B65F6' : '#e5e7eb',
+      '&:hover': { borderColor: state.isFocused ? '#0B65F6' : '#d1d5db' },
+      boxShadow: state.isFocused ? '0 0 0 3px rgba(11, 101, 246, 0.1)' : 'none',
+      backgroundColor: document.documentElement.classList.contains('dark') ? '#1e1f25' : '#ffffff',
+      borderRadius: '0.5rem'
+    }),
+    menu: (base) => ({
+      ...base,
+      backgroundColor: document.documentElement.classList.contains('dark') ? '#1e1f25' : '#ffffff',
+      borderRadius: '0.5rem',
+      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+      zIndex: 50
+    }),
+    menuList: (base) => ({
+      ...base,
+      padding: '0.25rem',
+      borderRadius: '0.5rem'
+    }),
+    option: (base, state) => ({
+      ...base,
+      backgroundColor: state.isFocused ? (document.documentElement.classList.contains('dark') ? '#252731' : '#f3f4f6') : 'transparent',
+      color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000',
+      padding: '0.5rem 0.75rem',
+      borderRadius: '0.375rem',
+      cursor: 'pointer',
+      '&:active': {
+        backgroundColor: document.documentElement.classList.contains('dark') ? '#2f3038' : '#e5e7eb'
+      }
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: document.documentElement.classList.contains('dark') ? '#ffffff' : '#000000'
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280'
+    }),
+    indicatorSeparator: (base) => ({
+      ...base,
+      backgroundColor: document.documentElement.classList.contains('dark') ? '#374151' : '#e5e7eb'
+    }),
+    dropdownIndicator: (base) => ({
+      ...base,
+      color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+      '&:hover': {
+        color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#4b5563'
+      }
+    }),
+    clearIndicator: (base) => ({
+      ...base,
+      color: document.documentElement.classList.contains('dark') ? '#9ca3af' : '#6b7280',
+      '&:hover': {
+        color: document.documentElement.classList.contains('dark') ? '#d1d5db' : '#4b5563'
+      }
+    })
+  };
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i);
+
+  // Fetch income categories
+  const fetchCategories = useCallback(async () => {
+    try {
+      const dueCats = await getIncomeCategories({ type: 'due' });
+      const incCats = await getIncomeCategories({ type: 'income' });
+      setDueCategories(dueCats);
+      setIncomeCategories(incCats);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      toast.error('Failed to fetch categories');
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
   const fetchSummary = useCallback(async () => {
     try {
@@ -137,23 +250,42 @@ export const Income = () => {
     else if (activeTab === 'direct') fetchDirect(1);
   }, [activeTab, fetchDue, fetchDirect]);
 
-  const handleCreateDue = async () => {
+  const handleCreateDue = async (data) => {
     try {
-      await createDueIncome(dueForm);
+      const payload = {
+        ...data,
+        category: selectedDueCategory?.value || data.category,
+        amount_due: Number(data.amount_due),
+        month: new Date(data.date).getMonth() + 1,
+        year: new Date(data.date).getFullYear(),
+        due_date: data.date
+      };
+      await createDueIncome(payload);
       toast.success('Due income created successfully');
       setDueModal({ isOpen: false, income: null, isEdit: false });
-      setDueForm({ category: 'building_rent', source_name: '', month: new Date().getMonth() + 1, year: new Date().getFullYear(), amount_due: '', due_date: '', notes: '' });
+      resetDue();
+      setSelectedDueCategory(null);
       fetchDue(); fetchSummary();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to create');
     }
   };
 
-  const handleUpdateDue = async () => {
+  const handleUpdateDue = async (data) => {
     try {
-      await updateDueIncome(dueModal.income._id, dueForm);
+      const payload = {
+        ...data,
+        category: selectedDueCategory?.value || data.category,
+        amount_due: Number(data.amount_due),
+        month: new Date(data.date).getMonth() + 1,
+        year: new Date(data.date).getFullYear(),
+        due_date: data.date
+      };
+      await updateDueIncome(dueModal.income._id, payload);
       toast.success('Due income updated successfully');
       setDueModal({ isOpen: false, income: null, isEdit: false });
+      resetDue();
+      setSelectedDueCategory(null);
       fetchDue(); fetchSummary();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to update');
@@ -185,23 +317,40 @@ export const Income = () => {
     }
   };
 
-  const handleCreateDirect = async () => {
+  const handleCreateDirect = async (data) => {
     try {
-      await createDirectIncome(directForm);
+      const payload = {
+        date: data.date,
+        category: selectedDirectCategory?.value || data.category || 'donation',
+        source_name: data.source_name,
+        amount: Number(data.amount),
+        payment_method: data.payment_method
+      };
+      await createDirectIncome(payload);
       toast.success('Direct income recorded successfully');
       setDirectModal({ isOpen: false, income: null, isEdit: false });
-      setDirectForm({ category: 'donation', source_name: '', amount: '', date: new Date().toISOString().split('T')[0], payment_method: 'cash', reference_no: '', description: '' });
+      resetDirect();
+      setSelectedDirectCategory(null);
       fetchDirect(); fetchSummary();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to create');
     }
   };
 
-  const handleUpdateDirect = async () => {
+  const handleUpdateDirect = async (data) => {
     try {
-      await updateDirectIncome(directModal.income._id, directForm);
+      const payload = {
+        date: data.date,
+        category: selectedDirectCategory?.value || data.category,
+        source_name: data.source_name,
+        amount: Number(data.amount),
+        payment_method: data.payment_method
+      };
+      await updateDirectIncome(directModal.income._id, payload);
       toast.success('Direct income updated successfully');
       setDirectModal({ isOpen: false, income: null, isEdit: false });
+      resetDirect();
+      setSelectedDirectCategory(null);
       fetchDirect(); fetchSummary();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to update');
@@ -236,21 +385,61 @@ export const Income = () => {
   };
 
   const openEditDue = (income) => {
-    setDueModal({ isOpen: true, income, isEdit: true });
-    setDueForm({
-      category: income.category, source_name: income.source_name, month: income.month,
-      year: income.year, amount_due: income.amount_due.toString(),
-      due_date: new Date(income.due_date).toISOString().split('T')[0], notes: income.notes || ''
+    setDueModal({
+      isOpen: true,
+      income,
+      isEdit: true
     });
+    resetDue({
+      date: new Date(income.created_at).toISOString().split('T')[0],
+      category: income.category,
+      source_name: income.source_name,
+      amount_due: income.amount_due.toString(),
+      payment_method: income.payment_method || 'cash'
+    });
+    setSelectedDueCategory({ value: income.category, label: income.category });
+  };
+
+  const openAddDue = () => {
+    setDueModal({
+      isOpen: true,
+      income: null,
+      isEdit: false
+    });
+    resetDue();
+    setSelectedDueCategory(null);
   };
 
   const openEditDirect = (income) => {
-    setDirectModal({ isOpen: true, income, isEdit: true });
-    setDirectForm({
-      category: income.category, source_name: income.source_name, amount: income.amount.toString(),
-      date: new Date(income.date).toISOString().split('T')[0], payment_method: income.payment_method,
-      reference_no: income.reference_no || '', description: income.description || ''
+    setDirectModal({
+      isOpen: true,
+      income,
+      isEdit: true
     });
+    resetDirect({
+      date: new Date(income.date).toISOString().split('T')[0],
+      category: income.category,
+      source_name: income.source_name,
+      amount: income.amount.toString(),
+      payment_method: income.payment_method
+    });
+    setSelectedDirectCategory({ value: income.category, label: income.category });
+  };
+
+  const openAddDirect = () => {
+    setDirectModal({
+      isOpen: true,
+      income: null,
+      isEdit: false
+    });
+    resetDirect({
+      date: new Date().toISOString().split('T')[0],
+      category: '',
+      source_name: '',
+      amount: '',
+      payment_method: 'cash'
+    });
+    setSelectedDirectCategory(null);
   };
 
   const getStatusBadge = (status) => {
@@ -583,18 +772,14 @@ export const Income = () => {
                 />
               </div>
 
-              <select
-                value={categoryFilter}
-                onChange={(e) => setCategoryFilter(e.target.value)}
-                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-              >
-                <option value="">All Categories</option>
-                {activeTab === 'due' ? (
-                  <><option value="building_rent">Building Rent</option><option value="shop_rent">Shop Rent</option><option value="coconut_sale">Coconut Sale</option><option value="hall_rent">Hall Rent</option><option value="other">Other</option></>
-                ) : (
-                  <><option value="donation">Donation</option><option value="misc_income">Misc Income</option><option value="event_income">Event Income</option><option value="charity_box">Charity Box</option><option value="other">Other</option></>
-                )}
-              </select>
+              <Select
+                value={categoryFilter ? { value: categoryFilter, label: activeTab === 'due' ? dueCategories.find(c => c.name === categoryFilter)?.name : incomeCategories.find(c => c.name === categoryFilter)?.name } : null}
+                onChange={(selected) => setCategoryFilter(selected ? selected.value : '')}
+                options={activeTab === 'due' ? dueCategories.map(c => ({ value: c.name, label: c.name })) : incomeCategories.map(c => ({ value: c.name, label: c.name }))}
+                placeholder="All Categories"
+                className="w-48"
+                styles={selectStyles}
+              />
 
               {activeTab === 'due' && (
                 <select
@@ -636,7 +821,7 @@ export const Income = () => {
 
             <div className="flex justify-end">
               <button
-                onClick={() => activeTab === 'due' ? setDueModal({ isOpen: true, income: null, isEdit: false }) : setDirectModal({ isOpen: true, income: null, isEdit: false })}
+                onClick={() => activeTab === 'due' ? openAddDue() : openAddDirect()}
                 className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
               >
                 <Plus size={18} />
@@ -682,7 +867,7 @@ export const Income = () => {
                         <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{income.income_code}</td>
                         <td className="py-3 px-4 text-sm">
                           <div className="flex items-center gap-2">
-                            {getCategoryIcon(income.category)}
+                            {/* {getCategoryIcon(income.category)} */}
                             {/* FIX: Use formatCategory helper with replaceAll */}
                             <span className="capitalize">{formatCategory(income.category)}</span>
                           </div>
@@ -757,7 +942,7 @@ export const Income = () => {
                         <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{new Date(income.date).toLocaleDateString()}</td>
                         <td className="py-3 px-4 text-sm">
                           <div className="flex items-center gap-2">
-                            {getCategoryIcon(income.category)}
+                            {/* {getCategoryIcon(income.category)} */}
                             {/* FIX: Use formatCategory helper with replaceAll */}
                             <span className="capitalize">{formatCategory(income.category)}</span>
                           </div>
@@ -826,49 +1011,55 @@ export const Income = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                    <select value={dueForm.category} onChange={(e) => setDueForm({ ...dueForm, category: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                      <option value="building_rent">Building Rent</option>
-                      <option value="shop_rent">Shop Rent</option>
-                      <option value="coconut_sale">Coconut Sale</option>
-                      <option value="hall_rent">Hall Rent</option>
-                      <option value="other">Other</option>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date *</label>
+                    <input type="date" {...registerDue('date', { required: 'Date is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
+                    {dueErrors.date && <p className="text-red-500 text-xs mt-1">{dueErrors.date.message}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category *</label>
+                    <input type="hidden" {...registerDue('category', { required: 'Category is required' })} />
+                    <Select
+                      value={selectedDueCategory}
+                      onChange={(selected) => {
+                        setSelectedDueCategory(selected);
+                        setDirectValue('category', selected?.value || '');
+                        triggerDue('category');
+                      }}
+                      options={dueCategories.map(c => ({ value: c.name, label: c.name }))}
+                      placeholder="Select Category"
+                      styles={{
+                        ...selectStyles,
+                        control: (base, state) => ({
+                          ...selectStyles.control(base, state),
+                          borderColor: dueErrors.category ? '#ef4444' : (state.isFocused ? '#0B65F6' : '#e5e7eb')
+                        })
+                      }}
+                    />
+                    {dueErrors.category && <p className="text-red-500 text-xs mt-1">Category is required</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Source Name *</label>
+                    <input type="text" {...registerDue('source_name', { required: 'Source name is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter source name" />
+                    {dueErrors.source_name && <p className="text-red-500 text-xs mt-1">{dueErrors.source_name.message}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount *</label>
+                    <input type="number" {...registerDue('amount_due', { required: 'Amount is required', min: { value: 0, message: 'Amount must be positive' } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter amount" />
+                    {dueErrors.amount_due && <p className="text-red-500 text-xs mt-1">{dueErrors.amount_due.message}</p>}
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Method *</label>
+                    <select {...registerDue('payment_method', { required: 'Payment method is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
+                      <option value="cash">Cash</option>
+                      <option value="upi">UPI</option>
+                      <option value="bank">Bank Transfer</option>
                     </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Source Name</label>
-                    <input type="text" value={dueForm.source_name} onChange={(e) => setDueForm({ ...dueForm, source_name: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter source name" />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Month</label>
-                      <select value={dueForm.month} onChange={(e) => setDueForm({ ...dueForm, month: Number(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                        {months.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Year</label>
-                      <select value={dueForm.year} onChange={(e) => setDueForm({ ...dueForm, year: Number(e.target.value) })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                        {years.map(y => <option key={y} value={y}>{y}</option>)}
-                      </select>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount Due</label>
-                    <input type="number" value={dueForm.amount_due} onChange={(e) => setDueForm({ ...dueForm, amount_due: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter amount" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Due Date</label>
-                    <input type="date" value={dueForm.due_date} onChange={(e) => setDueForm({ ...dueForm, due_date: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
-                    <textarea value={dueForm.notes} onChange={(e) => setDueForm({ ...dueForm, notes: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" rows="2" placeholder="Optional notes" />
+                    {dueErrors.payment_method && <p className="text-red-500 text-xs mt-1">{dueErrors.payment_method.message}</p>}
                   </div>
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
-                  <button onClick={() => setDueModal({ isOpen: false, income: null, isEdit: false })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
-                  <button onClick={dueModal.isEdit ? handleUpdateDue : handleCreateDue} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{dueModal.isEdit ? 'Update' : 'Create'}</button>
+                  <button onClick={() => { setDueModal({ isOpen: false, income: null, isEdit: false }); resetDue(); setSelectedDueCategory(null); }} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
+                  <button onClick={dueModal.isEdit ? handleSubmitDue(handleUpdateDue) : handleSubmitDue(handleCreateDue)} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{dueModal.isEdit ? 'Update' : 'Create'}</button>
                 </div>
               </div>
             </motion.div>
@@ -897,47 +1088,55 @@ export const Income = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date</label>
-                    <input type="date" value={directForm.date} onChange={(e) => setDirectForm({ ...directForm, date: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date *</label>
+                    <input type="date" {...registerDirect('date', { required: 'Date is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
+                    {directErrors.date && <p className="text-red-500 text-xs mt-1">{directErrors.date.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-                    <select value={directForm.category} onChange={(e) => setDirectForm({ ...directForm, category: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                      <option value="donation">Donation</option>
-                      <option value="misc_income">Misc Income</option>
-                      <option value="event_income">Event Income</option>
-                      <option value="charity_box">Charity Box</option>
-                      <option value="other">Other</option>
-                    </select>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category *</label>
+                    <input type="hidden" {...registerDirect('category', { required: 'Category is required' })} />
+                    <Select
+                      value={selectedDirectCategory}
+                      onChange={(selected) => {
+                        setSelectedDirectCategory(selected);
+                        setDirectValue('category', selected?.value || '');
+                        triggerDirect('category');
+                      }}
+                      options={incomeCategories.map(c => ({ value: c.name, label: c.name }))}
+                      placeholder="Select Category"
+                      styles={{
+                        ...selectStyles,
+                        control: (base, state) => ({
+                          ...selectStyles.control(base, state),
+                          borderColor: directErrors.category ? '#ef4444' : (state.isFocused ? '#0B65F6' : '#e5e7eb')
+                        })
+                      }}
+                    />
+                    {directErrors.category && <p className="text-red-500 text-xs mt-1">Category is required</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Source Name</label>
-                    <input type="text" value={directForm.source_name} onChange={(e) => setDirectForm({ ...directForm, source_name: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter source name" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Source Name *</label>
+                    <input type="text" {...registerDirect('source_name', { required: 'Source name is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter source name" />
+                    {directErrors.source_name && <p className="text-red-500 text-xs mt-1">{directErrors.source_name.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount</label>
-                    <input type="number" value={directForm.amount} onChange={(e) => setDirectForm({ ...directForm, amount: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter amount" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount *</label>
+                    <input type="number" {...registerDirect('amount', { required: 'Amount is required', min: { value: 0, message: 'Amount must be positive' } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter amount" />
+                    {directErrors.amount && <p className="text-red-500 text-xs mt-1">{directErrors.amount.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Method</label>
-                    <select value={directForm.payment_method} onChange={(e) => setDirectForm({ ...directForm, payment_method: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Method *</label>
+                    <select {...registerDirect('payment_method', { required: 'Payment method is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
                       <option value="cash">Cash</option>
                       <option value="upi">UPI</option>
                       <option value="bank">Bank Transfer</option>
                     </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference No</label>
-                    <input type="text" value={directForm.reference_no} onChange={(e) => setDirectForm({ ...directForm, reference_no: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Optional reference number" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Description</label>
-                    <textarea value={directForm.description} onChange={(e) => setDirectForm({ ...directForm, description: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" rows="2" placeholder="Optional description" />
+                    {directErrors.payment_method && <p className="text-red-500 text-xs mt-1">{directErrors.payment_method.message}</p>}
                   </div>
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
-                  <button onClick={() => setDirectModal({ isOpen: false, income: null, isEdit: false })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
-                  <button onClick={directModal.isEdit ? handleUpdateDirect : handleCreateDirect} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{directModal.isEdit ? 'Update' : 'Create'}</button>
+                  <button onClick={() => { setDirectModal({ isOpen: false, income: null, isEdit: false }); resetDirect(); setSelectedDirectCategory(null); }} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
+                  <button onClick={directModal.isEdit ? handleSubmitDirect(handleUpdateDirect) : handleSubmitDirect(handleCreateDirect)} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{directModal.isEdit ? 'Update' : 'Create'}</button>
                 </div>
               </div>
             </motion.div>
