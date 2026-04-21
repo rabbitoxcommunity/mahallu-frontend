@@ -85,6 +85,7 @@ const QuickHadiya = ({ onRefresh }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [contributorTypeFilter, setContributorTypeFilter] = useState('');
   const [paymentMethodFilter, setPaymentMethodFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
   const [loading, setLoading] = useState(false);
 
   const [collectionsData, setCollectionsData] = useState({
@@ -137,7 +138,8 @@ const QuickHadiya = ({ onRefresh }) => {
         limit: 20,
         search: searchTerm,
         contributor_type: contributorTypeFilter,
-        payment_method: paymentMethodFilter
+        payment_method: paymentMethodFilter,
+        date_filter: dateFilter
       });
       setCollectionsData(data);
     } catch (error) {
@@ -150,8 +152,8 @@ const QuickHadiya = ({ onRefresh }) => {
 
   // Debounced search
   const debouncedFetchCollections = useCallback(
-    debounce((page) => fetchCollections(page), 500),
-    [searchTerm, contributorTypeFilter, paymentMethodFilter]
+    debounce((page) => fetchCollections(page), 800),
+    [searchTerm, contributorTypeFilter, paymentMethodFilter, dateFilter]
   );
 
   // House search with debounce
@@ -195,7 +197,7 @@ const QuickHadiya = ({ onRefresh }) => {
   // Debounced search effect
   useEffect(() => {
     debouncedFetchCollections(1);
-  }, [searchTerm, contributorTypeFilter, paymentMethodFilter]);
+  }, [searchTerm, contributorTypeFilter, paymentMethodFilter, dateFilter]);
 
   // House search effect
   useEffect(() => {
@@ -298,7 +300,7 @@ const QuickHadiya = ({ onRefresh }) => {
         {/* Filter Section */}
         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
           <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-3">
               <div className="relative">
                 <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
@@ -330,14 +332,22 @@ const QuickHadiya = ({ onRefresh }) => {
                 <option value="upi">UPI</option>
                 <option value="bank">Bank</option>
               </select>
+
+              <input
+                type="month"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              />
             </div>
 
             <div className="flex items-center gap-2">
-              {(contributorTypeFilter || paymentMethodFilter) && (
+              {(contributorTypeFilter || paymentMethodFilter || dateFilter) && (
                 <button
                   onClick={() => {
                     setContributorTypeFilter('');
                     setPaymentMethodFilter('');
+                    setDateFilter('');
                   }}
                   className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all"
                 >
