@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Plus, Pencil, Trash2, X, Calendar, Wallet } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Calendar, Wallet, CreditCard } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getIncomeCategories, createIncomeCategory, updateIncomeCategory, deleteIncomeCategory } from '../../api/incomeCategoryService';
+import { getExpenseCategories, createExpenseCategory, updateExpenseCategory, deleteExpenseCategory } from '../../api/expenseCategoryService';
 
 const GeneralSettings = () => {
   const [categories, setCategories] = useState([]);
+  const [expenseCategories, setExpenseCategories] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [addModal, setAddModal] = useState({ isOpen: false });
-  const [editModal, setEditModal] = useState({ isOpen: false, category: null });
-  const [deleteModal, setDeleteModal] = useState({ isOpen: false, category: null });
+  const [addModal, setAddModal] = useState({ isOpen: false, categoryType: 'income' });
+  const [editModal, setEditModal] = useState({ isOpen: false, category: null, categoryType: 'income' });
+  const [deleteModal, setDeleteModal] = useState({ isOpen: false, category: null, categoryType: 'income' });
 
   const [formData, setFormData] = useState({
     name: '',
@@ -30,18 +32,38 @@ const GeneralSettings = () => {
     }
   };
 
+  const fetchExpenseCategories = async () => {
+    setLoading(true);
+    try {
+      const data = await getExpenseCategories();
+      setExpenseCategories(data);
+    } catch (error) {
+      console.error('Error fetching expense categories:', error);
+      toast.error('Failed to fetch expense categories');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchCategories();
+    fetchExpenseCategories();
   }, []);
 
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await createIncomeCategory(formData);
-      toast.success('Category created successfully');
-      setAddModal({ isOpen: false });
+      if (addModal.categoryType === 'expense') {
+        await createExpenseCategory(formData);
+        toast.success('Expense category created successfully');
+        fetchExpenseCategories();
+      } else {
+        await createIncomeCategory(formData);
+        toast.success('Category created successfully');
+        fetchCategories();
+      }
+      setAddModal({ isOpen: false, categoryType: 'income' });
       setFormData({ name: '', type: 'due', description: '' });
-      fetchCategories();
     } catch (error) {
       console.error('Error creating category:', error);
       toast.error(error.response?.data?.message || 'Failed to create category');
@@ -51,11 +73,17 @@ const GeneralSettings = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      await updateIncomeCategory(editModal.category._id, formData);
-      toast.success('Category updated successfully');
-      setEditModal({ isOpen: false, category: null });
+      if (editModal.categoryType === 'expense') {
+        await updateExpenseCategory(editModal.category._id, formData);
+        toast.success('Expense category updated successfully');
+        fetchExpenseCategories();
+      } else {
+        await updateIncomeCategory(editModal.category._id, formData);
+        toast.success('Category updated successfully');
+        fetchCategories();
+      }
+      setEditModal({ isOpen: false, category: null, categoryType: 'income' });
       setFormData({ name: '', type: 'due', description: '' });
-      fetchCategories();
     } catch (error) {
       console.error('Error updating category:', error);
       toast.error(error.response?.data?.message || 'Failed to update category');
@@ -64,32 +92,40 @@ const GeneralSettings = () => {
 
   const handleDelete = async () => {
     try {
-      await deleteIncomeCategory(deleteModal.category._id);
-      toast.success('Category deleted successfully');
-      setDeleteModal({ isOpen: false, category: null });
-      fetchCategories();
+      if (deleteModal.categoryType === 'expense') {
+        await deleteExpenseCategory(deleteModal.category._id);
+        toast.success('Expense category deleted successfully');
+        fetchExpenseCategories();
+      } else {
+        await deleteIncomeCategory(deleteModal.category._id);
+        toast.success('Category deleted successfully');
+        fetchCategories();
+      }
+      setDeleteModal({ isOpen: false, category: null, categoryType: 'income' });
     } catch (error) {
       console.error('Error deleting category:', error);
       toast.error('Failed to delete category');
     }
   };
 
-  const openEditModal = (category) => {
+  const openEditModal = (category, categoryType = 'income') => {
     setEditModal({
       isOpen: true,
-      category
+      category,
+      categoryType
     });
     setFormData({
       name: category.name,
-      type: category.type,
+      type: category.type || '',
       description: category.description || ''
     });
   };
 
-  const openDeleteModal = (category) => {
+  const openDeleteModal = (category, categoryType = 'income') => {
     setDeleteModal({
       isOpen: true,
-      category
+      category,
+      categoryType
     });
   };
 
@@ -100,21 +136,31 @@ const GeneralSettings = () => {
     <div className="w-full">
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Income Categories</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage income categories for Due and Income tracking</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Categories</h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage income and expense categories</p>
         </div>
 
         <div className="p-6">
-          <div className="flex justify-end mb-6">
+          <div className="flex justify-end gap-3 mb-6">
             <button
               onClick={() => {
-                setAddModal({ isOpen: true });
+                setAddModal({ isOpen: true, categoryType: 'income' });
                 setFormData({ name: '', type: 'due', description: '' });
               }}
               className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
             >
               <Plus size={18} />
-              Add Category
+              Add Income Category
+            </button>
+            <button
+              onClick={() => {
+                setAddModal({ isOpen: true, categoryType: 'expense' });
+                setFormData({ name: '', description: '' });
+              }}
+              className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
+            >
+              <Plus size={18} />
+              Add Expense Category
             </button>
           </div>
 
@@ -206,6 +252,50 @@ const GeneralSettings = () => {
                 )}
               </div>
             </div>
+
+            {/* Expense Categories */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <CreditCard size={20} className="text-red-600" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Expense Categories</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {expenseCategories.map((category) => (
+                  <div
+                    key={category._id}
+                    className="p-4 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-medium text-gray-900 dark:text-white">{category.name}</h4>
+                        {category.description && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => openEditModal(category, 'expense')}
+                          className="p-2 text-gray-600 dark:text-gray-400 hover:text-[#0B65F6] dark:hover:text-blue-400 transition-colors"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                        <button
+                          onClick={() => openDeleteModal(category, 'expense')}
+                          className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {expenseCategories.length === 0 && (
+                  <div className="col-span-3 text-center py-8 text-gray-500 dark:text-gray-400">
+                    No expense categories found. Click "Add Expense Category" to create one.
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -236,12 +326,15 @@ const GeneralSettings = () => {
                 <div className="p-6 border-b border-gray-100 dark:border-gray-800">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-                      {editModal.isOpen ? 'Edit Category' : 'Add Category'}
+                      {addModal.categoryType === 'expense' || editModal.categoryType === 'expense'
+                        ? (editModal.isOpen ? 'Edit Expense Category' : 'Add Expense Category')
+                        : (editModal.isOpen ? 'Edit Category' : 'Add Category')
+                      }
                     </h3>
                     <button
                       onClick={() => {
-                        setAddModal({ isOpen: false });
-                        setEditModal({ isOpen: false, category: null });
+                        setAddModal({ isOpen: false, categoryType: 'income' });
+                        setEditModal({ isOpen: false, category: null, categoryType: 'income' });
                       }}
                       className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
                     >
@@ -250,20 +343,22 @@ const GeneralSettings = () => {
                   </div>
                 </div>
                 <form onSubmit={editModal.isOpen ? handleUpdate : handleCreate} className="p-6 space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Category Type *
-                    </label>
-                    <select
-                      value={formData.type}
-                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                      className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                      required
-                    >
-                      <option value="due">Due</option>
-                      <option value="income">Income</option>
-                    </select>
-                  </div>
+                  {addModal.categoryType === 'income' || editModal.categoryType === 'income' ? (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Category Type *
+                      </label>
+                      <select
+                        value={formData.type}
+                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                        className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        required
+                      >
+                        <option value="due">Due</option>
+                        <option value="income">Income</option>
+                      </select>
+                    </div>
+                  ) : null}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Category Name *
@@ -291,8 +386,8 @@ const GeneralSettings = () => {
                     <button
                       type="button"
                       onClick={() => {
-                        setAddModal({ isOpen: false });
-                        setEditModal({ isOpen: false, category: null });
+                        setAddModal({ isOpen: false, categoryType: 'income' });
+                        setEditModal({ isOpen: false, category: null, categoryType: 'income' });
                       }}
                       className="flex-1 px-4 py-2 bg-gray-100 dark:bg-[#252731] text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-[#2f3038] transition-colors"
                     >

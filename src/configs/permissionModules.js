@@ -43,7 +43,8 @@ export const permissionModules = [
     roles: ["admin", "superAdmin"],
     subItems: [
       { label: "വരിസംഖ്യ", path: "/finance/varisankhya", roles: ["admin", "superAdmin"] },
-      { label: "വരുമാനം", path: "/finance/income", roles: ["admin", "superAdmin"] }
+      { label: "വരുമാനം", path: "/finance/income", roles: ["admin", "superAdmin"] },
+      { label: "Expense", path: "/finance/expense", roles: ["admin", "superAdmin"] }
     ]
   },
   {

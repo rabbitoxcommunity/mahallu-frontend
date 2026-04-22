@@ -24,6 +24,7 @@ import MemberDetailedView from "./pages/Family/MemberDetailedView";
 import Analytics from "./pages/Analytics";
 import Varisankhya from "./pages/Finance/Varisankhya";
 import { Income } from "./pages/Finance/Income";
+import Expense from "./pages/Finance/Expense";
 import GeneralSettings from "./pages/Settings/GeneralSettings";
 
 function App() {
@@ -72,6 +73,7 @@ function App() {
                             {/* Finance Routes */}
                             <Route path="/finance/varisankhya" element={<Varisankhya />} />
                             <Route path="/finance/income" element={<Income />} />
+                            <Route path="/finance/expense" element={<Expense />} />
                             
                             {/* Settings Routes */}
                             <Route path="/settings/general" element={<GeneralSettings />} />
