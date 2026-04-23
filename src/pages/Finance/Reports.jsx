@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { useTranslation } from 'react-i18next';
 import {
   getSummary,
   getStatement,
@@ -26,6 +27,7 @@ import {
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const Reports = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [loading, setLoading] = useState(false);
 
@@ -417,7 +419,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <IndianRupee size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">Total Income</span>
+            <span className="text-sm font-medium opacity-90">{t('finance.reports.totalIncome')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.total_income.toLocaleString()}</p>
         </motion.div>
@@ -432,7 +434,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <Home size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">Total Varisankhya</span>
+            <span className="text-sm font-medium opacity-90">{t('finance.reports.totalVarisankhya')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.total_varisankhya.toLocaleString()}</p>
         </motion.div>
@@ -447,7 +449,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <TrendingUp size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">Balance</span>
+            <span className="text-sm font-medium opacity-90">{t('common.balance')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.balance.toLocaleString()}</p>
         </motion.div>
@@ -462,7 +464,7 @@ const Reports = () => {
             <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
               <IndianRupee size={24} className="text-green-600" />
             </div>
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">This Month Income</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('finance.reports.thisMonthIncome')}</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">₹{summaryData.this_month_income.toLocaleString()}</p>
         </motion.div>
@@ -477,7 +479,7 @@ const Reports = () => {
             <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-xl">
               <Wallet size={24} className="text-red-600" />
             </div>
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">This Month Expense</span>
+            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('finance.reports.thisMonthExpense')}</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">₹{summaryData.this_month_expense.toLocaleString()}</p>
         </motion.div>
@@ -492,7 +494,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <Wallet size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">Total Expense</span>
+            <span className="text-sm font-medium opacity-90">{t('finance.reports.totalExpense')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.total_expense.toLocaleString()}</p>
         </motion.div>
@@ -843,17 +845,17 @@ const Reports = () => {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Finance Reports</h1>
-        <p className="text-gray-500 dark:text-gray-400">Combined financial insights and audit-ready reports</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('finance.reports.title')}</h1>
+        <p className="text-gray-500 dark:text-gray-400">{t('finance.reports.description')}</p>
       </div>
 
       {/* Tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
         {[
-          { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-          { id: 'statement', label: 'Financial Statement', icon: FileText },
-          { id: 'trends', label: 'Trends', icon: TrendingUp },
-          { id: 'export', label: 'Export / Audit', icon: Download }
+          { id: 'dashboard', label: t('finance.reports.dashboard'), icon: BarChart3 },
+          { id: 'statement', label: t('finance.reports.financialStatement'), icon: FileText },
+          { id: 'trends', label: t('finance.reports.trends'), icon: TrendingUp },
+          { id: 'export', label: t('finance.reports.exportAudit'), icon: Download }
         ].map(tab => (
           <button
             key={tab.id}
@@ -921,7 +923,7 @@ const Reports = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 flex items-center gap-3">
             <RefreshCw size={24} className="animate-spin text-[#0B65F6]" />
-            <span className="text-gray-900 dark:text-white">Loading...</span>
+            <span className="text-gray-900 dark:text-white">{t('common.loading')}</span>
           </div>
         </div>
       )}

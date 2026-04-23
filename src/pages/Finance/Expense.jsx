@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { motion, AnimatePresence } from 'framer-motion';
 import moment from 'moment';
+import { useTranslation } from 'react-i18next';
 import {
   Wallet,
   IndianRupee,
@@ -98,6 +99,7 @@ const PaymentMethodBadge = ({ method }) => {
 };
 
 const Expense = () => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [paymentMethodFilter, setPaymentMethodFilter] = useState('');
@@ -378,8 +380,8 @@ const Expense = () => {
       <div className="mb-8 no-print">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Expense Management</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">Track all outgoing money spent by Mahallu</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('finance.expense.title')}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">{t('finance.expense.description')}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <button
@@ -387,14 +389,14 @@ const Expense = () => {
               className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
             >
               <Plus size={18} />
-              Add Expense
+              {t('finance.expense.addExpense')}
             </button>
             <button
               onClick={fetchAllExpensesForPrint}
               className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               <Printer size={18} />
-              Print Report
+              {t('finance.expense.printReport')}
             </button>
           </div>
         </div>
@@ -409,19 +411,19 @@ const Expense = () => {
           color="bg-blue-500"
         /> */}
         <SummaryCard
-          title="This Month"
+          title={t('finance.expense.thisMonth')}
           value={`₹${summaryData.month_total.toLocaleString()}`}
           icon={Calendar}
           color="bg-green-500"
         />
         <SummaryCard
-          title="Cash Expense"
+          title={t('finance.expense.cashExpense')}
           value={`₹${summaryData.cash_total.toLocaleString()}`}
           icon={Banknote}
           color="bg-yellow-500"
         />
         <SummaryCard
-          title="UPI/Bank Expense"
+          title={t('finance.expense.bankExpense')}
           value={`₹${summaryData.bank_total.toLocaleString()}`}
           icon={CreditCard}
           color="bg-purple-500"
@@ -429,7 +431,7 @@ const Expense = () => {
         <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-red-100">Total Expense</p>
+              <p className="text-sm text-red-100">{t('finance.expense.totalExpense')}</p>
               <h3 className="text-2xl font-bold text-white mt-1">₹{summaryData.total.toLocaleString()}</h3>
             </div>
             <div className="p-3 rounded-xl bg-white/20">
@@ -448,7 +450,7 @@ const Expense = () => {
                 <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search expenses..."
+                  placeholder={t('finance.expense.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
@@ -579,14 +581,14 @@ const Expense = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Voucher No</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Date</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Category</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Paid To</th>
-                      <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Amount</th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.expense.voucherNo')}</th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.expense.paidTo')}</th>
+                      <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
                       {/* <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Method</th> */}
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Added By</th>
-                      <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.expense.createdBy')}</th>
+                      <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -595,7 +597,7 @@ const Expense = () => {
                         <td colSpan={8} className="py-12 text-center text-gray-400 dark:text-gray-500">
                           <div className="flex flex-col items-center gap-2">
                             <Wallet size={32} className="opacity-30" />
-                            <p className="text-sm">No expenses found</p>
+                            <p className="text-sm">{t('common.noData')}</p>
                           </div>
                         </td>
                       </tr>
@@ -760,7 +762,7 @@ const Expense = () => {
             >
               <div className="p-6 py-3 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Add Expense</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('finance.expense.addExpense')}</h2>
                   <button
                     onClick={() => {
                       setAddModal({ isOpen: false });
@@ -775,25 +777,25 @@ const Expense = () => {
 
               <form onSubmit={handleSubmitAdd(handleCreate)} className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.date')} *</label>
                   <input
                     type="date"
-                    {...registerAdd('date', { required: 'Date is required' })}
+                    {...registerAdd('date', { required: t('finance.expense.dateRequired') })}
                     className={`w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.date ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
                   />
                   {addErrors.date && <p className="text-red-500 text-xs mt-1">{addErrors.date.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.category')} *</label>
                   <Controller
                     name="category"
                     control={controlAdd}
-                    rules={{ required: 'Category is required' }}
+                    rules={{ required: t('finance.expense.categoryRequired') }}
                     render={({ field }) => (
                       <Select
                         {...field}
                         options={expenseCategories.map(cat => ({ value: cat.name, label: cat.name }))}
-                        placeholder="Select Category"
+                        placeholder={t('common.selectCategory')}
                         className={`react-select-container ${addErrors.category ? 'react-select-error' : ''}`}
                         classNamePrefix="react-select"
                         styles={{
@@ -836,14 +838,14 @@ const Expense = () => {
                   {addErrors.paid_to && <p className="text-red-500 text-xs mt-1">{addErrors.paid_to.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Amount *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.amount')} *</label>
                   <div className="relative">
                     <IndianRupee size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="number"
                       {...registerAdd('amount', {
-                        required: 'Amount is required',
-                        min: { value: 0.01, message: 'Amount must be greater than 0' }
+                        required: t('finance.expense.amountRequired'),
+                        min: { value: 0.01, message: t('finance.expense.amountPositive') }
                       })}
                       onWheel={(e) => e.target.blur()}
                       className={`w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.amount ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
@@ -852,11 +854,11 @@ const Expense = () => {
                   {addErrors.amount && <p className="text-red-500 text-xs mt-1">{addErrors.amount.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Method *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.paymentMethod')} *</label>
                   <Controller
                     name="payment_method"
                     control={controlAdd}
-                    rules={{ required: 'Payment Method is required' }}
+                    rules={{ required: t('finance.expense.paymentMethodRequired') }}
                     render={({ field }) => (
                       <Select
                         {...field}
@@ -865,7 +867,7 @@ const Expense = () => {
                           { value: 'upi', label: 'UPI' },
                           { value: 'bank', label: 'Bank' }
                         ]}
-                        placeholder="Select Payment Method"
+                        placeholder={t('common.selectPaymentMethod')}
                         className={`react-select-container ${addErrors.payment_method ? 'react-select-error' : ''}`}
                         classNamePrefix="react-select"
                         styles={{
@@ -936,13 +938,13 @@ const Expense = () => {
                     }}
                     className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800"
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                   <button
                     type="submit"
                     className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700"
                   >
-                    Save Expense
+                    {t('finance.expense.saveExpense')}
                   </button>
                 </div>
               </form>
@@ -963,7 +965,7 @@ const Expense = () => {
             >
               <div className="p-6 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Edit Expense</h2>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">{t('finance.expense.editExpense')}</h2>
                   <button
                     onClick={() => setEditModal({ isOpen: false, expense: null })}
                     className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
@@ -975,7 +977,7 @@ const Expense = () => {
 
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Date *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.date')} *</label>
                   <input
                     type="date"
                     value={editForm.date}
@@ -984,7 +986,7 @@ const Expense = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.category')} *</label>
                   <Select
                     value={editForm.category ? { value: editForm.category, label: editForm.category } : null}
                     onChange={(selected) => setEditForm({ ...editForm, category: selected ? selected.value : '' })}
@@ -1033,7 +1035,7 @@ const Expense = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Amount *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.amount')} *</label>
                   <div className="relative">
                     <IndianRupee size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
@@ -1045,7 +1047,7 @@ const Expense = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Payment Method *</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.paymentMethod')} *</label>
                   <Select
                     value={editForm.payment_method ? { value: editForm.payment_method, label: editForm.payment_method.charAt(0).toUpperCase() + editForm.payment_method.slice(1) } : null}
                     onChange={(selected) => setEditForm({ ...editForm, payment_method: selected ? selected.value : '' })}
@@ -1144,7 +1146,7 @@ const Expense = () => {
                   onClick={handleUpdate}
                   className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700"
                 >
-                  Update Expense
+                  {t('finance.expense.updateExpense')}
                 </button>
               </div>
             </motion.div>
@@ -1181,11 +1183,11 @@ const Expense = () => {
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense?.voucher_no}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Date</p>
+                    <p className="text-sm text-gray-500">{t('common.date')}</p>
                     <p className="font-medium text-gray-900 dark:text-white">{moment(viewModal.expense?.updatedAt).format('DD MMM YYYY, h:mm A')}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Category</p>
+                    <p className="text-sm text-gray-500">{t('common.category')}</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense?.category}</p>
                   </div>
                   <div>
@@ -1193,11 +1195,11 @@ const Expense = () => {
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense?.paid_to}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Amount</p>
+                    <p className="text-sm text-gray-500">{t('common.amount')}</p>
                     <p className="font-medium text-gray-900 dark:text-white">₹{viewModal.expense?.amount.toLocaleString()}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Payment Method</p>
+                    <p className="text-sm text-gray-500">{t('common.paymentMethod')}</p>
                     <p className="font-medium text-gray-900 dark:text-white capitalize">{viewModal.expense?.payment_method}</p>
                   </div>
                 </div>
@@ -1247,22 +1249,22 @@ const Expense = () => {
                   <div className="mx-auto flex items-center justify-center w-12 h-12 rounded-full bg-red-100 mb-4">
                     <Trash2 size={24} className="text-red-600" />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Delete Expense?</h3>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('finance.expense.deleteExpense')}?</h3>
                   <p className="text-sm text-gray-500 mb-6">
-                    Are you sure you want to delete this expense? This action cannot be undone.
+                    {t('finance.expense.deleteConfirm')}
                   </p>
                   <div className="flex justify-center gap-3">
                     <button
                       onClick={() => setDeleteModal({ isOpen: false, expense: null })}
                       className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
-                      Cancel
+                      {t('common.cancel')}
                     </button>
                     <button
                       onClick={handleDelete}
                       className="px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600"
                     >
-                      Delete
+                      {t('common.delete')}
                     </button>
                   </div>
                 </div>
@@ -1302,11 +1304,11 @@ const Expense = () => {
                   </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Date:</span>
+                      <span className="text-gray-500">{t('common.date')}:</span>
                       <span className="font-medium text-gray-900 dark:text-white">{moment(voucherModal.expense?.updatedAt).format('DD MMM YYYY, h:mm A')}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Category:</span>
+                      <span className="text-gray-500">{t('common.category')}:</span>
                       <span className="font-medium text-gray-900 dark:text-white">{voucherModal.expense?.category}</span>
                     </div>
                     <div className="flex justify-between">
@@ -1314,11 +1316,11 @@ const Expense = () => {
                       <span className="font-medium text-gray-900 dark:text-white">{voucherModal.expense?.paid_to}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Amount:</span>
+                      <span className="text-gray-500">{t('common.amount')}:</span>
                       <span className="font-medium text-gray-900 dark:text-white">₹{voucherModal.expense?.amount.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-500">Payment Method:</span>
+                      <span className="text-gray-500">{t('common.paymentMethod')}:</span>
                       <span className="font-medium text-gray-900 dark:text-white capitalize">{voucherModal.expense?.payment_method}</span>
                     </div>
                     {voucherModal.expense?.reference_no && (

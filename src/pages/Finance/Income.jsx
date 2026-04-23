@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { motion, AnimatePresence } from 'framer-motion';
 import Select from 'react-select';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import {
   IndianRupee, Search, Filter, ChevronLeft, ChevronRight, Plus,
   History, Edit2, Trash2, Download, X, CheckCircle, Calendar,
@@ -19,6 +20,7 @@ import IncomeReceipt from './IncomeReceipt';
 import QuickHadiya from './QuickHadiya';
 
 export const Income = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState(() => {
     const savedTab = localStorage.getItem('incomeActiveTab');
     return savedTab || 'due';
@@ -472,8 +474,8 @@ export const Income = () => {
       <div className="mb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{activeTab === 'hadiya' ? 'Quick Hadiya Collection' : 'Income Management'}</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">{activeTab === 'hadiya' ? 'Fast collection flow for voluntary contributions during events' : 'Manage due-based and direct income records'}</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{activeTab === 'hadiya' ? t('finance.income.quickHadiya') : t('finance.income.title')}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">{activeTab === 'hadiya' ? t('finance.income.hadiyaDescription') : t('finance.income.description')}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             {activeTab !== 'hadiya' && (
@@ -512,7 +514,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total Due</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.totalDue')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{(summary?.due_based?.total_due || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
@@ -739,7 +741,7 @@ export const Income = () => {
           >
             <div className="flex items-center justify-center gap-2">
               <Wallet size={18} />
-              Direct Income
+              {t('finance.income.directIncome')}
             </div>
           </button>
           <button
@@ -766,7 +768,7 @@ export const Income = () => {
                 <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder={`Search ${activeTab === 'due' ? 'due income' : 'direct income'}...`}
+                  placeholder={activeTab === 'due' ? t('finance.income.searchDue') : t('finance.income.searchDirect')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
@@ -815,7 +817,7 @@ export const Income = () => {
                   className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all hover:shadow-md active:scale-95"
                 >
                   <X size={16} />
-                  Clear Filters
+                  {t('common.clearFilters')}
                 </button>
               )}
             </div>
@@ -826,7 +828,7 @@ export const Income = () => {
                 className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
               >
                 <Plus size={18} />
-                Add {activeTab === 'due' ? 'Due Income' : 'Direct Income'}
+                {activeTab === 'due' ? t('finance.income.addDue') : t('finance.income.addDirect')}
               </button>
             </div>
           </div>
@@ -858,7 +860,7 @@ export const Income = () => {
                       <td colSpan={9} className="py-12 text-center text-gray-400 dark:text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                           <IndianRupee size={32} className="opacity-30" />
-                          <p className="text-sm">No due income records found</p>
+                          <p className="text-sm">{t('common.noData')}</p>
                         </div>
                       </td>
                     </tr>
@@ -932,7 +934,7 @@ export const Income = () => {
                       <td colSpan={8} className="py-12 text-center text-gray-400 dark:text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                           <Wallet size={32} className="opacity-30" />
-                          <p className="text-sm">No direct income records found</p>
+                          <p className="text-sm">{t('common.noData')}</p>
                         </div>
                       </td>
                     </tr>
@@ -1004,21 +1006,21 @@ export const Income = () => {
                       <Calendar size={24} className="text-[#0B65F6]" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">{dueModal.isEdit ? 'Edit Due Income' : 'Add Due Income'}</h2>
-                      <p className="text-sm text-gray-500">{dueModal.isEdit ? 'Update due income record' : 'Create new due income record'}</p>
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">{dueModal.isEdit ? t('finance.income.editDue') : t('finance.income.addDue')}</h2>
+                      <p className="text-sm text-gray-500">{dueModal.isEdit ? t('finance.income.updateDue') : t('finance.income.createDue')}</p>
                     </div>
                   </div>
                   <button onClick={() => setDueModal({ isOpen: false, income: null, isEdit: false })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date *</label>
-                    <input type="date" {...registerDue('date', { required: 'Date is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.date')} *</label>
+                    <input type="date" {...registerDue('date', { required: t('finance.income.dateRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
                     {dueErrors.date && <p className="text-red-500 text-xs mt-1">{dueErrors.date.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category *</label>
-                    <input type="hidden" {...registerDue('category', { required: 'Category is required' })} />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.category')} *</label>
+                    <input type="hidden" {...registerDue('category', { required: t('finance.income.categoryRequired') })} />
                     <Select
                       value={selectedDueCategory}
                       onChange={(selected) => {
@@ -1027,7 +1029,7 @@ export const Income = () => {
                         triggerDue('category');
                       }}
                       options={dueCategories.map(c => ({ value: c.name, label: c.name }))}
-                      placeholder="Select Category"
+                      placeholder={t('common.selectCategory')}
                       styles={{
                         ...selectStyles,
                         control: (base, state) => ({
@@ -1036,20 +1038,20 @@ export const Income = () => {
                         })
                       }}
                     />
-                    {dueErrors.category && <p className="text-red-500 text-xs mt-1">Category is required</p>}
+                    {dueErrors.category && <p className="text-red-500 text-xs mt-1">{t('finance.income.categoryRequired')}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Source Name *</label>
-                    <input type="text" {...registerDue('source_name', { required: 'Source name is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter source name" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.sourceName')} *</label>
+                    <input type="text" {...registerDue('source_name', { required: t('finance.income.sourceNameRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterSourceName')} />
                     {dueErrors.source_name && <p className="text-red-500 text-xs mt-1">{dueErrors.source_name.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount *</label>
-                    <input type="number" {...registerDue('amount_due', { required: 'Amount is required', min: { value: 0, message: 'Amount must be positive' } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter amount" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
+                    <input type="number" {...registerDue('amount_due', { required: t('finance.income.amountRequired'), min: { value: 0, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterAmount')} />
                     {dueErrors.amount_due && <p className="text-red-500 text-xs mt-1">{dueErrors.amount_due.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Method *</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
                     <select {...registerDue('payment_method', { required: 'Payment method is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
                       <option value="cash">Cash</option>
                       <option value="upi">UPI</option>
@@ -1059,8 +1061,8 @@ export const Income = () => {
                   </div>
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
-                  <button onClick={() => { setDueModal({ isOpen: false, income: null, isEdit: false }); resetDue(); setSelectedDueCategory(null); }} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
-                  <button onClick={dueModal.isEdit ? handleSubmitDue(handleUpdateDue) : handleSubmitDue(handleCreateDue)} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{dueModal.isEdit ? 'Update' : 'Create'}</button>
+                  <button onClick={() => { setDueModal({ isOpen: false, income: null, isEdit: false }); resetDue(); setSelectedDueCategory(null); }} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">{t('common.cancel')}</button>
+                  <button onClick={dueModal.isEdit ? handleSubmitDue(handleUpdateDue) : handleSubmitDue(handleCreateDue)} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{dueModal.isEdit ? t('common.update') : t('common.create')}</button>
                 </div>
               </div>
             </motion.div>
@@ -1081,21 +1083,21 @@ export const Income = () => {
                       <Wallet size={24} className="text-green-600" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">{directModal.isEdit ? 'Edit Direct Income' : 'Add Direct Income'}</h2>
-                      <p className="text-sm text-gray-500">{directModal.isEdit ? 'Update direct income record' : 'Create new direct income record'}</p>
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">{directModal.isEdit ? t('finance.income.editDirect') : t('finance.income.addDirect')}</h2>
+                      <p className="text-sm text-gray-500">{directModal.isEdit ? t('finance.income.updateDirect') : t('finance.income.createDirect')}</p>
                     </div>
                   </div>
                   <button onClick={() => setDirectModal({ isOpen: false, income: null, isEdit: false })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date *</label>
-                    <input type="date" {...registerDirect('date', { required: 'Date is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.date')} *</label>
+                    <input type="date" {...registerDirect('date', { required: t('finance.income.dateRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
                     {directErrors.date && <p className="text-red-500 text-xs mt-1">{directErrors.date.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category *</label>
-                    <input type="hidden" {...registerDirect('category', { required: 'Category is required' })} />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.category')} *</label>
+                    <input type="hidden" {...registerDirect('category', { required: t('finance.income.categoryRequired') })} />
                     <Select
                       value={selectedDirectCategory}
                       onChange={(selected) => {
@@ -1104,7 +1106,7 @@ export const Income = () => {
                         triggerDirect('category');
                       }}
                       options={incomeCategories.map(c => ({ value: c.name, label: c.name }))}
-                      placeholder="Select Category"
+                      placeholder={t('common.selectCategory')}
                       styles={{
                         ...selectStyles,
                         control: (base, state) => ({
@@ -1113,21 +1115,21 @@ export const Income = () => {
                         })
                       }}
                     />
-                    {directErrors.category && <p className="text-red-500 text-xs mt-1">Category is required</p>}
+                    {directErrors.category && <p className="text-red-500 text-xs mt-1">{t('finance.income.categoryRequired')}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Source Name *</label>
-                    <input type="text" {...registerDirect('source_name', { required: 'Source name is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter source name" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.sourceName')} *</label>
+                    <input type="text" {...registerDirect('source_name', { required: t('finance.income.sourceNameRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterSourceName')} />
                     {directErrors.source_name && <p className="text-red-500 text-xs mt-1">{directErrors.source_name.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Amount *</label>
-                    <input type="number" {...registerDirect('amount', { required: 'Amount is required', min: { value: 0, message: 'Amount must be positive' } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Enter amount" />
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
+                    <input type="number" {...registerDirect('amount', { required: t('finance.income.amountRequired'), min: { value: 0, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterAmount')} />
                     {directErrors.amount && <p className="text-red-500 text-xs mt-1">{directErrors.amount.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Method *</label>
-                    <select {...registerDirect('payment_method', { required: 'Payment method is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
+                    <select {...registerDirect('payment_method', { required: t('finance.income.paymentMethodRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
                       <option value="cash">Cash</option>
                       <option value="upi">UPI</option>
                       <option value="bank">Bank Transfer</option>
@@ -1136,8 +1138,8 @@ export const Income = () => {
                   </div>
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
-                  <button onClick={() => { setDirectModal({ isOpen: false, income: null, isEdit: false }); resetDirect(); setSelectedDirectCategory(null); }} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
-                  <button onClick={directModal.isEdit ? handleSubmitDirect(handleUpdateDirect) : handleSubmitDirect(handleCreateDirect)} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{directModal.isEdit ? 'Update' : 'Create'}</button>
+                  <button onClick={() => { setDirectModal({ isOpen: false, income: null, isEdit: false }); resetDirect(); setSelectedDirectCategory(null); }} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">{t('common.cancel')}</button>
+                  <button onClick={directModal.isEdit ? handleSubmitDirect(handleUpdateDirect) : handleSubmitDirect(handleCreateDirect)} className="px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg">{directModal.isEdit ? t('common.update') : t('common.create')}</button>
                 </div>
               </div>
             </motion.div>

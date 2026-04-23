@@ -4,11 +4,13 @@ import { useSidebar } from "../../../context/SidebarContext";
 import { useAuth } from "../../../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const SubMenu = ({ item }) => {
     const { isCollapsed, closeMobile } = useSidebar();
     const { pathname } = useLocation();
     const { user } = useAuth();
+    const { t } = useTranslation();
     const role = user?.role || "user";
 
     // Filter subItems based on user role and permissions
@@ -68,7 +70,7 @@ const SubMenu = ({ item }) => {
                             className="flex-1 overflow-hidden"
                         >
                             <span className="text-xs font-medium whitespace-nowrap ml-1 flex items-center justify-between">
-                                {item.label}
+                                {t(item.label)}
                                 <ChevronDown
                                     size={14}
                                     className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
@@ -81,7 +83,7 @@ const SubMenu = ({ item }) => {
                 {/* Tooltip for collapsed state */}
                 {isCollapsed && (
                     <div className="absolute left-[calc(100%+12px)] px-3 py-2 bg-gray-900 text-white text-[11px] font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all invisible group-hover:visible shadow-xl z-[9999] whitespace-nowrap">
-                        {item.label}
+                        {t(item.label)}
                         <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-gray-900 rotate-45" />
                     </div>
                 )}
@@ -110,7 +112,7 @@ const SubMenu = ({ item }) => {
                                         }
                                     `}
                                 >
-                                    {sub.label}
+                                    {t(sub.label)}
                                 </NavLink>
                             ))}
                         </div>

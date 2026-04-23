@@ -7,14 +7,17 @@ import {
     LogOut,
     ChevronLeft,
     ChevronRight,
-    MoreHorizontal
+    MoreHorizontal,
+    Globe
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Swal from "sweetalert2";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
     const { user, logout } = useAuth();
     const { isCollapsed, toggleCollapse, isMobileOpen, closeMobile } = useSidebar();
+    const { t, i18n } = useTranslation();
 
     const role = user?.role || "user";
 
@@ -132,7 +135,7 @@ const Sidebar = () => {
                         <div key={idx} className="space-y-2">
                             {!isCollapsed && (
                                 <h3 className="text-[10px] font-bold text-gray-400 px-3 tracking-widest uppercase mb-3 text-xs">
-                                    {section.title}
+                                    {t(section.title)}
                                 </h3>
                             )}
                             <div className="space-y-1">
@@ -168,9 +171,19 @@ const Sidebar = () => {
                             </div>
                         )}
                         {!isCollapsed && (
-                            <button onClick={handleLogout} className="p-2 hover:bg-red-50 hover:text-red-500 rounded-lg transition-colors group">
-                                <LogOut size={18} />
-                            </button>
+                            <div className="flex items-center gap-1">
+                                <select
+                                    value={i18n.language}
+                                    onChange={(e) => i18n.changeLanguage(e.target.value)}
+                                    className="px-2 py-1 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                                >
+                                    <option value="en">EN</option>
+                                    <option value="ml">ML</option>
+                                </select>
+                                <button onClick={handleLogout} className="p-2 hover:bg-red-50 hover:text-red-500 rounded-lg transition-colors group">
+                                    <LogOut size={18} />
+                                </button>
+                            </div>
                         )}
                     </div>
                 </div>
