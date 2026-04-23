@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -34,6 +34,43 @@ import {
 import {
   getExpenseCategories
 } from '../../api/expenseCategoryService';
+
+// Add print styles
+const printStyles = `
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    body {
+      background: white !important;
+    }
+    .print-only {
+      display: block !important;
+    }
+    /* Hide common sidebar selectors */
+    aside,
+    nav,
+    [class*="sidebar"],
+    [class*="Sidebar"],
+    [class*="menu"],
+    [class*="Menu"] {
+      display: none !important;
+    }
+    /* Hide header elements */
+    header,
+    [class*="header"],
+    [class*="Header"] {
+      display: none !important;
+    }
+  }
+`;
+
+// Inject print styles
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = printStyles;
+  document.head.appendChild(style);
+}
 
 // Payment method badge
 const PaymentMethodBadge = ({ method }) => {
@@ -90,6 +127,10 @@ const Expense = () => {
   const [editModal, setEditModal] = useState({ isOpen: false, expense: null });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, expense: null });
   const [voucherModal, setVoucherModal] = useState({ isOpen: false, expense: null });
+  const [printModal, setPrintModal] = useState({ isOpen: false, allExpenses: [] });
+
+  // File input ref
+  const fileInputRef = useRef(null);
 
   // React Hook Form for Add Expense
   const {
@@ -166,6 +207,28 @@ const Expense = () => {
     }
   };
 
+  // Fetch all expenses for printing
+  const fetchAllExpensesForPrint = async () => {
+    setLoading(true);
+    try {
+      const data = await getExpenses({
+        page: 1,
+        limit: 1000, // Fetch all expenses
+        search: searchTerm,
+        category: categoryFilter,
+        payment_method: paymentMethodFilter,
+        date_from: dateFrom,
+        date_to: dateTo
+      });
+      setPrintModal({ isOpen: true, allExpenses: data.expenses });
+    } catch (error) {
+      console.error('Error fetching expenses for print:', error);
+      toast.error('Failed to fetch expenses');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Debounced search
   const debouncedFetchExpenses = useCallback(
     debounce((page) => fetchExpenses(page), 500),
@@ -193,10 +256,18 @@ const Expense = () => {
         category: data.category?.value || data.category,
         payment_method: data.payment_method?.value || data.payment_method
       };
+      // Get file from ref
+      if (fileInputRef.current && fileInputRef.current.files[0]) {
+        payload.bill_file = fileInputRef.current.files[0];
+      }
       await createExpense(payload);
       toast.success('Expense created successfully');
       setAddModal({ isOpen: false });
       resetAddForm();
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
       fetchExpenses();
       fetchSummary();
     } catch (error) {
@@ -302,7 +373,7 @@ const Expense = () => {
   return (
     <div className="w-full">
       {/* Header Section */}
-      <div className="mb-8">
+      <div className="mb-8 no-print">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Expense Management</h1>
@@ -316,11 +387,10 @@ const Expense = () => {
               <Plus size={18} />
               Add Expense
             </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              <Download size={18} />
-              Export CSV
-            </button>
-            <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+            <button
+              onClick={fetchAllExpensesForPrint}
+              className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+            >
               <Printer size={18} />
               Print Report
             </button>
@@ -329,13 +399,13 @@ const Expense = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
-        <SummaryCard
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+        {/* <SummaryCard
           title="Today Expense"
           value={`₹${summaryData.today_total.toLocaleString()}`}
           icon={Calendar}
           color="bg-blue-500"
-        />
+        /> */}
         <SummaryCard
           title="This Month"
           value={`₹${summaryData.month_total.toLocaleString()}`}
@@ -354,16 +424,21 @@ const Expense = () => {
           icon={CreditCard}
           color="bg-purple-500"
         />
-        <SummaryCard
-          title="Total Expense"
-          value={`₹${summaryData.total.toLocaleString()}`}
-          icon={Wallet}
-          color="bg-red-500"
-        />
+        <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm text-red-100">Total Expense</p>
+              <h3 className="text-2xl font-bold text-white mt-1">₹{summaryData.total.toLocaleString()}</h3>
+            </div>
+            <div className="p-3 rounded-xl bg-white/20">
+              <Wallet size={24} className="text-white" />
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Filter Section */}
-      <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden mb-6">
+      <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden mb-6 no-print">
         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
           <div className="flex flex-col lg:flex-row gap-4">
             <div className="flex-1 grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -561,6 +636,17 @@ const Expense = () => {
                               >
                                 <Trash2 size={18} />
                               </button>
+                              {expense.bill_file && (
+                                <a
+                                  href={`http://localhost:5005/uploads/${expense.bill_file}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                  title="View Receipt"
+                                >
+                                  <Download size={18} />
+                                </a>
+                              )}
                               <button
                                 onClick={() => setVoucherModal({ isOpen: true, expense })}
                                 className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
@@ -606,6 +692,16 @@ const Expense = () => {
                         >
                           View
                         </button>
+                        {expense.bill_file && (
+                          <a
+                            href={`http://localhost:5005/uploads/${expense.bill_file}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium text-center"
+                          >
+                            Receipt
+                          </a>
+                        )}
                         <button
                           onClick={() => setVoucherModal({ isOpen: true, expense })}
                           className="flex-1 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium"
@@ -799,6 +895,16 @@ const Expense = () => {
                   />
                   {addErrors.payment_method && <p className="text-red-500 text-xs mt-1">{addErrors.payment_method.message}</p>}
                 </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    ref={fileInputRef}
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Accepts images (JPEG, PNG) and PDF files (Max 5MB)</p>
+                </div>
                 {/* <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reference No</label>
                   <input
@@ -978,6 +1084,31 @@ const Expense = () => {
                       })
                     }}
                   />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
+                  {editModal.expense?.bill_file && (
+                    <div className="mb-2">
+                      <a
+                        href={`http://localhost:5005/uploads/${editModal.expense.bill_file}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-blue-600 hover:underline"
+                      >
+                        View Current File
+                      </a>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      setEditForm({ ...editForm, bill_file: file });
+                    }}
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Accepts images (JPEG, PNG) and PDF files (Max 5MB). Leave empty to keep existing file.</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reference No</label>
@@ -1216,6 +1347,106 @@ const Expense = () => {
                 </button>
                 <button
                   onClick={() => window.print()}
+                  className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center gap-2"
+                >
+                  <Printer size={18} />
+                  Print
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Print Modal */}
+      <AnimatePresence>
+        {printModal.isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-white dark:bg-[#1e1f25] rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden"
+            >
+              <div className="p-6 border-b border-gray-100 dark:border-gray-800">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">Expense Report</h2>
+                  <button
+                    onClick={() => setPrintModal({ isOpen: false, allExpenses: [] })}
+                    className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-6 overflow-auto max-h-[70vh]" id="print-content">
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="border-b-2 border-gray-200 dark:border-gray-700">
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Voucher No</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Date</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Category</th>
+                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Paid To</th>
+                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Amount</th>
+                      <th className="text-center py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Method</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {printModal.allExpenses.map((expense) => (
+                      <tr key={expense._id} className="border-b border-gray-100 dark:border-gray-800">
+                        <td className="py-3 px-4 text-sm text-gray-900 dark:text-white">{expense.voucher_no}</td>
+                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                          {new Date(expense.date).toLocaleDateString()}
+                        </td>
+                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.category}</td>
+                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
+                        <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">
+                          ₹{expense.amount.toLocaleString()}
+                        </td>
+                        <td className="py-3 px-4 text-center text-sm text-gray-700 dark:text-gray-300 capitalize">
+                          {expense.payment_method}
+                        </td>
+                      </tr>
+                    ))}
+                    {printModal.allExpenses.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="py-12 text-center text-gray-400">
+                          No expenses found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                  <tfoot>
+                    <tr className="border-t-2 border-gray-200 dark:border-gray-700">
+                      <td colSpan={4} className="py-3 px-4 text-sm font-bold text-gray-900 dark:text-white text-right">
+                        Total:
+                      </td>
+                      <td className="py-3 px-4 text-sm font-bold text-gray-900 dark:text-white text-right">
+                        ₹{printModal.allExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()}
+                      </td>
+                      <td></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3">
+                <button
+                  onClick={() => setPrintModal({ isOpen: false, allExpenses: [] })}
+                  className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={() => {
+                    const printContent = document.getElementById('print-content');
+                    const originalContent = document.body.innerHTML;
+                    document.body.innerHTML = printContent.innerHTML;
+                    window.print();
+                    document.body.innerHTML = originalContent;
+                    window.location.reload();
+                  }}
                   className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center gap-2"
                 >
                   <Printer size={18} />
