@@ -25,6 +25,7 @@ import Analytics from "./pages/Analytics";
 import Varisankhya from "./pages/Finance/Varisankhya";
 import { Income } from "./pages/Finance/Income";
 import Expense from "./pages/Finance/Expense";
+import Reports from "./pages/Finance/Reports";
 import GeneralSettings from "./pages/Settings/GeneralSettings";
 
 function App() {
@@ -74,6 +75,7 @@ function App() {
                             <Route path="/finance/varisankhya" element={<Varisankhya />} />
                             <Route path="/finance/income" element={<Income />} />
                             <Route path="/finance/expense" element={<Expense />} />
+                            <Route path="/finance/reports" element={<Reports />} />
                             
                             {/* Settings Routes */}
                             <Route path="/settings/general" element={<GeneralSettings />} />
