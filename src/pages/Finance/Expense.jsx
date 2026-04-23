@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { motion, AnimatePresence } from 'framer-motion';
+import moment from 'moment';
 import {
   Wallet,
   IndianRupee,
@@ -583,7 +584,7 @@ const Expense = () => {
                       <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Category</th>
                       <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Paid To</th>
                       <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Amount</th>
-                      <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Method</th>
+                      {/* <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Method</th> */}
                       <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Added By</th>
                       <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
                     </tr>
@@ -603,16 +604,16 @@ const Expense = () => {
                         <tr key={expense._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
                           <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{expense.voucher_no}</td>
                           <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
-                            {new Date(expense.date).toLocaleDateString()}
+                            {moment(expense.updatedAt).format('DD MMM YYYY, h:mm A')}
                           </td>
                           <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.category}</td>
                           <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
                           <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">
                             ₹{expense.amount.toLocaleString()}
                           </td>
-                          <td className="py-3 px-4 text-center">
+                          {/* <td className="py-3 px-4 text-center">
                             <PaymentMethodBadge method={expense.payment_method} />
-                          </td>
+                          </td> */}
                           <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.created_by?.name || '-'}</td>
                           <td className="py-3 px-4">
                             <div className="flex items-center justify-center gap-2">
@@ -674,7 +675,7 @@ const Expense = () => {
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-medium text-gray-900 dark:text-white">{expense.voucher_no}</p>
-                          <p className="text-sm text-gray-500">{new Date(expense.date).toLocaleDateString()}</p>
+                          <p className="text-sm text-gray-500">{moment(expense.updatedAt).format('DD MMM YYYY, h:mm A')}</p>
                         </div>
                         <PaymentMethodBadge method={expense.payment_method} />
                       </div>
@@ -1112,7 +1113,7 @@ const Expense = () => {
                   />
                   <p className="text-xs text-gray-500 mt-1">Accepts images (JPEG, PNG) and PDF files (Max 5MB). Leave empty to keep existing file.</p>
                 </div>
-                <div>
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reference No</label>
                   <input
                     type="text"
@@ -1120,8 +1121,8 @@ const Expense = () => {
                     onChange={(e) => setEditForm({ ...editForm, reference_no: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
-                </div>
-                <div>
+                </div> */}
+                {/* <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
                   <textarea
                     value={editForm.notes}
@@ -1129,7 +1130,7 @@ const Expense = () => {
                     className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     rows="3"
                   />
-                </div>
+                </div> */}
               </div>
 
               <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex justify-end gap-3">
@@ -1181,7 +1182,7 @@ const Expense = () => {
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Date</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{new Date(viewModal.expense?.date).toLocaleDateString()}</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{moment(viewModal.expense?.updatedAt).format('DD MMM YYYY, h:mm A')}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-500">Category</p>
@@ -1302,7 +1303,7 @@ const Expense = () => {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-500">Date:</span>
-                      <span className="font-medium text-gray-900 dark:text-white">{new Date(voucherModal.expense?.date).toLocaleDateString()}</span>
+                      <span className="font-medium text-gray-900 dark:text-white">{moment(voucherModal.expense?.updatedAt).format('DD MMM YYYY, h:mm A')}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Category:</span>
@@ -1425,7 +1426,7 @@ const Expense = () => {
                       <tr key={expense._id} className="border-b border-gray-100 dark:border-gray-800">
                         <td className="py-3 px-4 text-sm text-gray-900 dark:text-white">{expense.voucher_no}</td>
                         <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
-                          {new Date(expense.date).toLocaleDateString()}
+                          {moment(expense.updatedAt).format('DD MMM YYYY, h:mm A')}
                         </td>
                         <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.category}</td>
                         <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
