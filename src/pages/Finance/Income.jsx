@@ -69,6 +69,7 @@ export const Income = () => {
     register: registerDue,
     handleSubmit: handleSubmitDue,
     reset: resetDue,
+    setValue: setDueValue,
     trigger: triggerDue,
     formState: { errors: dueErrors }
   } = useForm({
@@ -1022,7 +1023,7 @@ export const Income = () => {
                       value={selectedDueCategory}
                       onChange={(selected) => {
                         setSelectedDueCategory(selected);
-                        setDirectValue('category', selected?.value || '');
+                        setDueValue('category', selected?.value || '');
                         triggerDue('category');
                       }}
                       options={dueCategories.map(c => ({ value: c.name, label: c.name }))}
