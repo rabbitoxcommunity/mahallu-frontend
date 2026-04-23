@@ -131,6 +131,7 @@ const Expense = () => {
 
   // File input ref
   const fileInputRef = useRef(null);
+  const voucherRef = useRef(null);
 
   // React Hook Form for Add Expense
   const {
@@ -839,10 +840,11 @@ const Expense = () => {
                     <IndianRupee size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="number"
-                      {...registerAdd('amount', { 
+                      {...registerAdd('amount', {
                         required: 'Amount is required',
                         min: { value: 0.01, message: 'Amount must be greater than 0' }
                       })}
+                      onWheel={(e) => e.target.blur()}
                       className={`w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.amount ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
                     />
                   </div>
@@ -1291,8 +1293,8 @@ const Expense = () => {
                 </div>
               </div>
 
-              <div className="p-6 space-y-4" id="voucher-content">
-                <div className="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6">
+              <div className="p-6 space-y-4">
+                <div ref={voucherRef} className="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6" style={{ width: '80mm', margin: '0 auto' }}>
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">EXPENSE VOUCHER</h3>
                     <p className="text-sm text-gray-500">{voucherModal.expense?.voucher_no}</p>
@@ -1346,7 +1348,33 @@ const Expense = () => {
                   Close
                 </button>
                 <button
-                  onClick={() => window.print()}
+                  onClick={() => {
+                    if (voucherRef.current) {
+                      const printContents = voucherRef.current.innerHTML;
+                      const originalContents = document.body.innerHTML;
+
+                      document.body.innerHTML = `
+                        <html>
+                          <head>
+                            <title>Expense Voucher - ${voucherModal.expense?.voucher_no}</title>
+                            <style>
+                              @media print {
+                                body { font-family: Arial, sans-serif; }
+                                .no-print { display: none; }
+                              }
+                            </style>
+                          </head>
+                          <body>
+                            ${printContents}
+                          </body>
+                        </html>
+                      `;
+
+                      window.print();
+                      document.body.innerHTML = originalContents;
+                      window.location.reload();
+                    }
+                  }}
                   className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center gap-2"
                 >
                   <Printer size={18} />
