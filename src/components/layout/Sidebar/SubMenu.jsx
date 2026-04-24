@@ -107,7 +107,7 @@ const SubMenu = ({ item }) => {
                                     to={sub.path}
                                     onClick={closeMobile}
                                     className={({ isActive }) => `
-                                        ${lang === 'en' ? '' : 'text-[13px]'} py-2 rounded-lg transition-colors
+                                        ${lang === 'en' ? 'text-sm' : 'text-[13px]'} py-2 rounded-lg transition-colors
                                         ${isActive
                                             ? "text-[#0B65F6] font-bold"
                                             : "text-gray-500 hover:text-gray-900 dark:hover:text-gray-200"
