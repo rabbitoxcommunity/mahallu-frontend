@@ -10,8 +10,10 @@ const SubMenu = ({ item }) => {
     const { isCollapsed, closeMobile } = useSidebar();
     const { pathname } = useLocation();
     const { user } = useAuth();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const lang = i18n.language;
     const role = user?.role || "user";
+
 
     // Filter subItems based on user role and permissions
     const filteredSubItems = item.subItems?.filter(subItem => {
@@ -69,7 +71,7 @@ const SubMenu = ({ item }) => {
                             transition={{ duration: 0.2 }}
                             className="flex-1 overflow-hidden"
                         >
-                            <span className="text-xs font-medium whitespace-nowrap ml-1 flex items-center justify-between">
+                            <span className={` ${lang === 'en' ? 'text-sm' : 'text-xs'} font-medium whitespace-nowrap ml-1 flex items-center justify-between `}>
                                 {t(item.label)}
                                 <ChevronDown
                                     size={14}
@@ -105,7 +107,7 @@ const SubMenu = ({ item }) => {
                                     to={sub.path}
                                     onClick={closeMobile}
                                     className={({ isActive }) => `
-                                        text-[13px] py-2 rounded-lg transition-colors
+                                        ${lang === 'en' ? 'text-xs' : 'text-[13px]'} py-2 rounded-lg transition-colors
                                         ${isActive
                                             ? "text-[#0B65F6] font-bold"
                                             : "text-gray-500 hover:text-gray-900 dark:hover:text-gray-200"
