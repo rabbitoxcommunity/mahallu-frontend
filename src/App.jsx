@@ -27,6 +27,7 @@ import { Income } from "./pages/Finance/Income";
 import Expense from "./pages/Finance/Expense";
 import Reports from "./pages/Finance/Reports";
 import GeneralSettings from "./pages/Settings/GeneralSettings";
+import VarisankhyaConfig from "./pages/Settings/VarisankhyaConfig";
 
 function App() {
     return (
@@ -79,6 +80,7 @@ function App() {
                             
                             {/* Settings Routes */}
                             <Route path="/settings/general" element={<GeneralSettings />} />
+                            <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
                             
                             {/* Add other protected pages here */}
                         </Route>

@@ -145,7 +145,10 @@
       "totalPaid": "Total Paid",
       "paymentsMade": "Payments Made",
       "pending": "Pending",
-      "pendingMonths": "Pending Months"
+      "pendingMonths": "Pending Months",
+      "category": "Category",
+      "house": "House",
+      "due": "Due"
     },
     "income": {
       "title": "Income",
@@ -310,6 +313,24 @@
         "deleteCategory": "Delete Category",
         "deleteConfirmation": "Are you sure you want to delete",
         "deleteWarning": "This action cannot be undone."
+      },
+      "varisankhyaConfig": {
+        "title": "Varisankhya Amount Settings",
+        "description": "Configure monthly varisankhya amounts based on family economic status",
+        "category": "Category",
+        "amount": "Amount",
+        "save": "Save",
+        "normal": "Normal",
+        "poor": "Poor",
+        "miskeen": "Miskeen",
+        "monthlyAmount": "Monthly Amount",
+        "isActive": "Active",
+        "configSaved": "Configuration saved successfully",
+        "configError": "Error saving configuration",
+        "selectCategory": "Select Category",
+        "categoryRequired": "Category is required",
+        "amountRequired": "Amount is required",
+        "amountPositive": "Amount must be positive"
       }
     }
   },

@@ -145,7 +145,10 @@
       "totalPaid": "ആകെ നൽകിയത്",
       "paymentsMade": "നൽകിയ പേയ്മെന്റുകൾ",
       "pending": "ബാക്കി",
-      "pendingMonths": "ബാക്കി മാസങ്ങൾ"
+      "pendingMonths": "ബാക്കി മാസങ്ങൾ",
+      "category": "വിഭാഗം",
+      "house": "വീട്",
+      "due": "ബാധ്യത"
     },
     "income": {
       "title": "വരുമാനം",
@@ -310,6 +313,24 @@
         "deleteCategory": "വിഭാഗം ഇല്ലാതാക്കുക",
         "deleteConfirmation": "ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ",
         "deleteWarning": "ഈ പ്രവർത്തനം പിന്നോട്ടിലാക്കാനാവില്ല."
+      },
+      "varisankhyaConfig": {
+        "title": "വരിസംഖ്യ ക്രമീകരണങ്ങൾ",
+        "description": "കുടുംബ സാമ്പത്തിക നില അനുസരിച്ച് മാസിക വരിസംഖ്യ തുക ക്രമീകരിക്കുക",
+        "category": "വിഭാഗം",
+        "amount": "തുക",
+        "save": "സേവ് ചെയ്യുക",
+        "normal": "സാധാരണ",
+        "poor": "ദരിദ്രർ",
+        "miskeen": "മിസ്കീൻ",
+        "monthlyAmount": "മാസിക തുക",
+        "isActive": "സജീവം",
+        "configSaved": "ക്രമീകരണം വിജയകരമായി സേവ് ചെയ്തു",
+        "configError": "ക്രമീകരണം സേവ് ചെയ്യുന്നതിൽ പിശക്",
+        "selectCategory": "വിഭാഗം തിരഞ്ഞെടുക്കുക",
+        "categoryRequired": "വിഭാഗം ആവശ്യമാണ്",
+        "amountRequired": "തുക ആവശ്യമാണ്",
+        "amountPositive": "തുക പോസിറ്റീവ് ആയിരിക്കണം"
       }
     }
   },

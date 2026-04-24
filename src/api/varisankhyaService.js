@@ -1,11 +1,10 @@
 import axios from './axios';
 
 // Generate monthly varisankhya dues for all active houses
-export const generateMonthlyDues = async (month, year, default_amount = 200) => {
+export const generateMonthlyDues = async (month, year) => {
   const response = await axios.post('/finance/varisankhya/generate', {
     month,
-    year,
-    default_amount
+    year
   });
   return response.data;
 };

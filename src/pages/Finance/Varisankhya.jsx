@@ -46,7 +46,6 @@ const Varisankhya = () => {
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [defaultAmount, setDefaultAmount] = useState('200');
 
   // Data states
   const [monthlyData, setMonthlyData] = useState({
@@ -265,7 +264,8 @@ console.log(paymentHistoryData,'paymentHistoryData')
     if (result.isConfirmed) {
       setGenerating(true);
       try {
-        const response = await generateMonthlyDues(month, year, defaultAmount);
+        // Call without default_amount - backend will use configured amounts from varisankhya config
+        const response = await generateMonthlyDues(month, year);
         toast.success(`Generated ${response.summary.created} dues. Skipped ${response.summary.skipped} existing records.`);
         fetchMonthlyData();
       } catch (error) {
@@ -381,13 +381,6 @@ console.log(paymentHistoryData,'paymentHistoryData')
                 <option key={y} value={y}>{y}</option>
               ))}
             </select>
-            <input
-              type="number"
-              value={defaultAmount}
-              onChange={(e) => setDefaultAmount(e.target.value)}
-              placeholder={t('finance.varisankhya.defaultAmount')}
-              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] w-32"
-            />
             <button
               onClick={handleGenerateDues}
               disabled={generating}
@@ -597,6 +590,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         <tr className="border-b border-gray-100 dark:border-gray-800">
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Family</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.category')}</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Contact</th>
                           <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
                           <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
@@ -615,6 +609,9 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             </td>
                             <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
                               {record.house_id?.family_name || '-'}
+                            </td>
+                            <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                              {record.house_id?.family_id?.economic_status || 'Normal'}
                             </td>
                             <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
                               {record.house_id?.primary_contact || '-'}
@@ -688,6 +685,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             <p className="font-medium text-gray-900 dark:text-white">{record.house_id?.house_code}</p>
                             <p className="text-sm text-gray-500">{record.house_id?.householder_name}</p>
                             <p className="text-xs text-gray-400">{record.house_id?.family_name}</p>
+                            <p className="text-xs text-gray-400">{t('finance.varisankhya.category')}: {record.house_id?.family_id?.economic_status || 'Normal'}</p>
                           </div>
                           <StatusBadge status={record.status} />
                         </div>
