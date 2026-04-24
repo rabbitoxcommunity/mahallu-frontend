@@ -87,7 +87,7 @@ export default function StaffList() {
     const Icon = badge.icon;
 
     return (
-      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-${badge.color}-100 text-${badge.color}-800 dark:bg-${badge.color}-900/30 dark:text-${badge.color}-400`}>
+      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full  font-medium bg-${badge.color}-100 text-${badge.color}-800 dark:bg-${badge.color}-900/30 dark:text-${badge.color}-400`}>
         <Icon size={12} />
         {badge.label}
       </span>
@@ -97,14 +97,14 @@ export default function StaffList() {
   const getStatusBadge = (is_active) => {
     if (is_active) {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full  font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
           <CheckCircle size={12} />
           Active
         </span>
       );
     } else {
       return (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full  font-medium bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
           <XCircle size={12} />
           Inactive
         </span>
@@ -114,20 +114,20 @@ export default function StaffList() {
 
   const getPermissionsSummary = (permissions) => {
     if (!permissions || typeof permissions !== 'object') {
-      return <span className="text-xs text-gray-500 dark:text-gray-400">No permissions</span>;
+      return <span className=" text-gray-500 dark:text-gray-400">No permissions</span>;
     }
     
     const enabledPermissions = Object.keys(permissions).filter(key => permissions[key]);
     const count = enabledPermissions.length;
     
     if (count === 0) {
-      return <span className="text-xs text-gray-500 dark:text-gray-400">No permissions</span>;
+      return <span className=" text-gray-500 dark:text-gray-400">No permissions</span>;
     }
     
     return (
       <div className="flex items-center gap-1">
-        <span className="text-xs font-medium text-gray-900 dark:text-white">{count}</span>
-        <span className="text-xs text-gray-500 dark:text-gray-400">modules</span>
+        <span className=" font-medium text-gray-900 dark:text-white">{count}</span>
+        <span className=" text-gray-500 dark:text-gray-400">modules</span>
       </div>
     );
   };
@@ -187,22 +187,22 @@ export default function StaffList() {
           <table className="w-full">
             <thead className="bg-gray-50 dark:bg-[#252731] border-b border-gray-100 dark:border-gray-800/60">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left  font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Staff
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left  font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Role
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left  font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Permissions
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left  font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Status
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left  font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Created
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left  font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -222,10 +222,10 @@ export default function StaffList() {
                         <Users size={20} className="text-gray-600 dark:text-gray-400" />
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        <div className=" font-medium text-gray-900 dark:text-white">
                           {staffMember.name}
                         </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
+                        <div className=" text-gray-500 dark:text-gray-400">
                           {staffMember.email}
                         </div>
                       </div>
@@ -241,7 +241,7 @@ export default function StaffList() {
                     {getStatusBadge(staffMember.is_active)}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                    <div className="flex items-center gap-1  text-gray-500 dark:text-gray-400">
                       <Calendar size={14} />
                       {formatDate(staffMember.createdAt)}
                     </div>
@@ -282,7 +282,7 @@ export default function StaffList() {
         {pagination.pages > 1 && (
           <div className="px-6 py-4 border-t border-gray-100 dark:border-gray-800/60">
             <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
+              <div className=" text-gray-500 dark:text-gray-400">
                 Showing {((pagination.page - 1) * pagination.limit) + 1} to{' '}
                 {Math.min(pagination.page * pagination.limit, pagination.total)} of{' '}
                 {pagination.total} results
@@ -295,7 +295,7 @@ export default function StaffList() {
                 >
                   <ChevronLeft size={16} />
                 </button>
-                <span className="px-3 py-1 text-sm font-medium text-gray-900 dark:text-white bg-gray-100 dark:bg-[#252731] rounded-lg">
+                <span className="px-3 py-1  font-medium text-gray-900 dark:text-white bg-gray-100 dark:bg-[#252731] rounded-lg">
                   {pagination.page} / {pagination.pages}
                 </span>
                 <button

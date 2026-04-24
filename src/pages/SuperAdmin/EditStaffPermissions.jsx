@@ -147,9 +147,9 @@ export default function EditStaffPermissions() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 {staff.name}
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{staff.email}</p>
+              <p className=" text-gray-500 dark:text-gray-400">{staff.email}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full  font-medium ${
                   staff.role === 'admin' 
                     ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
                     : 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400'
@@ -157,7 +157,7 @@ export default function EditStaffPermissions() {
                   <Shield size={12} />
                   {staff.role.charAt(0).toUpperCase() + staff.role.slice(1)}
                 </span>
-                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full  font-medium ${
                   staff.is_active
                     ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                     : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
@@ -221,7 +221,7 @@ export default function EditStaffPermissions() {
                             )}
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        <p className=" text-gray-500 dark:text-gray-400 mt-1">
                           {module.description}
                         </p>
                       </div>
@@ -241,7 +241,7 @@ export default function EditStaffPermissions() {
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/60 rounded-xl">
               <div className="flex items-start gap-3">
                 <ShieldAlert size={20} className="text-blue-600 dark:text-blue-400 mt-0.5" />
-                <div className="text-sm text-blue-800 dark:text-blue-200">
+                <div className=" text-blue-800 dark:text-blue-200">
                   <strong>Permission Note:</strong> Staff members can only access the modules you enable here. 
                   SuperAdmins and PlatformAdmins bypass all permission restrictions.
                 </div>

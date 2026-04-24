@@ -87,7 +87,7 @@ const SearchableSelect = ({
     return (
         <div className="w-full">
             {label && (
-                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     {label} {required && <span className="text-red-500">*</span>}
                 </label>
             )}
@@ -118,7 +118,7 @@ const SearchableSelect = ({
                     />
                 </div>
             </div>
-            {error && <p className="mt-1.5 text-xs text-red-500">{error.message}</p>}
+            {error && <p className="mt-1.5  text-red-500">{error.message}</p>}
         </div>
     );
 };

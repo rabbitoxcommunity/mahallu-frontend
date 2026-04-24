@@ -13,7 +13,7 @@ const SlideOver = ({
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[60] overflow-hidden text-xs">
+                <div className="fixed inset-0 z-[60] overflow-hidden ">
                     <div className="absolute inset-0 overflow-hidden">
                         {/* Overlay */}
                         <motion.div
@@ -40,7 +40,7 @@ const SlideOver = ({
                                                     {title}
                                                 </h2>
                                                 {subtitle && (
-                                                    <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                                                    <p className="mt-1  text-gray-500 dark:text-gray-400">
                                                         {subtitle}
                                                     </p>
                                                 )}

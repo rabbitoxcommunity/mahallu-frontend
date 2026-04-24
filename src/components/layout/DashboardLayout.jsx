@@ -3,10 +3,19 @@ import { useSidebar } from "../../context/SidebarContext";
 import { motion } from "framer-motion";
 import { Menu, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const DashboardLayout = ({ children }) => {
     const { isCollapsed, toggleMobile } = useSidebar();
     const { t, i18n } = useTranslation();
+
+    useEffect(() => {
+        if (i18n.language === 'en') {
+            document.documentElement.style.fontSize = '16px';
+        } else {
+            document.documentElement.style.fontSize = '15px';
+        }
+    }, [i18n.language]);
 
     return (
         <div className="flex min-h-screen bg-gray-50 dark:bg-[#111217]">
@@ -34,7 +43,7 @@ const DashboardLayout = ({ children }) => {
                     <select
                         value={i18n.language}
                         onChange={(e) => i18n.changeLanguage(e.target.value)}
-                        className="px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        className="px-3 py-1.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     >
                         <option value="en">{t('language.english')}</option>
                         <option value="ml">{t('language.malayalam')}</option>

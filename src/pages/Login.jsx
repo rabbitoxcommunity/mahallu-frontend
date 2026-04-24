@@ -87,7 +87,7 @@ export default function Login() {
                                 <input
                                     type="email"
                                     placeholder="Email"
-                                    className={`w-full pl-11 text-xs pr-4 py-3 bg-white border ${errors.email ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] focus:border-transparent transition-colors text-gray-900`}
+                                    className={`w-full pl-11  pr-4 py-3 bg-white border ${errors.email ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] focus:border-transparent transition-colors text-gray-900`}
                                     {...register("email", {
                                         required: "Email is required",
                                         pattern: {
@@ -97,7 +97,7 @@ export default function Login() {
                                     })}
                                 />
                             </div>
-                            {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+                            {errors.email && <p className="mt-1  text-red-500">{errors.email.message}</p>}
                         </div>
 
                         <div>
@@ -110,7 +110,7 @@ export default function Login() {
                                 <input
                                     type={showPassword ? "text" : "password"}
                                     placeholder="Password"
-                                    className={`w-full pl-11 text-xs pr-12 py-3 bg-white border ${errors.password ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] focus:border-transparent transition-colors text-gray-900`}
+                                    className={`w-full pl-11  pr-12 py-3 bg-white border ${errors.password ? 'border-red-500' : 'border-gray-200'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] focus:border-transparent transition-colors text-gray-900`}
                                     {...register("password", {
                                         required: "Password is required",
                                         minLength: {
@@ -135,7 +135,7 @@ export default function Login() {
                                     )}
                                 </div>
                             </div>
-                            {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
+                            {errors.password && <p className="mt-1  text-red-500">{errors.password.message}</p>}
                         </div>
 
 
@@ -216,7 +216,7 @@ export default function Login() {
 
                 <div className="relative z-10 text-center mt-12 text-white max-w-sm">
                     <h3 className="text-2xl font-bold mb-3 tracking-wide">Connect with every application.</h3>
-                    <p className="text-blue-100 text-xs">Everything you need in an easily customizable dashboard.</p>
+                    <p className="text-blue-100 ">Everything you need in an easily customizable dashboard.</p>
 
                     {/* Pagination dots */}
                     <div className="flex items-center justify-center gap-2 mt-8">

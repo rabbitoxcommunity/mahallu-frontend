@@ -419,7 +419,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <IndianRupee size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">{t('finance.reports.totalIncome')}</span>
+            <span className=" font-medium opacity-90">{t('finance.reports.totalIncome')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.total_income.toLocaleString()}</p>
         </motion.div>
@@ -434,7 +434,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <Home size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">{t('finance.reports.totalVarisankhya')}</span>
+            <span className=" font-medium opacity-90">{t('finance.reports.totalVarisankhya')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.total_varisankhya.toLocaleString()}</p>
         </motion.div>
@@ -449,7 +449,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <TrendingUp size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">{t('common.balance')}</span>
+            <span className=" font-medium opacity-90">{t('common.balance')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.balance.toLocaleString()}</p>
         </motion.div>
@@ -464,7 +464,7 @@ const Reports = () => {
             <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-xl">
               <IndianRupee size={24} className="text-green-600" />
             </div>
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('finance.reports.thisMonthIncome')}</span>
+            <span className=" font-medium text-gray-500 dark:text-gray-400">{t('finance.reports.thisMonthIncome')}</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">₹{summaryData.this_month_income.toLocaleString()}</p>
         </motion.div>
@@ -479,7 +479,7 @@ const Reports = () => {
             <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-xl">
               <Wallet size={24} className="text-red-600" />
             </div>
-            <span className="text-sm font-medium text-gray-500 dark:text-gray-400">{t('finance.reports.thisMonthExpense')}</span>
+            <span className=" font-medium text-gray-500 dark:text-gray-400">{t('finance.reports.thisMonthExpense')}</span>
           </div>
           <p className="text-3xl font-bold text-gray-900 dark:text-white">₹{summaryData.this_month_expense.toLocaleString()}</p>
         </motion.div>
@@ -494,7 +494,7 @@ const Reports = () => {
             <div className="p-3 bg-white/20 rounded-xl">
               <Wallet size={24} />
             </div>
-            <span className="text-sm font-medium opacity-90">{t('finance.reports.totalExpense')}</span>
+            <span className=" font-medium opacity-90">{t('finance.reports.totalExpense')}</span>
           </div>
           <p className="text-3xl font-bold">₹{summaryData.total_expense.toLocaleString()}</p>
         </motion.div>
@@ -508,11 +508,11 @@ const Reports = () => {
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 mb-6">
         <div className="flex flex-wrap gap-4 items-end">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
+            <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
             <select
               value={statementFilters.month}
               onChange={(e) => setStatementFilters({ ...statementFilters, month: parseInt(e.target.value) })}
-              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               {Array.from({ length: 12 }, (_, i) => (
                 <option key={i + 1} value={i + 1}>{moment().month(i).format('MMMM')}</option>
@@ -520,11 +520,11 @@ const Reports = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+            <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
             <select
               value={statementFilters.year}
               onChange={(e) => setStatementFilters({ ...statementFilters, year: parseInt(e.target.value) })}
-              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               {[2024, 2025, 2026, 2027].map(year => (
                 <option key={year} value={year}>{year}</option>
@@ -543,15 +543,15 @@ const Reports = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Opening Balance</p>
+          <p className=" text-gray-600 dark:text-gray-400">Opening Balance</p>
           <p className={`text-2xl font-bold ${statementData.opening_balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{statementData.opening_balance.toLocaleString()}</p>
         </div>
         <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Month Income</p>
+          <p className=" text-gray-600 dark:text-gray-400">Month Income</p>
           <p className="text-2xl font-bold text-green-600">₹{statementData.month_income.toLocaleString()}</p>
         </div>
         <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4 border border-red-200 dark:border-red-800">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Month Expense</p>
+          <p className=" text-gray-600 dark:text-gray-400">Month Expense</p>
           <p className="text-2xl font-bold text-red-600">₹{statementData.month_expense.toLocaleString()}</p>
         </div>
       </div>
@@ -559,12 +559,12 @@ const Reports = () => {
       <div className={`bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 mb-6 ${statementData.closing_balance >= 0 ? 'border-l-4 border-l-blue-500' : 'border-l-4 border-l-red-500'}`}>
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">Closing Balance</p>
+            <p className=" text-gray-600 dark:text-gray-400">Closing Balance</p>
             <p className={`text-4xl font-bold ${statementData.closing_balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{statementData.closing_balance.toLocaleString()}</p>
           </div>
           <div className="text-right">
-            <p className="text-sm text-gray-500">Formula</p>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Opening + Income - Expense</p>
+            <p className=" text-gray-500">Formula</p>
+            <p className=" font-medium text-gray-700 dark:text-gray-300">Opening + Income - Expense</p>
           </div>
         </div>
       </div>
@@ -581,8 +581,8 @@ const Reports = () => {
               <div className="space-y-3">
                 {statementData.income_breakdown.map((item, index) => (
                   <div key={index} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
-                    <span className="text-sm text-gray-700 dark:text-gray-300">{item._id || 'Uncategorized'}</span>
-                    <span className="text-sm font-bold text-green-600">₹{item.total.toLocaleString()}</span>
+                    <span className=" text-gray-700 dark:text-gray-300">{item._id || 'Uncategorized'}</span>
+                    <span className=" font-bold text-green-600">₹{item.total.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -601,8 +601,8 @@ const Reports = () => {
               <div className="space-y-3">
                 {statementData.expense_breakdown.map((item, index) => (
                   <div key={index} className="flex justify-between items-center p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
-                    <span className="text-sm text-gray-700 dark:text-gray-300">{item._id || 'Uncategorized'}</span>
-                    <span className="text-sm font-bold text-red-600">₹{item.total.toLocaleString()}</span>
+                    <span className=" text-gray-700 dark:text-gray-300">{item._id || 'Uncategorized'}</span>
+                    <span className=" font-bold text-red-600">₹{item.total.toLocaleString()}</span>
                   </div>
                 ))}
               </div>
@@ -689,11 +689,11 @@ const Reports = () => {
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 mb-6">
         <div className="flex flex-wrap gap-4 items-end">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Report Type</label>
+            <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Report Type</label>
             <select
               value={exportFilters.type}
               onChange={(e) => setExportFilters({ ...exportFilters, type: e.target.value })}
-              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               <option value="monthly">Monthly Report</option>
               <option value="annual">Annual Report</option>
@@ -702,11 +702,11 @@ const Reports = () => {
           {exportFilters.type === 'monthly' && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
+                <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
                 <select
                   value={exportFilters.month}
                   onChange={(e) => setExportFilters({ ...exportFilters, month: parseInt(e.target.value) })}
-                  className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   {Array.from({ length: 12 }, (_, i) => (
                     <option key={i + 1} value={i + 1}>{moment().month(i).format('MMMM')}</option>
@@ -714,11 +714,11 @@ const Reports = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+                <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
                 <select
                   value={exportFilters.year}
                   onChange={(e) => setExportFilters({ ...exportFilters, year: parseInt(e.target.value) })}
-                  className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   {[2024, 2025, 2026, 2027].map(year => (
                     <option key={year} value={year}>{year}</option>
@@ -729,11 +729,11 @@ const Reports = () => {
           )}
           {exportFilters.type === 'annual' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+              <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
               <select
                 value={exportFilters.year}
                 onChange={(e) => setExportFilters({ ...exportFilters, year: parseInt(e.target.value) })}
-                className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               >
                 {[2024, 2025, 2026, 2027].map(year => (
                   <option key={year} value={year}>{year}</option>
@@ -773,20 +773,20 @@ const Reports = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Opening Balance</p>
+                    <p className=" text-gray-600 dark:text-gray-400">Opening Balance</p>
                     <p className="text-xl font-bold text-blue-600">₹{exportData.opening_balance.toLocaleString()}</p>
                   </div>
                   <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Income</p>
+                    <p className=" text-gray-600 dark:text-gray-400">Income</p>
                     <p className="text-xl font-bold text-green-600">₹{exportData.income.toLocaleString()}</p>
                   </div>
                   <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Expense</p>
+                    <p className=" text-gray-600 dark:text-gray-400">Expense</p>
                     <p className="text-xl font-bold text-red-600">₹{exportData.expense.toLocaleString()}</p>
                   </div>
                 </div>
                 <div className={`bg-white dark:bg-[#1e1f25] rounded-xl p-4 border ${exportData.closing_balance >= 0 ? 'border-blue-200' : 'border-red-200'}`}>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Closing Balance</p>
+                  <p className=" text-gray-600 dark:text-gray-400">Closing Balance</p>
                   <p className={`text-2xl font-bold ${exportData.closing_balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{exportData.closing_balance.toLocaleString()}</p>
                 </div>
               </div>
@@ -794,15 +794,15 @@ const Reports = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-3 gap-4">
                   <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Income</p>
+                    <p className=" text-gray-600 dark:text-gray-400">Total Income</p>
                     <p className="text-xl font-bold text-green-600">₹{exportData.total_income.toLocaleString()}</p>
                   </div>
                   <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Expense</p>
+                    <p className=" text-gray-600 dark:text-gray-400">Total Expense</p>
                     <p className="text-xl font-bold text-red-600">₹{exportData.total_expense.toLocaleString()}</p>
                   </div>
                   <div className={`bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4`}>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Balance</p>
+                    <p className=" text-gray-600 dark:text-gray-400">Balance</p>
                     <p className={`text-xl font-bold ${exportData.balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{exportData.balance.toLocaleString()}</p>
                   </div>
                 </div>
@@ -814,19 +814,19 @@ const Reports = () => {
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-200 dark:border-gray-700">
-                          <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Month</th>
-                          <th className="text-right py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Income</th>
-                          <th className="text-right py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Expense</th>
-                          <th className="text-right py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Balance</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-900 dark:text-white">Month</th>
+                          <th className="text-right py-3 px-4  font-semibold text-gray-900 dark:text-white">Income</th>
+                          <th className="text-right py-3 px-4  font-semibold text-gray-900 dark:text-white">Expense</th>
+                          <th className="text-right py-3 px-4  font-semibold text-gray-900 dark:text-white">Balance</th>
                         </tr>
                       </thead>
                       <tbody>
                         {exportData.monthly_breakdown.map((item, index) => (
                           <tr key={index} className="border-b border-gray-100 dark:border-gray-800">
-                            <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{item.month_name}</td>
-                            <td className="py-3 px-4 text-right text-sm text-green-600">₹{item.income.toLocaleString()}</td>
-                            <td className="py-3 px-4 text-right text-sm text-red-600">₹{item.expense.toLocaleString()}</td>
-                            <td className={`py-3 px-4 text-right text-sm font-medium ${item.balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{item.balance.toLocaleString()}</td>
+                            <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{item.month_name}</td>
+                            <td className="py-3 px-4 text-right  text-green-600">₹{item.income.toLocaleString()}</td>
+                            <td className="py-3 px-4 text-right  text-red-600">₹{item.expense.toLocaleString()}</td>
+                            <td className={`py-3 px-4 text-right  font-medium ${item.balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{item.balance.toLocaleString()}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -860,7 +860,7 @@ const Reports = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl  font-medium whitespace-nowrap transition-colors ${
               activeTab === tab.id
                 ? 'bg-[#0B65F6] text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'

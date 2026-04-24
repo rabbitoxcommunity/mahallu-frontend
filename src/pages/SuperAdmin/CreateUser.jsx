@@ -106,22 +106,22 @@ export default function CreateUser() {
               </h3>
               <div className="space-y-3">
                 <div>
-                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Name</label>
+                  <label className=" font-medium text-gray-500 dark:text-gray-400">Name</label>
                   <p className="text-gray-900 dark:text-white">{createdUser.user.name}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Email</label>
+                  <label className=" font-medium text-gray-500 dark:text-gray-400">Email</label>
                   <p className="text-gray-900 dark:text-white">{createdUser.user.email}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Role</label>
+                  <label className=" font-medium text-gray-500 dark:text-gray-400">Role</label>
                   <p className="text-gray-900 dark:text-white capitalize">{createdUser.user.role}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Password</label>
+                  <label className=" font-medium text-gray-500 dark:text-gray-400">Password</label>
                   <div className="flex items-center gap-2">
                     <p className="text-gray-900 dark:text-white font-mono">{createdUser.plainPassword}</p>
-                    <span className="text-xs text-amber-600 dark:text-amber-400 font-medium">
+                    <span className=" text-amber-600 dark:text-amber-400 font-medium">
                       Share this password
                     </span>
                   </div>
@@ -146,7 +146,7 @@ export default function CreateUser() {
                       ) : (
                         <div className="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-600" />
                       )}
-                      <span className="text-sm text-gray-900 dark:text-white">{module.label}</span>
+                      <span className=" text-gray-900 dark:text-white">{module.label}</span>
                     </div>
                   );
                 })}
@@ -156,7 +156,7 @@ export default function CreateUser() {
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/60 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <CheckCircle size={20} className="text-amber-600 dark:text-amber-400 mt-0.5" />
-                <div className="text-sm text-amber-800 dark:text-amber-200">
+                <div className=" text-amber-800 dark:text-amber-200">
                   <strong>Success!</strong> The user can now log in with their credentials and access the modules you've permitted.
                 </div>
               </div>
@@ -216,7 +216,7 @@ export default function CreateUser() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Name *
                   </label>
                   <div className="relative">
@@ -231,12 +231,12 @@ export default function CreateUser() {
                     />
                   </div>
                   {errors.name && (
-                    <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+                    <p className="mt-1  text-red-500">{errors.name.message}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Email *
                   </label>
                   <div className="relative">
@@ -257,12 +257,12 @@ export default function CreateUser() {
                     />
                   </div>
                   {errors.email && (
-                    <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+                    <p className="mt-1  text-red-500">{errors.email.message}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Password *
                   </label>
                   <div className="relative">
@@ -283,12 +283,12 @@ export default function CreateUser() {
                     />
                   </div>
                   {errors.password && (
-                    <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
+                    <p className="mt-1  text-red-500">{errors.password.message}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Role *
                   </label>
                   <div className="relative">
@@ -305,7 +305,7 @@ export default function CreateUser() {
                     </select>
                   </div>
                   {errors.role && (
-                    <p className="mt-1 text-sm text-red-500">{errors.role.message}</p>
+                    <p className="mt-1  text-red-500">{errors.role.message}</p>
                   )}
                 </div>
               </div>
@@ -362,7 +362,7 @@ export default function CreateUser() {
                               )}
                             </div>
                           </div>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          <p className=" text-gray-500 dark:text-gray-400 mt-1">
                             {module.description}
                           </p>
                         </div>
@@ -379,7 +379,7 @@ export default function CreateUser() {
                 })}
               </div>
               
-              <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
+              <p className="mt-4  text-gray-500 dark:text-gray-400">
                 Select the modules this user should have access to. Admins and Users can only access permitted modules.
               </p>
             </div>

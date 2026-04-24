@@ -22,7 +22,7 @@ export default function AddHouse() {
                 </div>
                 <Link
                     to="/family/house/register"
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5  font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                 >
                     <ArrowLeft size={16} />
                     {t('common.back')}

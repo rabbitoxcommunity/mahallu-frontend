@@ -183,7 +183,7 @@ const GeneralSettings = () => {
                       <div>
                         <h4 className="font-medium text-gray-900 dark:text-white">{category.name}</h4>
                         {category.description && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
+                          <p className=" text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
                         )}
                       </div>
                       <div className="flex gap-2">
@@ -227,7 +227,7 @@ const GeneralSettings = () => {
                       <div>
                         <h4 className="font-medium text-gray-900 dark:text-white">{category.name}</h4>
                         {category.description && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
+                          <p className=" text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
                         )}
                       </div>
                       <div className="flex gap-2">
@@ -271,7 +271,7 @@ const GeneralSettings = () => {
                       <div>
                         <h4 className="font-medium text-gray-900 dark:text-white">{category.name}</h4>
                         {category.description && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
+                          <p className=" text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
                         )}
                       </div>
                       <div className="flex gap-2">
@@ -347,13 +347,13 @@ const GeneralSettings = () => {
                 <form onSubmit={editModal.isOpen ? handleUpdate : handleCreate} className="p-6 space-y-4">
                   {addModal.categoryType === 'income' || editModal.categoryType === 'income' ? (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                         {t('settings.categories.categoryType')} *
                       </label>
                       <select
                         value={formData.type}
                         onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                        className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                         required
                       >
                         <option value="due">Due</option>
@@ -362,25 +362,25 @@ const GeneralSettings = () => {
                     </div>
                   ) : null}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t('settings.categories.categoryName')} *
                     </label>
                     <input
                       type="text"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                      className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t('settings.categories.description')}
                     </label>
                     <textarea
                       value={formData.description}
                       onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                      className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                       rows="3"
                     />
                   </div>

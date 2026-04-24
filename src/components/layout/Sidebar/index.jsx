@@ -134,7 +134,7 @@ const Sidebar = () => {
                     {filteredMenu.map((section, idx) => (
                         <div key={idx} className="space-y-2">
                             {!isCollapsed && (
-                                <h3 className="text-[10px] font-bold text-gray-400 px-3 tracking-widest uppercase mb-3 text-xs">
+                                <h3 className="text-[10px] font-bold text-gray-400 px-3 tracking-widest uppercase mb-3 ">
                                     {t(section.title)}
                                 </h3>
                             )}
@@ -166,7 +166,7 @@ const Sidebar = () => {
                         </div>
                         {!isCollapsed && (
                             <div className="flex-1 overflow-hidden">
-                                <p className="text-xs font-bold text-gray-900 dark:text-gray-100 truncate">{user?.name || 'User'}</p>
+                                <p className=" font-bold text-gray-900 dark:text-gray-100 truncate">{user?.name || 'User'}</p>
                                 <p className="text-[10px] text-gray-500 truncate">{user?.email || 'user@example.com'}</p>
                             </div>
                         )}
@@ -175,7 +175,7 @@ const Sidebar = () => {
                                 <select
                                     value={i18n.language}
                                     onChange={(e) => i18n.changeLanguage(e.target.value)}
-                                    className="px-2 py-1 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                                    className="px-2 py-1 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                                 >
                                     <option value="en">EN</option>
                                     <option value="ml">ML</option>

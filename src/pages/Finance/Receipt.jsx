@@ -127,7 +127,7 @@ Thank you for your payment!
               </div>
               <div>
                 <h2 className="text-lg font-bold text-gray-900 dark:text-white">Payment Receipt</h2>
-                <p className="text-sm text-gray-500">Receipt No: {record.receipt_no}</p>
+                <p className=" text-gray-500">Receipt No: {record.receipt_no}</p>
               </div>
             </div>
             <button
@@ -144,17 +144,17 @@ Thank you for your payment!
               {/* Receipt Header */}
               <div className="text-center mb-6 border-b-2 border-gray-200 pb-4">
                 <h1 className="text-xl font-bold text-gray-900">VARISANKHYA RECEIPT</h1>
-                <p className="text-xs text-gray-600 mt-1">Mahallu Management System</p>
+                <p className=" text-gray-600 mt-1">Mahallu Management System</p>
               </div>
 
               {/* Receipt Info */}
-              <div className="flex justify-between mb-4 text-sm">
+              <div className="flex justify-between mb-4 ">
                 <div>
-                  <p className="text-xs text-gray-500 uppercase">Receipt No</p>
+                  <p className=" text-gray-500 uppercase">Receipt No</p>
                   <p className="font-bold text-gray-900">{record.receipt_no}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-gray-500 uppercase">Date</p>
+                  <p className=" text-gray-500 uppercase">Date</p>
                   <p className="font-bold text-gray-900">
                     {record.paid_date ? new Date(record.paid_date).toLocaleDateString() : new Date().toLocaleDateString()}
                   </p>
@@ -163,8 +163,8 @@ Thank you for your payment!
 
               {/* House Details */}
               <div className="mb-4">
-                <h3 className="text-xs font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">House Details</h3>
-                <div className="space-y-1 text-xs">
+                <h3 className=" font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">House Details</h3>
+                <div className="space-y-1 ">
                   <div className="flex justify-between">
                     <span className="text-gray-600">House Code:</span>
                     <span className="font-medium">{record.house_id?.house_code || 'N/A'}</span>
@@ -182,8 +182,8 @@ Thank you for your payment!
 
               {/* Payment Details */}
               <div className="mb-4">
-                <h3 className="text-xs font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">Payment Details</h3>
-                <div className="space-y-1 text-xs">
+                <h3 className=" font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">Payment Details</h3>
+                <div className="space-y-1 ">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Month/Year:</span>
                     <span className="font-medium">{months[record.month - 1]} {record.year}</span>
@@ -222,9 +222,9 @@ Thank you for your payment!
               <div className="text-center border-t-2 border-gray-200 pt-3">
                 <div className="flex items-center justify-center gap-1 text-green-600 mb-1">
                   <CheckCircle size={16} />
-                  <span className="text-sm font-bold">Payment Received</span>
+                  <span className=" font-bold">Payment Received</span>
                 </div>
-                <p className="text-xs text-gray-500">Thank you for your payment!</p>
+                <p className=" text-gray-500">Thank you for your payment!</p>
               </div>
             </div>
           </div>

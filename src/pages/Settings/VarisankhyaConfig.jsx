@@ -105,7 +105,7 @@ const VarisankhyaConfig = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: categoryOptions.indexOf(option) * 0.1 }}
               >
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {option.label}
                 </label>
                 <input
@@ -114,11 +114,11 @@ const VarisankhyaConfig = () => {
                     required: t('finance.settings.varisankhyaConfig.amountRequired'),
                     min: { value: 0, message: t('finance.settings.varisankhyaConfig.amountPositive') }
                   })}
-                  className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                  className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
                   placeholder={t('finance.settings.varisankhyaConfig.monthlyAmount')}
                 />
                 {errors[`config_${option.value}`] && (
-                  <p className="mt-1 text-sm text-red-600">
+                  <p className="mt-1  text-red-600">
                     {errors[`config_${option.value}`].message}
                   </p>
                 )}
@@ -150,13 +150,13 @@ const VarisankhyaConfig = () => {
           <table className="w-full">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-700">
-                <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">
+                <th className="text-left py-3 px-4  font-semibold text-gray-900 dark:text-white">
                   {t('finance.settings.varisankhyaConfig.category')}
                 </th>
-                <th className="text-right py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">
+                <th className="text-right py-3 px-4  font-semibold text-gray-900 dark:text-white">
                   {t('finance.settings.varisankhyaConfig.monthlyAmount')}
                 </th>
-                <th className="text-center py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">
+                <th className="text-center py-3 px-4  font-semibold text-gray-900 dark:text-white">
                   {t('finance.settings.varisankhyaConfig.isActive')}
                 </th>
               </tr>
@@ -166,19 +166,19 @@ const VarisankhyaConfig = () => {
                 const config = configs.find(c => c.category === option.value);
                 return (
                   <tr key={option.value} className="border-b border-gray-100 dark:border-gray-800">
-                    <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                    <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                       {option.label}
                     </td>
-                    <td className="py-3 px-4 text-right text-sm text-gray-900 dark:text-white font-medium">
+                    <td className="py-3 px-4 text-right  text-gray-900 dark:text-white font-medium">
                       {config ? `₹${config.monthly_amount}` : '-'}
                     </td>
                     <td className="py-3 px-4 text-center">
                       {config ? (
-                        <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full text-xs">
+                        <span className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-full ">
                           {t('common.active')}
                         </span>
                       ) : (
-                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-full text-xs">
+                        <span className="px-2 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-full ">
                           {t('common.inactive')}
                         </span>
                       )}

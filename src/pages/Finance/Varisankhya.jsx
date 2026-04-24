@@ -327,7 +327,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
     };
 
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${styles[status] || styles.unpaid}`}>
+      <span className={`px-3 py-1 rounded-full  font-medium border ${styles[status] || styles.unpaid}`}>
         {labels[status] || status}
       </span>
     );
@@ -342,9 +342,9 @@ console.log(paymentHistoryData,'paymentHistoryData')
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+          <p className=" text-gray-500 dark:text-gray-400">{title}</p>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</h3>
-          {subtext && <p className="text-xs text-gray-400 mt-1">{subtext}</p>}
+          {subtext && <p className=" text-gray-400 mt-1">{subtext}</p>}
         </div>
         <div className={`p-3 rounded-xl ${color}`}>
           <Icon size={24} className="text-white" />
@@ -366,7 +366,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
             <select
               value={month}
               onChange={(e) => setMonth(Number(e.target.value))}
-              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               {months.map(m => (
                 <option key={m.value} value={m.value}>{m.label}</option>
@@ -375,7 +375,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
             <select
               value={year}
               onChange={(e) => setYear(Number(e.target.value))}
-              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               {years.map(y => (
                 <option key={y} value={y}>{y}</option>
@@ -434,7 +434,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
         <div className="flex border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
           <button
             onClick={() => setActiveTab('monthly')}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4  font-medium transition-colors ${
               activeTab === 'monthly'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -447,7 +447,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
           </button>
           <button
             onClick={() => setActiveTab('defaulters')}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4  font-medium transition-colors ${
               activeTab === 'defaulters'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -460,7 +460,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
           </button>
           <button
             onClick={() => setActiveTab('history')}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4  font-medium transition-colors ${
               activeTab === 'history'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -485,7 +485,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                 placeholder={`${t('common.search')} ${activeTab === 'monthly' ? t('finance.varisankhya.houses') : activeTab === 'defaulters' ? t('finance.varisankhya.defaulters') : t('finance.varisankhya.payments')}...`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               />
             </div>
 
@@ -498,7 +498,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     setDateFilter(e.target.value);
                     setCustomDateRange({ from: '', to: '' });
                   }}
-                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   <option value="">{t('finance.varisankhya.allTime')}</option>
                   <option value="today">{t('finance.varisankhya.today')}</option>
@@ -514,13 +514,13 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       type="date"
                       value={customDateRange.from}
                       onChange={(e) => setCustomDateRange(prev => ({ ...prev, from: e.target.value }))}
-                      className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                      className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     />
                     <input
                       type="date"
                       value={customDateRange.to}
                       onChange={(e) => setCustomDateRange(prev => ({ ...prev, to: e.target.value }))}
-                      className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                      className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     />
                   </div>
                 )}
@@ -554,14 +554,14 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             <TrendingUp size={16} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-xs text-white/90">{t('finance.varisankhya.totalCollected')}</p>
+                            <p className=" text-white/90">{t('finance.varisankhya.totalCollected')}</p>
                             <h3 className="text-xl font-bold text-white">
                               ₹{calculateTotalCollected().toLocaleString()}
                             </h3>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-xs text-white/70">{paymentHistoryData.payments?.length || 0} payments</p>
+                          <p className=" text-white/70">{paymentHistoryData.payments?.length || 0} payments</p>
                         </div>
                       </div>
                     </motion.div>
@@ -588,14 +588,14 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.family')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.category')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.contact')}</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.family')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.category')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.contact')}</th>
+                          <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                          <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                          <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                          <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -604,22 +604,22 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             <td className="py-3 px-4">
                               <div className="flex flex-col">
                                 <span className="font-medium text-gray-900 dark:text-white">{record.house_id?.house_code}</span>
-                                <span className="text-xs text-gray-500">{record.house_id?.householder_name}</span>
+                                <span className=" text-gray-500">{record.house_id?.householder_name}</span>
                               </div>
                             </td>
-                            <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                            <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                               {record.house_id?.family_name || '-'}
                             </td>
-                            <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                            <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                               {record.house_id?.family_id?.economic_status || t('finance.varisankhya.normal')}
                             </td>
-                            <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                            <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                               {record.house_id?.primary_contact || '-'}
                             </td>
-                            <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">
+                            <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">
                               ₹{record.amount_due}
                             </td>
-                            <td className="py-3 px-4 text-right text-sm font-medium text-green-600">
+                            <td className="py-3 px-4 text-right  font-medium text-green-600">
                               ₹{record.amount_paid}
                             </td>
                             <td className="py-3 px-4 text-center">
@@ -683,13 +683,13 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">{record.house_id?.house_code}</p>
-                            <p className="text-sm text-gray-500">{record.house_id?.householder_name}</p>
-                            <p className="text-xs text-gray-400">{record.house_id?.family_name}</p>
-                            <p className="text-xs text-gray-400">{t('finance.varisankhya.category')}: {record.house_id?.family_id?.economic_status || t('finance.varisankhya.normal')}</p>
+                            <p className=" text-gray-500">{record.house_id?.householder_name}</p>
+                            <p className=" text-gray-400">{record.house_id?.family_name}</p>
+                            <p className=" text-gray-400">{t('finance.varisankhya.category')}: {record.house_id?.family_id?.economic_status || t('finance.varisankhya.normal')}</p>
                           </div>
                           <StatusBadge status={record.status} />
                         </div>
-                        <div className="flex justify-between text-sm">
+                        <div className="flex justify-between ">
                           <span className="text-gray-500">{t('finance.varisankhya.due')}: <span className="font-medium text-gray-900">₹{record.amount_due}</span></span>
                           <span className="text-gray-500">{t('finance.varisankhya.paid')}: <span className="font-medium text-green-600">₹{record.amount_paid}</span></span>
                         </div>
@@ -697,7 +697,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                           {record.status !== 'paid' && (
                             <button
                               onClick={() => setPaymentModal({ isOpen: true, record })}
-                              className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium"
+                              className="flex-1 py-2 bg-green-600 text-white rounded-lg  font-medium"
                             >
                               {t('finance.varisankhya.pay')}
                             </button>
@@ -705,7 +705,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                           {record.receipt_no && (
                             <button
                               onClick={() => setReceiptModal({ isOpen: true, record })}
-                              className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium"
+                              className="flex-1 py-2 bg-blue-600 text-white rounded-lg  font-medium"
                             >
                               {t('finance.varisankhya.receipt')}
                             </button>
@@ -721,7 +721,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                               });
                               fetchHouseHistory(record.house_id?._id);
                             }}
-                            className="flex-1 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium"
+                            className="flex-1 py-2 bg-purple-600 text-white rounded-lg  font-medium"
                           >
                             History
                           </button>
@@ -736,7 +736,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   {/* Pagination */}
                   {monthlyData.pages > 1 && (
                     <div className="flex items-center justify-between mt-4">
-                      <p className="text-sm text-gray-500">
+                      <p className=" text-gray-500">
                         Showing {((monthlyData.page - 1) * 20) + 1} to {Math.min(monthlyData.page * 20, monthlyData.total)} of {monthlyData.total} entries
                       </p>
                       <div className="flex items-center gap-2">
@@ -747,7 +747,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         >
                           <ChevronLeft size={18} />
                         </button>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className=" text-gray-700 dark:text-gray-300">
                           Page {monthlyData.page} of {monthlyData.pages}
                         </span>
                         <button
@@ -771,11 +771,11 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.family')}</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.pending')}</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.amountDue')}</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.family')}</th>
+                          <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.pending')}</th>
+                          <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.amountDue')}</th>
+                          <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -784,18 +784,18 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             <td className="py-3 px-4">
                               <div className="flex flex-col">
                                 <span className="font-medium text-gray-900 dark:text-white">{defaulter.house_code}</span>
-                                <span className="text-xs text-gray-500">{defaulter.house_name}</span>
+                                <span className=" text-gray-500">{defaulter.house_name}</span>
                               </div>
                             </td>
-                            <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                            <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                               {defaulter.family_name || '-'}
                             </td>
                             <td className="py-3 px-4 text-center">
-                              <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                              <span className="px-3 py-1 bg-red-100 text-red-700 rounded-full  font-medium">
                                 {defaulter.pending_months_count} months
                               </span>
                             </td>
-                            <td className="py-3 px-4 text-right text-sm font-bold text-red-600">
+                            <td className="py-3 px-4 text-right  font-bold text-red-600">
                               ₹{defaulter.pending_amount.toLocaleString()}
                             </td>
                             <td className="py-3 px-4">
@@ -829,15 +829,15 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">{defaulter.house_code}</p>
-                            <p className="text-sm text-gray-500">{defaulter.house_name}</p>
+                            <p className=" text-gray-500">{defaulter.house_name}</p>
                           </div>
-                          <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full text-xs font-medium">
+                          <span className="px-2 py-1 bg-red-100 text-red-700 rounded-full  font-medium">
                             {defaulter.pending_months_count} months
                           </span>
                         </div>
-                        <p className="text-xs text-gray-400">{defaulter.family_name}</p>
+                        <p className=" text-gray-400">{defaulter.family_name}</p>
                         <div className="flex justify-between items-center pt-2 border-t border-red-200 dark:border-red-800">
-                          <span className="text-sm text-gray-500">{t('finance.varisankhya.due')}: <span className="font-bold text-red-600">₹{defaulter.pending_amount.toLocaleString()}</span></span>
+                          <span className=" text-gray-500">{t('finance.varisankhya.due')}: <span className="font-bold text-red-600">₹{defaulter.pending_amount.toLocaleString()}</span></span>
                           <button
                               onClick={() => openDefaulterHistoryModal(defaulter)}
                               className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
@@ -856,7 +856,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   {/* Pagination */}
                   {defaultersData.pages > 1 && (
                     <div className="flex items-center justify-between mt-4">
-                      <p className="text-sm text-gray-500">
+                      <p className=" text-gray-500">
                         Showing {((defaultersData.page - 1) * 20) + 1} to {Math.min(defaultersData.page * 20, defaultersData.total)} of {defaultersData.total} entries
                       </p>
                       <div className="flex items-center gap-2">
@@ -867,7 +867,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         >
                           <ChevronLeft size={18} />
                         </button>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className=" text-gray-700 dark:text-gray-300">
                           Page {defaultersData.page} of {defaultersData.pages}
                         </span>
                         <button
@@ -891,33 +891,33 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.receipt')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.receipt')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
+                          <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                          <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
+                          <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                          <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
                         {paymentHistoryData.payments.map((payment) => (
                           <tr key={payment._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
-                            <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">
+                            <td className="py-3 px-4  font-medium text-gray-900 dark:text-white">
                               {payment.receipt_no}
                             </td>
                             <td className="py-3 px-4">
                               <div className="flex flex-col">
                                 <span className="font-medium text-gray-900 dark:text-white">{payment.house_id?.house_code}</span>
-                                <span className="text-xs text-gray-500">{payment.house_id?.householder_name}</span>
+                                <span className=" text-gray-500">{payment.house_id?.householder_name}</span>
                               </div>
                             </td>
-                            <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                            <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                               {months.find(m => m.value === payment.month)?.label} {payment.year}
                             </td>
-                            <td className="py-3 px-4 text-right text-sm font-bold text-green-600">
+                            <td className="py-3 px-4 text-right  font-bold text-green-600">
                               ₹{payment.amount_paid.toLocaleString()}
                             </td>
-                            <td className="py-3 px-4 text-center text-sm text-gray-700 dark:text-gray-300">
+                            <td className="py-3 px-4 text-center  text-gray-700 dark:text-gray-300">
                               {payment.paid_date ? new Date(payment.paid_date).toLocaleDateString() : '-'}
                             </td>
                             <td className="py-3 px-4">
@@ -992,24 +992,24 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">{payment.house_id?.house_code}</p>
-                            <p className="text-sm text-gray-500">{payment.house_id?.householder_name}</p>
+                            <p className=" text-gray-500">{payment.house_id?.householder_name}</p>
                           </div>
-                          <span className="text-xs font-medium text-green-600 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
+                          <span className=" font-medium text-green-600 bg-green-100 dark:bg-green-900/30 px-2 py-1 rounded">
                             ₹{payment.amount_paid.toLocaleString()}
                           </span>
                         </div>
-                        <div className="flex justify-between text-sm text-gray-500">
+                        <div className="flex justify-between  text-gray-500">
                           <span>{months.find(m => m.value === payment.month)?.label} {payment.year}</span>
                           <span>{payment.paid_date ? new Date(payment.paid_date).toLocaleDateString() : '-'}</span>
                         </div>
-                        <div className="flex justify-between text-sm">
+                        <div className="flex justify-between ">
                           <span className="text-gray-500">{t('finance.varisankhya.receipt')}: <span className="font-medium text-gray-700">{payment.receipt_no}</span></span>
                           <span className="text-gray-500 capitalize">{payment.payment_method}</span>
                         </div>
                         <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                           <button
                             onClick={() => setReceiptModal({ isOpen: true, record: payment })}
-                            className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium"
+                            className="flex-1 py-2 bg-blue-600 text-white rounded-lg  font-medium"
                           >
                             {t('common.view')}
                           </button>
@@ -1049,7 +1049,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                               printWindow.document.write(receiptContent);
                               printWindow.document.close();
                             }}
-                            className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium"
+                            className="flex-1 py-2 bg-green-600 text-white rounded-lg  font-medium"
                           >
                             {t('common.print')}
                           </button>
@@ -1065,9 +1065,9 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   <div className="mt-4 p-4 bg-gray-50 dark:bg-[#252731] rounded-xl">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">{t('finance.varisankhya.totalCollected')}</span>
+                        <span className=" text-gray-600 dark:text-gray-400">{t('finance.varisankhya.totalCollected')}</span>
                         {dateFilter && (
-                          <p className="text-xs text-gray-500">
+                          <p className=" text-gray-500">
                             {dateFilter === 'today' && t('finance.varisankhya.today')}
                             {dateFilter === 'this_month' && t('finance.varisankhya.thisMonth')}
                             {dateFilter === 'last_month' && t('finance.varisankhya.lastMonth')}
@@ -1085,7 +1085,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   {/* Pagination */}
                   {paymentHistoryData.pages > 1 && (
                     <div className="flex items-center justify-between mt-4">
-                      <p className="text-sm text-gray-500">
+                      <p className=" text-gray-500">
                         Showing {((paymentHistoryData.page - 1) * 20) + 1} to {Math.min(paymentHistoryData.page * 20, paymentHistoryData.total)} of {paymentHistoryData.total} entries
                       </p>
                       <div className="flex items-center gap-2">
@@ -1096,7 +1096,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         >
                           <ChevronLeft size={18} />
                         </button>
-                        <span className="text-sm text-gray-700 dark:text-gray-300">
+                        <span className=" text-gray-700 dark:text-gray-300">
                           Page {paymentHistoryData.page} of {paymentHistoryData.pages}
                         </span>
                         <button
@@ -1157,7 +1157,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     </div>
                     <div>
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.varisankhya.paymentHistory')}</h2>
-                      <p className="text-sm text-gray-500">{historyModal.houseName}</p>
+                      <p className=" text-gray-500">{historyModal.houseName}</p>
                     </div>
                   </div>
                   <button
@@ -1177,15 +1177,15 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <div className="mb-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
                         <div className="grid grid-cols-3 gap-4 text-center">
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalDue')}</p>
+                            <p className=" text-gray-500 uppercase">{t('finance.varisankhya.totalDue')}</p>
                             <p className="text-lg font-bold text-gray-900 dark:text-white">₹{historyModal.data.summary?.total_due?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalPaid')}</p>
+                            <p className=" text-gray-500 uppercase">{t('finance.varisankhya.totalPaid')}</p>
                             <p className="text-lg font-bold text-green-600">₹{historyModal.data.summary?.total_paid?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.paymentsMade')}</p>
+                            <p className=" text-gray-500 uppercase">{t('finance.varisankhya.paymentsMade')}</p>
                             <p className="text-lg font-bold text-blue-600">{historyModal.data.summary?.payments_count || 0}</p>
                           </div>
                         </div>
@@ -1193,21 +1193,21 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-gray-100 dark:border-gray-800">
-                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
-                            <th className="text-center py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
-                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                            <th className="text-left py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                            <th className="text-center py-2 px-4  font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                            <th className="text-left py-2 px-4  font-semibold text-gray-500 uppercase">{t('common.date')}</th>
                           </tr>
                         </thead>
                         <tbody>
                           {historyModal.data.history.map((h) => (
                             <tr key={h._id} className="border-b border-gray-50 dark:border-gray-800/50">
-                              <td className="py-2 px-4 text-sm">{months.find(m => m.value === h.month)?.label} {h.year}</td>
-                              <td className="py-2 px-4 text-right text-sm">₹{h.amount_due}</td>
-                              <td className="py-2 px-4 text-right text-sm font-medium text-green-600">₹{h.amount_paid}</td>
+                              <td className="py-2 px-4 ">{months.find(m => m.value === h.month)?.label} {h.year}</td>
+                              <td className="py-2 px-4 text-right ">₹{h.amount_due}</td>
+                              <td className="py-2 px-4 text-right  font-medium text-green-600">₹{h.amount_paid}</td>
                               <td className="py-2 px-4 text-center"><StatusBadge status={h.status} /></td>
-                              <td className="py-2 px-4 text-sm text-gray-500">
+                              <td className="py-2 px-4  text-gray-500">
                                 {h.paid_date ? new Date(h.paid_date).toLocaleDateString() : '-'}
                               </td>
                             </tr>
@@ -1250,10 +1250,10 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     </div>
                     <div>
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">Defaulter History</h2>
-                      <p className="text-sm text-gray-500">
+                      <p className=" text-gray-500">
                         {defaulterHistoryModal.houseData?.house_code} - {defaulterHistoryModal.houseData?.house_name}
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className=" text-gray-400">
                         {defaulterHistoryModal.houseData?.family_name} | {defaulterHistoryModal.houseData?.contact}
                       </p>
                     </div>
@@ -1275,19 +1275,19 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <div className="mb-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalDue')}</p>
+                            <p className=" text-gray-500 uppercase">{t('finance.varisankhya.totalDue')}</p>
                             <p className="text-lg font-bold text-red-600">₹{defaulterHistoryData.summary?.total_due?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalPaid')}</p>
+                            <p className=" text-gray-500 uppercase">{t('finance.varisankhya.totalPaid')}</p>
                             <p className="text-lg font-bold text-green-600">₹{defaulterHistoryData.summary?.total_paid?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.pending')}</p>
+                            <p className=" text-gray-500 uppercase">{t('finance.varisankhya.pending')}</p>
                             <p className="text-lg font-bold text-orange-600">₹{defaulterHistoryData.summary?.pending_amount?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.pendingMonths')}</p>
+                            <p className=" text-gray-500 uppercase">{t('finance.varisankhya.pendingMonths')}</p>
                             <p className="text-lg font-bold text-blue-600">{defaulterHistoryData.summary?.pending_months_count || 0}</p>
                           </div>
                         </div>
@@ -1295,20 +1295,20 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-gray-100 dark:border-gray-800">
-                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
-                            <th className="text-center py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                            <th className="text-left py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                            <th className="text-center py-2 px-4  font-semibold text-gray-500 uppercase">{t('common.status')}</th>
                           </tr>
                         </thead>
                         <tbody>
                           {defaulterHistoryData.history.map((record, index) => (
                             <tr key={index} className="border-b border-gray-50 dark:border-gray-800/50">
-                              <td className="py-2 px-4 text-sm">{new Date(record.year, record.month - 1).toLocaleDateString('en-US', { month: 'long' })} {record.year}</td>
-                              <td className="py-2 px-4 text-right text-sm">₹{record.amount_due?.toLocaleString() || 0}</td>
-                              <td className="py-2 px-4 text-right text-sm">₹{record.amount_paid?.toLocaleString() || 0}</td>
+                              <td className="py-2 px-4 ">{new Date(record.year, record.month - 1).toLocaleDateString('en-US', { month: 'long' })} {record.year}</td>
+                              <td className="py-2 px-4 text-right ">₹{record.amount_due?.toLocaleString() || 0}</td>
+                              <td className="py-2 px-4 text-right ">₹{record.amount_paid?.toLocaleString() || 0}</td>
                               <td className="py-2 px-4 text-center">
-                                <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${
+                                <span className={`inline-flex px-2 py-1  font-medium rounded-full ${
                                   record.status === 'paid' 
                                     ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                                     : record.status === 'partial'

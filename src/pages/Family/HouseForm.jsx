@@ -101,7 +101,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {t('family.form.householderNameLabel')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
@@ -111,19 +111,19 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                             <input
                                 type="text"
                                 className={`block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border ${errors.householder_name ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800 focus:ring-[#0B65F6]'
-                                    } rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
+                                    } rounded-xl  text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
                                 placeholder={t('family.form.householderNamePlaceholder')}
                                 {...register("householder_name", { required: t('family.form.householderNameRequired') })}
                             />
                         </div>
                         {errors.householder_name && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.householder_name.message}</p>
+                            <p className="mt-1.5  text-red-500">{errors.householder_name.message}</p>
                         )}
                     </div>
 
                     {/* Primary Contact */}
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {t('family.form.primaryContactLabel')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
@@ -133,19 +133,19 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                             <input
                                 type="text"
                                 className={`block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border ${errors.primary_contact ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800 focus:ring-[#0B65F6]'
-                                    } rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
+                                    } rounded-xl  text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
                                 placeholder={t('family.form.primaryContactPlaceholder')}
                                 {...register("primary_contact", { required: t('family.form.primaryContactRequired') })}
                             />
                         </div>
                         {errors.primary_contact && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.primary_contact.message}</p>
+                            <p className="mt-1.5  text-red-500">{errors.primary_contact.message}</p>
                         )}
                     </div>
 
                     {/* Address */}
                     <div className="md:col-span-2">
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {t('family.form.addressLabel')}
                         </label>
                         <div className="relative">
@@ -154,7 +154,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                             </div>
                             <textarea
                                 rows={3}
-                                className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] focus:border-[#0B65F6] focus:outline-none transition-colors resize-none"
+                                className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] focus:border-[#0B65F6] focus:outline-none transition-colors resize-none"
                                 placeholder={t('family.form.addressPlaceholder')}
                                 {...register("address")}
                             />
@@ -172,7 +172,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                     </div>
 
                     {/* Zakat Eligible (Checkbox) */}
-                    <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 h-fit self-end text-xs">
+                    <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 h-fit self-end ">
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input
                                 type="checkbox"
@@ -190,7 +190,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
 
                     {/* Notes */}
                     <div className="md:col-span-2">
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {t('family.form.notesLabel')}
                         </label>
                         <div className="relative">
@@ -199,7 +199,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                             </div>
                             <textarea
                                 rows={2}
-                                className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] focus:border-[#0B65F6] focus:outline-none transition-colors resize-none"
+                                className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] focus:border-[#0B65F6] focus:outline-none transition-colors resize-none"
                                 placeholder={t('family.form.notesPlaceholder')}
                                 {...register("notes")}
                             />
@@ -207,7 +207,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                     </div>
 
                     {/* Active Status */}
-                    <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 md:col-span-2 text-xs">
+                    <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800 md:col-span-2 ">
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input
                                 type="checkbox"
@@ -227,7 +227,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                         <button
                             type="button"
                             onClick={onCancel}
-                            className="px-6 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
+                            className="px-6 py-2.5  font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                         >
                             {t('family.form.cancel')}
                         </button>
@@ -235,7 +235,7 @@ export default function HouseForm({ initialData, onSuccess, onCancel }) {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="flex items-center justify-center gap-2 px-6 py-2.5 text-xs font-medium text-white bg-[#0B65F6] rounded-xl hover:bg-[#0B65F6]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0B65F6] disabled:opacity-50 transition-all shadow-sm"
+                        className="flex items-center justify-center gap-2 px-6 py-2.5  font-medium text-white bg-[#0B65F6] rounded-xl hover:bg-[#0B65F6]/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0B65F6] disabled:opacity-50 transition-all shadow-sm"
                     >
                         {isSubmitting ? (
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

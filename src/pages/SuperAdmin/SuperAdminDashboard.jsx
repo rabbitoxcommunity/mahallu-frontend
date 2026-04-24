@@ -65,7 +65,7 @@ export default function SuperAdminDashboard() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#0B65F6] dark:group-hover:text-[#0B65F6] mb-2">
                   {item.name}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+                <p className=" text-gray-500 dark:text-gray-400">
                   {item.description}
                 </p>
               </Link>

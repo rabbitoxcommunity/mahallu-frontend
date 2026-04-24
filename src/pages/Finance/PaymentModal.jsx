@@ -120,7 +120,7 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                       </div>
                       <div>
                         <h2 className="text-lg font-bold text-gray-900 dark:text-white">Record Payment</h2>
-                        <p className="text-sm text-gray-500">
+                        <p className=" text-gray-500">
                           {record.house_id?.house_code} - {record.house_id?.householder_name}
                         </p>
                       </div>
@@ -138,22 +138,22 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                     {/* Amount Info */}
                     <div className="grid grid-cols-3 gap-3 p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
                       <div>
-                        <p className="text-xs text-gray-500 uppercase">Amount Due</p>
+                        <p className=" text-gray-500 uppercase">Amount Due</p>
                         <p className="text-base font-bold text-gray-900 dark:text-white">₹{record.amount_due}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 uppercase">Already Paid</p>
+                        <p className=" text-gray-500 uppercase">Already Paid</p>
                         <p className="text-base font-bold text-green-600">₹{record.amount_paid}</p>
                       </div>
                       <div>
-                        <p className="text-xs text-gray-500 uppercase">Remaining</p>
+                        <p className=" text-gray-500 uppercase">Remaining</p>
                         <p className="text-base font-bold text-orange-600">₹{remainingAmount}</p>
                       </div>
                     </div>
 
                     {/* Amount Paid Input */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Amount Paid *
                       </label>
                       <div className="relative">
@@ -174,7 +174,7 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                             setAmountPaid(remainingAmount.toString());
                             setQuickAmount('full');
                           }}
-                          className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                          className={`px-3 py-1.5  rounded-lg transition-colors ${
                             quickAmount === 'full'
                               ? 'bg-blue-600 text-white'
                               : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-200'
@@ -188,7 +188,7 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                             setAmountPaid(halfAmount.toString());
                             setQuickAmount('half');
                           }}
-                          className={`px-3 py-1.5 text-xs rounded-lg transition-colors ${
+                          className={`px-3 py-1.5  rounded-lg transition-colors ${
                             quickAmount === 'half'
                               ? 'bg-orange-600 text-white'
                               : 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 hover:bg-orange-200'
@@ -201,7 +201,7 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
 
                     {/* Payment Method */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Payment Method *
                       </label>
                       <div className="grid grid-cols-2 gap-3">
@@ -238,7 +238,7 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
 
                     {/* Notes */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Notes (Optional)
                       </label>
                       <textarea
@@ -254,9 +254,9 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                     <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl border border-blue-100 dark:border-blue-800">
                       <div className="flex items-center gap-2 mb-1">
                         <FileText size={16} className="text-blue-600" />
-                        <span className="text-sm font-medium text-blue-900 dark:text-blue-100">Payment Summary</span>
+                        <span className=" font-medium text-blue-900 dark:text-blue-100">Payment Summary</span>
                       </div>
-                      <div className="space-y-1 text-xs">
+                      <div className="space-y-1 ">
                         <div className="flex justify-between">
                           <span className="text-gray-600 dark:text-gray-400">House:</span>
                           <span className="font-medium text-gray-900 dark:text-white">{record.house_id?.house_code}</span>
@@ -279,14 +279,14 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                   <div className="flex items-center justify-end gap-2 p-4 border-t border-gray-100 dark:border-gray-800">
                     <button
                       onClick={onClose}
-                      className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+                      className="px-3 py-2  text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => handleSubmit(false)}
                       disabled={loading || !amountPaid}
-                      className="flex items-center gap-1.5 px-3 py-2 text-sm bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-2  bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
                       title="Save payment and close"
                     >
                       <CheckCircle size={16} />
@@ -295,7 +295,7 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                     <button
                       onClick={() => handleSubmit(true)}
                       disabled={loading || !amountPaid}
-                      className="flex items-center gap-1.5 px-3 py-2 text-sm bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-2  bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
                       title="Save payment and show receipt for printing"
                     >
                       <Printer size={16} />

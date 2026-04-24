@@ -142,9 +142,9 @@ export default function EditPermissions() {
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 {user.name}
               </h3>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
+              <p className=" text-gray-500 dark:text-gray-400">{user.email}</p>
               <div className="flex items-center gap-2 mt-2">
-                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full  font-medium ${
                   user.role === 'admin' 
                     ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
                     : 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
@@ -152,7 +152,7 @@ export default function EditPermissions() {
                   <Shield size={12} />
                   {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                 </span>
-                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full  font-medium ${
                   user.is_active
                     ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                     : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
@@ -216,7 +216,7 @@ export default function EditPermissions() {
                             )}
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        <p className=" text-gray-500 dark:text-gray-400 mt-1">
                           {module.description}
                         </p>
                       </div>
@@ -236,7 +236,7 @@ export default function EditPermissions() {
             <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/60 rounded-xl">
               <div className="flex items-start gap-3">
                 <Shield size={20} className="text-blue-600 dark:text-blue-400 mt-0.5" />
-                <div className="text-sm text-blue-800 dark:text-blue-200">
+                <div className=" text-blue-800 dark:text-blue-200">
                   <strong>Permission Note:</strong> Users can only access the modules you enable here. 
                   SuperAdmins and PlatformAdmins bypass all permission restrictions.
                 </div>

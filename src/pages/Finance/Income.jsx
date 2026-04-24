@@ -483,7 +483,7 @@ export const Income = () => {
                 <select
                   value={month}
                   onChange={(e) => setMonth(Number(e.target.value))}
-                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   {months.map(m => (
                     <option key={m.value} value={m.value}>{m.label}</option>
@@ -492,7 +492,7 @@ export const Income = () => {
                 <select
                   value={year}
                   onChange={(e) => setYear(Number(e.target.value))}
-                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   {years.map(y => (
                     <option key={y} value={y}>{y}</option>
@@ -514,7 +514,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.totalDue')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.totalDue')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{(summary?.due_based?.total_due || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
@@ -529,7 +529,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.totalPaid')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.totalPaid')}</p>
                 <h3 className="text-2xl font-bold text-green-600 mt-1">₹{(summary?.due_based?.total_paid || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
@@ -544,7 +544,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.pending')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.pending')}</p>
                 <h3 className="text-2xl font-bold text-orange-600 mt-1">₹{(summary?.due_based?.total_pending || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-orange-500">
@@ -559,7 +559,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.paidCount')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.paidCount')}</p>
                 <h3 className="text-2xl font-bold text-green-600 mt-1">{summary?.due_based?.paid_count || 0}</h3>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
@@ -574,7 +574,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.overdue')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.overdue')}</p>
                 <h3 className="text-2xl font-bold text-red-600 mt-1">{summary?.due_based?.overdue_count || 0}</h3>
               </div>
               <div className="p-3 rounded-xl bg-red-500">
@@ -592,7 +592,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.totalIncome')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.totalIncome')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{(summary?.direct?.total_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
@@ -607,7 +607,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.cashIncome')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.cashIncome')}</p>
                 <h3 className="text-2xl font-bold text-green-600 mt-1">₹{(summary?.direct?.cash_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
@@ -622,7 +622,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.upiIncome')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.upiIncome')}</p>
                 <h3 className="text-2xl font-bold text-purple-600 mt-1">₹{(summary?.direct?.upi_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-purple-500">
@@ -637,7 +637,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.bankIncome')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.bankIncome')}</p>
                 <h3 className="text-2xl font-bold text-blue-600 mt-1">₹{(summary?.direct?.bank_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
@@ -655,9 +655,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.todayTotal')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.todayTotal')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.today_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.today_count} {t('finance.income.collections')}</p>
+                <p className=" text-gray-400 mt-1">{hadiyaSummary.today_count} {t('finance.income.collections')}</p>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
                 <Calendar size={24} className="text-white" />
@@ -671,9 +671,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.thisMonthTotal')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.thisMonthTotal')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.month_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.month_count} {t('finance.income.collections')}</p>
+                <p className=" text-gray-400 mt-1">{hadiyaSummary.month_count} {t('finance.income.collections')}</p>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
                 <Wallet size={24} className="text-white" />
@@ -687,9 +687,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.houseContributions')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.houseContributions')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.house_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.house_count} {t('finance.income.houses')}</p>
+                <p className=" text-gray-400 mt-1">{hadiyaSummary.house_count} {t('finance.income.houses')}</p>
               </div>
               <div className="p-3 rounded-xl bg-purple-500">
                 <Building2 size={24} className="text-white" />
@@ -703,9 +703,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.externalContributions')}</p>
+                <p className=" text-gray-500 dark:text-gray-400">{t('finance.income.externalContributions')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.external_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.external_count} {t('finance.income.guests')}</p>
+                <p className=" text-gray-400 mt-1">{hadiyaSummary.external_count} {t('finance.income.guests')}</p>
               </div>
               <div className="p-3 rounded-xl bg-orange-500">
                 <Heart size={24} className="text-white" />
@@ -720,7 +720,7 @@ export const Income = () => {
         <div className="flex border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
           <button
             onClick={() => setActiveTab('due')}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4  font-medium transition-colors ${
               activeTab === 'due'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -733,7 +733,7 @@ export const Income = () => {
           </button>
           <button
             onClick={() => setActiveTab('direct')}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4  font-medium transition-colors ${
               activeTab === 'direct'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -746,7 +746,7 @@ export const Income = () => {
           </button>
           <button
             onClick={() => setActiveTab('hadiya')}
-            className={`flex-1 px-6 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 px-6 py-4  font-medium transition-colors ${
               activeTab === 'hadiya'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
@@ -771,7 +771,7 @@ export const Income = () => {
                   placeholder={activeTab === 'due' ? t('finance.income.searchDue') : t('finance.income.searchDirect')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 />
               </div>
 
@@ -788,7 +788,7 @@ export const Income = () => {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   <option value="">{t('finance.income.allStatus')}</option>
                   <option value="paid">{t('common.paid')}</option>
@@ -801,7 +801,7 @@ export const Income = () => {
                 <select
                   value={paymentMethodFilter}
                   onChange={(e) => setPaymentMethodFilter(e.target.value)}
-                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   <option value="">{t('finance.income.allMethods')}</option>
                   <option value="cash">Cash</option>
@@ -841,14 +841,14 @@ export const Income = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.monthYear')}</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.due')}</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.paid')}</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.monthYear')}</th>
+                    <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.due')}</th>
+                    <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.paid')}</th>
+                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -858,27 +858,27 @@ export const Income = () => {
                       <td colSpan={9} className="py-12 text-center text-gray-400 dark:text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                           <IndianRupee size={32} className="opacity-30" />
-                          <p className="text-sm">{t('common.noData')}</p>
+                          <p className="">{t('common.noData')}</p>
                         </div>
                       </td>
                     </tr>
                   ) : (
                     dueData.incomes.map((income) => (
                       <tr key={income._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
-                        <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{income.income_code}</td>
-                        <td className="py-3 px-4 text-sm">
+                        <td className="py-3 px-4  font-medium text-gray-900 dark:text-white">{income.income_code}</td>
+                        <td className="py-3 px-4 ">
                           <div className="flex items-center gap-2">
                             {/* {getCategoryIcon(income.category)} */}
                             {/* FIX: Use formatCategory helper with replaceAll */}
                             <span className="capitalize">{formatCategory(income.category)}</span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{income.source_name}</td>
-                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{months[income.month - 1]?.label} {income.year}</td>
-                        <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">₹{income.amount_due?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right text-sm font-medium text-green-600">₹{income.amount_paid?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right text-sm font-medium text-orange-600">₹{income.balance?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-center"><span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(income.status)}`}>{income.status}</span></td>
+                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{income.source_name}</td>
+                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{months[income.month - 1]?.label} {income.year}</td>
+                        <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">₹{income.amount_due?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right  font-medium text-green-600">₹{income.amount_paid?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right  font-medium text-orange-600">₹{income.balance?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-center"><span className={`inline-flex px-2 py-1  font-medium rounded-full ${getStatusBadge(income.status)}`}>{income.status}</span></td>
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
                             {income.status !== 'paid' && (
@@ -898,7 +898,7 @@ export const Income = () => {
             </div>
             {dueData.pages > 1 && (
               <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
-                <p className="text-sm text-gray-500">{t('finance.income.pageOf', { page: dueData.page, pages: dueData.pages })}</p>
+                <p className=" text-gray-500">{t('finance.income.pageOf', { page: dueData.page, pages: dueData.pages })}</p>
                 <div className="flex gap-2">
                   <button onClick={() => fetchDue(dueData.page - 1)} disabled={dueData.page === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronLeft size={18} /></button>
                   <button onClick={() => fetchDue(dueData.page + 1)} disabled={dueData.page === dueData.pages} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronRight size={18} /></button>
@@ -915,14 +915,14 @@ export const Income = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.method')}</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.receipt')}</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
+                    <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
+                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.method')}</th>
+                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.receipt')}</th>
+                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -932,33 +932,33 @@ export const Income = () => {
                       <td colSpan={8} className="py-12 text-center text-gray-400 dark:text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                           <Wallet size={32} className="opacity-30" />
-                          <p className="text-sm">{t('common.noData')}</p>
+                          <p className="">{t('common.noData')}</p>
                         </div>
                       </td>
                     </tr>
                   ) : (
                     directData.incomes.map((income) => (
                       <tr key={income._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
-                        <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{income.income_code}</td>
-                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{new Date(income.date).toLocaleDateString()}</td>
-                        <td className="py-3 px-4 text-sm">
+                        <td className="py-3 px-4  font-medium text-gray-900 dark:text-white">{income.income_code}</td>
+                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{new Date(income.date).toLocaleDateString()}</td>
+                        <td className="py-3 px-4 ">
                           <div className="flex items-center gap-2">
                             {/* {getCategoryIcon(income.category)} */}
                             {/* FIX: Use formatCategory helper with replaceAll */}
                             <span className="capitalize">{formatCategory(income.category)}</span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{income.source_name}</td>
-                        <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">₹{income.amount?.toLocaleString()}</td>
+                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{income.source_name}</td>
+                        <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">₹{income.amount?.toLocaleString()}</td>
                         <td className="py-3 px-4 text-center">
                           <div className="flex items-center justify-center gap-2">
                             {income.payment_method === 'cash' && <Banknote size={18} className="text-green-600" />}
                             {income.payment_method === 'upi' && <Smartphone size={18} className="text-blue-600" />}
                             {income.payment_method === 'bank' && <CreditCard size={18} className="text-purple-600" />}
-                            <span className="capitalize text-xs">{income.payment_method}</span>
+                            <span className="capitalize ">{income.payment_method}</span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center text-sm text-gray-700 dark:text-gray-300">{income.receipt_no || '-'}</td>
+                        <td className="py-3 px-4 text-center  text-gray-700 dark:text-gray-300">{income.receipt_no || '-'}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
                             {/* FIX: Eye was used but not imported — now imported at top */}
@@ -976,7 +976,7 @@ export const Income = () => {
             </div>
             {directData.pages > 1 && (
               <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
-                <p className="text-sm text-gray-500">{t('finance.income.pageOf', { page: directData.page, pages: directData.pages })}</p>
+                <p className=" text-gray-500">{t('finance.income.pageOf', { page: directData.page, pages: directData.pages })}</p>
                 <div className="flex gap-2">
                   <button onClick={() => fetchDirect(directData.page - 1)} disabled={directData.page === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronLeft size={18} /></button>
                   <button onClick={() => fetchDirect(directData.page + 1)} disabled={directData.page === directData.pages} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronRight size={18} /></button>
@@ -1005,19 +1005,19 @@ export const Income = () => {
                     </div>
                     <div>
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">{dueModal.isEdit ? t('finance.income.editDue') : t('finance.income.addDue')}</h2>
-                      <p className="text-sm text-gray-500">{dueModal.isEdit ? t('finance.income.updateDue') : t('finance.income.createDue')}</p>
+                      <p className=" text-gray-500">{dueModal.isEdit ? t('finance.income.updateDue') : t('finance.income.createDue')}</p>
                     </div>
                   </div>
                   <button onClick={() => setDueModal({ isOpen: false, income: null, isEdit: false })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.date')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.date')} *</label>
                     <input type="date" {...registerDue('date', { required: t('finance.income.dateRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
-                    {dueErrors.date && <p className="text-red-500 text-xs mt-1">{dueErrors.date.message}</p>}
+                    {dueErrors.date && <p className="text-red-500  mt-1">{dueErrors.date.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.category')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.category')} *</label>
                     <input type="hidden" {...registerDue('category', { required: t('finance.income.categoryRequired') })} />
                     <Select
                       value={selectedDueCategory}
@@ -1036,26 +1036,26 @@ export const Income = () => {
                         })
                       }}
                     />
-                    {dueErrors.category && <p className="text-red-500 text-xs mt-1">{t('finance.income.categoryRequired')}</p>}
+                    {dueErrors.category && <p className="text-red-500  mt-1">{t('finance.income.categoryRequired')}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.sourceName')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.sourceName')} *</label>
                     <input type="text" {...registerDue('source_name', { required: t('finance.income.sourceNameRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterSourceName')} />
-                    {dueErrors.source_name && <p className="text-red-500 text-xs mt-1">{dueErrors.source_name.message}</p>}
+                    {dueErrors.source_name && <p className="text-red-500  mt-1">{dueErrors.source_name.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
                     <input type="number" {...registerDue('amount_due', { required: t('finance.income.amountRequired'), min: { value: 0, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterAmount')} />
-                    {dueErrors.amount_due && <p className="text-red-500 text-xs mt-1">{dueErrors.amount_due.message}</p>}
+                    {dueErrors.amount_due && <p className="text-red-500  mt-1">{dueErrors.amount_due.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
                     <select {...registerDue('payment_method', { required: t('finance.income.paymentMethodRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
                       <option value="cash">{t('finance.income.cash')}</option>
                       <option value="upi">{t('finance.income.upi')}</option>
                       <option value="bank">{t('finance.income.bankTransfer')}</option>
                     </select>
-                    {dueErrors.payment_method && <p className="text-red-500 text-xs mt-1">{dueErrors.payment_method.message}</p>}
+                    {dueErrors.payment_method && <p className="text-red-500  mt-1">{dueErrors.payment_method.message}</p>}
                   </div>
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
@@ -1082,19 +1082,19 @@ export const Income = () => {
                     </div>
                     <div>
                       <h2 className="text-lg font-bold text-gray-900 dark:text-white">{directModal.isEdit ? t('finance.income.editDirect') : t('finance.income.addDirect')}</h2>
-                      <p className="text-sm text-gray-500">{directModal.isEdit ? t('finance.income.updateDirect') : t('finance.income.createDirect')}</p>
+                      <p className=" text-gray-500">{directModal.isEdit ? t('finance.income.updateDirect') : t('finance.income.createDirect')}</p>
                     </div>
                   </div>
                   <button onClick={() => setDirectModal({ isOpen: false, income: null, isEdit: false })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.date')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.date')} *</label>
                     <input type="date" {...registerDirect('date', { required: t('finance.income.dateRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
-                    {directErrors.date && <p className="text-red-500 text-xs mt-1">{directErrors.date.message}</p>}
+                    {directErrors.date && <p className="text-red-500  mt-1">{directErrors.date.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.category')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.category')} *</label>
                     <input type="hidden" {...registerDirect('category', { required: t('finance.income.categoryRequired') })} />
                     <Select
                       value={selectedDirectCategory}
@@ -1113,26 +1113,26 @@ export const Income = () => {
                         })
                       }}
                     />
-                    {directErrors.category && <p className="text-red-500 text-xs mt-1">{t('finance.income.categoryRequired')}</p>}
+                    {directErrors.category && <p className="text-red-500  mt-1">{t('finance.income.categoryRequired')}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.sourceName')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.sourceName')} *</label>
                     <input type="text" {...registerDirect('source_name', { required: t('finance.income.sourceNameRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterSourceName')} />
-                    {directErrors.source_name && <p className="text-red-500 text-xs mt-1">{directErrors.source_name.message}</p>}
+                    {directErrors.source_name && <p className="text-red-500  mt-1">{directErrors.source_name.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
                     <input type="number" {...registerDirect('amount', { required: t('finance.income.amountRequired'), min: { value: 0, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterAmount')} />
-                    {directErrors.amount && <p className="text-red-500 text-xs mt-1">{directErrors.amount.message}</p>}
+                    {directErrors.amount && <p className="text-red-500  mt-1">{directErrors.amount.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
                     <select {...registerDirect('payment_method', { required: t('finance.income.paymentMethodRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
                       <option value="cash">{t('finance.income.cash')}</option>
                       <option value="upi">{t('finance.income.upi')}</option>
                       <option value="bank">{t('finance.income.bankTransfer')}</option>
                     </select>
-                    {directErrors.payment_method && <p className="text-red-500 text-xs mt-1">{directErrors.payment_method.message}</p>}
+                    {directErrors.payment_method && <p className="text-red-500  mt-1">{directErrors.payment_method.message}</p>}
                   </div>
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
@@ -1159,25 +1159,25 @@ export const Income = () => {
                 <div className="p-6">
                   <div className="grid grid-cols-3 gap-3 mb-6 p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
                     <div className="text-center">
-                      <p className="text-xs text-gray-500">{t('finance.income.totalDue')}</p>
+                      <p className=" text-gray-500">{t('finance.income.totalDue')}</p>
                       <p className="text-lg font-bold text-gray-900 dark:text-white">₹{paymentModal.income.amount_due}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs text-gray-500">{t('finance.income.alreadyPaid')}</p>
+                      <p className=" text-gray-500">{t('finance.income.alreadyPaid')}</p>
                       <p className="text-lg font-bold text-green-600">₹{paymentModal.income.amount_paid}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs text-gray-500">{t('finance.income.remaining')}</p>
+                      <p className=" text-gray-500">{t('finance.income.remaining')}</p>
                       <p className="text-lg font-bold text-orange-600">₹{paymentModal.income.balance}</p>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.paymentAmount')}</label>
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.paymentAmount')}</label>
                       <input type="number" value={paymentForm.payment_amount} onChange={(e) => setPaymentForm({ ...paymentForm, payment_amount: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.paymentMethod')}</label>
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.paymentMethod')}</label>
                       <select value={paymentForm.payment_method} onChange={(e) => setPaymentForm({ ...paymentForm, payment_method: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
                         <option value="cash">{t('finance.income.cash')}</option>
                         <option value="upi">{t('finance.income.upi')}</option>
@@ -1185,11 +1185,11 @@ export const Income = () => {
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.referenceNo')}</label>
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.referenceNo')}</label>
                       <input type="text" value={paymentForm.reference_no} onChange={(e) => setPaymentForm({ ...paymentForm, reference_no: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.optional')} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.notes')}</label>
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.notes')}</label>
                       <textarea value={paymentForm.notes} onChange={(e) => setPaymentForm({ ...paymentForm, notes: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" rows="2" placeholder={t('finance.income.optional')} />
                     </div>
                   </div>
@@ -1224,13 +1224,13 @@ export const Income = () => {
                         <div key={index} className="p-4 bg-gray-50 dark:bg-[#252731] rounded-xl">
                           <div className="flex justify-between items-center mb-2">
                             <span className="font-medium text-gray-900 dark:text-white">₹{payment.payment_amount?.toLocaleString()}</span>
-                            <span className="text-sm text-gray-500">{new Date(payment.payment_date).toLocaleDateString()}</span>
+                            <span className=" text-gray-500">{new Date(payment.payment_date).toLocaleDateString()}</span>
                           </div>
-                          <div className="flex justify-between text-sm">
+                          <div className="flex justify-between ">
                             <span className="text-gray-600">{t('finance.income.method')}: {payment.payment_method}</span>
                             {payment.reference_no && <span className="text-gray-600">Ref: {payment.reference_no}</span>}
                           </div>
-                          {payment.notes && <p className="text-sm text-gray-500 mt-2">{payment.notes}</p>}
+                          {payment.notes && <p className=" text-gray-500 mt-2">{payment.notes}</p>}
                         </div>
                       ))}
                     </div>
@@ -1258,16 +1258,16 @@ export const Income = () => {
                 </div>
                 <div className="p-6 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div><p className="text-xs text-gray-500">{t('finance.income.incomeCode')}</p><p className="font-medium">{viewModal.income.income_code}</p></div>
-                    <div><p className="text-xs text-gray-500">{t('common.date')}</p><p className="font-medium">{new Date(viewModal.income.date).toLocaleDateString()}</p></div>
+                    <div><p className=" text-gray-500">{t('finance.income.incomeCode')}</p><p className="font-medium">{viewModal.income.income_code}</p></div>
+                    <div><p className=" text-gray-500">{t('common.date')}</p><p className="font-medium">{new Date(viewModal.income.date).toLocaleDateString()}</p></div>
                   </div>
                   {/* FIX: Use formatCategory helper with replaceAll */}
-                  <div><p className="text-xs text-gray-500">{t('common.category')}</p><p className="font-medium capitalize">{formatCategory(viewModal.income.category)}</p></div>
-                  <div><p className="text-xs text-gray-500">{t('finance.income.source')}</p><p className="font-medium">{viewModal.income.source_name}</p></div>
-                  <div><p className="text-xs text-gray-500">{t('common.amount')}</p><p className="font-medium text-green-600 text-lg">₹{viewModal.income.amount?.toLocaleString()}</p></div>
-                  <div><p className="text-xs text-gray-500">{t('finance.income.paymentMethod')}</p><p className="font-medium capitalize">{viewModal.income.payment_method}</p></div>
-                  {viewModal.income.reference_no && <div><p className="text-xs text-gray-500">Reference</p><p className="font-medium">{viewModal.income.reference_no}</p></div>}
-                  {viewModal.income.description && <div><p className="text-xs text-gray-500">Description</p><p className="font-medium">{viewModal.income.description}</p></div>}
+                  <div><p className=" text-gray-500">{t('common.category')}</p><p className="font-medium capitalize">{formatCategory(viewModal.income.category)}</p></div>
+                  <div><p className=" text-gray-500">{t('finance.income.source')}</p><p className="font-medium">{viewModal.income.source_name}</p></div>
+                  <div><p className=" text-gray-500">{t('common.amount')}</p><p className="font-medium text-green-600 text-lg">₹{viewModal.income.amount?.toLocaleString()}</p></div>
+                  <div><p className=" text-gray-500">{t('finance.income.paymentMethod')}</p><p className="font-medium capitalize">{viewModal.income.payment_method}</p></div>
+                  {viewModal.income.reference_no && <div><p className=" text-gray-500">Reference</p><p className="font-medium">{viewModal.income.reference_no}</p></div>}
+                  {viewModal.income.description && <div><p className=" text-gray-500">Description</p><p className="font-medium">{viewModal.income.description}</p></div>}
                 </div>
               </div>
             </motion.div>

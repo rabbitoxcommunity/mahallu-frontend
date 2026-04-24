@@ -52,7 +52,7 @@ const PaymentMethodBadge = ({ method }) => {
   const Icon = icons[method] || Banknote;
 
   return (
-    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${styles[method] || styles.cash}`}>
+    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full  font-medium border ${styles[method] || styles.cash}`}>
       <Icon size={12} />
       <span className="capitalize">{method}</span>
     </span>
@@ -74,7 +74,7 @@ const ContributorTypeBadge = ({ type }) => {
   const Icon = icons[type] || Building2;
 
   return (
-    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${styles[type] || styles.house}`}>
+    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full  font-medium border ${styles[type] || styles.house}`}>
       <Icon size={12} />
       <span className="capitalize">{type === 'house' ? 'House' : 'External'}</span>
     </span>
@@ -308,14 +308,14 @@ const QuickHadiya = ({ onRefresh }) => {
                   placeholder="Search collections..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 />
               </div>
 
               <select
                 value={contributorTypeFilter}
                 onChange={(e) => setContributorTypeFilter(e.target.value)}
-                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               >
                 <option value="">All Types</option>
                 <option value="house">House</option>
@@ -325,7 +325,7 @@ const QuickHadiya = ({ onRefresh }) => {
               <select
                 value={paymentMethodFilter}
                 onChange={(e) => setPaymentMethodFilter(e.target.value)}
-                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               >
                 <option value="">All Methods</option>
                 <option value="cash">Cash</option>
@@ -337,7 +337,7 @@ const QuickHadiya = ({ onRefresh }) => {
                 type="month"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               />
             </div>
 
@@ -380,13 +380,13 @@ const QuickHadiya = ({ onRefresh }) => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Code</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Date</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Contributor</th>
-                      <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Type</th>
-                      <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Amount</th>
-                      <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Method</th>
-                      <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">Code</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">Date</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">Contributor</th>
+                      <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">Type</th>
+                      <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">Amount</th>
+                      <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">Method</th>
+                      <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -395,34 +395,34 @@ const QuickHadiya = ({ onRefresh }) => {
                         <td colSpan={7} className="py-12 text-center text-gray-400 dark:text-gray-500">
                           <div className="flex flex-col items-center gap-2">
                             <Wallet size={32} className="opacity-30" />
-                            <p className="text-sm">No hadiya collections found</p>
+                            <p className="">No hadiya collections found</p>
                           </div>
                         </td>
                       </tr>
                     ) : (
                       collectionsData.collections.map((collection) => (
                         <tr key={collection._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
-                          <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{collection.collection_code}</td>
-                          <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                          <td className="py-3 px-4  font-medium text-gray-900 dark:text-white">{collection.collection_code}</td>
+                          <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                             {new Date(collection.date).toLocaleDateString()}
                           </td>
-                          <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                          <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                             {collection.contributor_type === 'house' ? (
                               <div>
                                 <p className="font-medium">{collection.house_id?.house_code}</p>
-                                <p className="text-xs text-gray-500">{collection.house_id?.householder_name}</p>
+                                <p className=" text-gray-500">{collection.house_id?.householder_name}</p>
                               </div>
                             ) : (
                               <div>
                                 <p className="font-medium">{collection.contributor_name}</p>
-                                <p className="text-xs text-gray-500">{collection.contributor_place}</p>
+                                <p className=" text-gray-500">{collection.contributor_place}</p>
                               </div>
                             )}
                           </td>
                           <td className="py-3 px-4 text-center">
                             <ContributorTypeBadge type={collection.contributor_type} />
                           </td>
-                          <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">
+                          <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">
                             ₹{collection.amount.toLocaleString()}
                           </td>
                           <td className="py-3 px-4 text-center">
@@ -477,12 +477,12 @@ const QuickHadiya = ({ onRefresh }) => {
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-medium text-gray-900 dark:text-white">{collection.collection_code}</p>
-                          <p className="text-sm text-gray-500">{new Date(collection.date).toLocaleDateString()}</p>
+                          <p className=" text-gray-500">{new Date(collection.date).toLocaleDateString()}</p>
                         </div>
                         <ContributorTypeBadge type={collection.contributor_type} />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <p className=" text-gray-700 dark:text-gray-300">
                           {collection.contributor_type === 'house' ? (
                             `${collection.house_id?.house_code} - ${collection.house_id?.householder_name}`
                           ) : (
@@ -497,13 +497,13 @@ const QuickHadiya = ({ onRefresh }) => {
                       <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                         <button
                           onClick={() => setViewModal({ isOpen: true, collection })}
-                          className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium"
+                          className="flex-1 py-2 bg-blue-600 text-white rounded-lg  font-medium"
                         >
                           View
                         </button>
                         <button
                           onClick={() => setReceiptModal({ isOpen: true, collection })}
-                          className="flex-1 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium"
+                          className="flex-1 py-2 bg-purple-600 text-white rounded-lg  font-medium"
                         >
                           Receipt
                         </button>
@@ -516,7 +516,7 @@ const QuickHadiya = ({ onRefresh }) => {
               {/* Pagination */}
               {collectionsData.pages > 1 && (
                 <div className="flex items-center justify-between mt-4">
-                  <p className="text-sm text-gray-500">
+                  <p className=" text-gray-500">
                     Showing {((collectionsData.page - 1) * 20) + 1} to {Math.min(collectionsData.page * 20, collectionsData.total)} of {collectionsData.total} entries
                   </p>
                   <div className="flex items-center gap-2">
@@ -527,7 +527,7 @@ const QuickHadiya = ({ onRefresh }) => {
                     >
                       <ChevronLeft size={18} />
                     </button>
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <span className=" text-gray-700 dark:text-gray-300">
                       Page {collectionsData.page} of {collectionsData.pages}
                     </span>
                     <button
@@ -573,7 +573,7 @@ const QuickHadiya = ({ onRefresh }) => {
               <div className="p-6 space-y-4">
                 {/* Contributor Type */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Contributor Type
                   </label>
                   <div className="flex gap-4">
@@ -591,7 +591,7 @@ const QuickHadiya = ({ onRefresh }) => {
                         }}
                         className="w-4 h-4 text-[#0B65F6]"
                       />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">Registered House</span>
+                      <span className=" text-gray-700 dark:text-gray-300">Registered House</span>
                     </label>
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -602,7 +602,7 @@ const QuickHadiya = ({ onRefresh }) => {
                         onChange={(e) => setAddForm({ ...addForm, contributor_type: e.target.value })}
                         className="w-4 h-4 text-[#0B65F6]"
                       />
-                      <span className="text-sm text-gray-700 dark:text-gray-300">External / Guest</span>
+                      <span className=" text-gray-700 dark:text-gray-300">External / Guest</span>
                     </label>
                   </div>
                 </div>
@@ -610,7 +610,7 @@ const QuickHadiya = ({ onRefresh }) => {
                 {/* House Search (for registered house) */}
                 {addForm.contributor_type === 'house' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                       Search House
                     </label>
                     <div className="relative">
@@ -620,7 +620,7 @@ const QuickHadiya = ({ onRefresh }) => {
                         placeholder="Search house name, person name, phone, area..."
                         value={houseSearchTerm}
                         onChange={(e) => setHouseSearchTerm(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                       />
                       {searchingHouses && (
                         <RefreshCw size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 animate-spin" />
@@ -642,9 +642,9 @@ const QuickHadiya = ({ onRefresh }) => {
                             className="p-3 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer border-b border-gray-100 dark:border-gray-800 last:border-0"
                           >
                             <p className="font-medium text-gray-900 dark:text-white">{house.house_name}</p>
-                            <p className="text-xs text-gray-500">{house.head_name} • {house.family_name}</p>
-                            <p className="text-xs text-gray-400">{house.address} • {house.contact}</p>
-                            <p className="text-xs text-gray-400">Code: {house.house_code}</p>
+                            <p className=" text-gray-500">{house.head_name} • {house.family_name}</p>
+                            <p className=" text-gray-400">{house.address} • {house.contact}</p>
+                            <p className=" text-gray-400">Code: {house.house_code}</p>
                           </div>
                         ))}
                       </div>
@@ -654,14 +654,14 @@ const QuickHadiya = ({ onRefresh }) => {
                     {selectedHouse && (
                       <div className="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl">
                         <p className="font-medium text-gray-900 dark:text-white">{selectedHouse.house_name}</p>
-                        <p className="text-xs text-gray-500">{selectedHouse.head_name} • {selectedHouse.family_name}</p>
-                        <p className="text-xs text-gray-400">{selectedHouse.address} • {selectedHouse.contact}</p>
+                        <p className=" text-gray-500">{selectedHouse.head_name} • {selectedHouse.family_name}</p>
+                        <p className=" text-gray-400">{selectedHouse.address} • {selectedHouse.contact}</p>
                         <button
                           onClick={() => {
                             setSelectedHouse(null);
                             setAddForm({ ...addForm, house_id: '' });
                           }}
-                          className="mt-2 text-xs text-red-600 hover:text-red-700"
+                          className="mt-2  text-red-600 hover:text-red-700"
                         >
                           Clear selection
                         </button>
@@ -674,36 +674,36 @@ const QuickHadiya = ({ onRefresh }) => {
                 {addForm.contributor_type === 'external' && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Contributor Name
                       </label>
                       <input
                         type="text"
                         value={addForm.contributor_name}
                         onChange={(e) => setAddForm({ ...addForm, contributor_name: e.target.value })}
-                        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Place / Address
                       </label>
                       <input
                         type="text"
                         value={addForm.contributor_place}
                         onChange={(e) => setAddForm({ ...addForm, contributor_place: e.target.value })}
-                        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Mobile
                       </label>
                       <input
                         type="text"
                         value={addForm.contributor_mobile}
                         onChange={(e) => setAddForm({ ...addForm, contributor_mobile: e.target.value })}
-                        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                       />
                     </div>
                   </>
@@ -711,7 +711,7 @@ const QuickHadiya = ({ onRefresh }) => {
 
                 {/* Common Fields */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Amount *
                   </label>
                   <div className="relative">
@@ -721,20 +721,20 @@ const QuickHadiya = ({ onRefresh }) => {
                       value={addForm.amount}
                       onChange={(e) => setAddForm({ ...addForm, amount: e.target.value })}
                       onWheel={(e) => e.target.blur()}
-                      className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                      className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Payment Method *
                   </label>
                   <select
                     value={addForm.payment_method}
                     onChange={(e) => setAddForm({ ...addForm, payment_method: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   >
                     <option value="cash">Cash</option>
                     <option value="upi">UPI</option>
@@ -743,26 +743,26 @@ const QuickHadiya = ({ onRefresh }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Date
                   </label>
                   <input
                     type="date"
                     value={addForm.date}
                     onChange={(e) => setAddForm({ ...addForm, date: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Notes
                   </label>
                   <textarea
                     value={addForm.notes}
                     onChange={(e) => setAddForm({ ...addForm, notes: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div>
               </div>
@@ -813,58 +813,58 @@ const QuickHadiya = ({ onRefresh }) => {
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Code</p>
+                    <p className=" text-gray-500 dark:text-gray-400">Code</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.collection.collection_code}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Date</p>
+                    <p className=" text-gray-500 dark:text-gray-400">Date</p>
                     <p className="font-medium text-gray-900 dark:text-white">{new Date(viewModal.collection.date).toLocaleDateString()}</p>
                   </div>
                 </div>
 
                 <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Contributor</p>
+                  <p className=" text-gray-500 dark:text-gray-400">Contributor</p>
                   {viewModal.collection.contributor_type === 'house' ? (
                     <div>
                       <p className="font-medium text-gray-900 dark:text-white">{viewModal.collection.house_id?.house_code}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{viewModal.collection.house_id?.householder_name}</p>
-                      <p className="text-sm text-gray-500">{viewModal.collection.house_id?.address}</p>
+                      <p className=" text-gray-600 dark:text-gray-400">{viewModal.collection.house_id?.householder_name}</p>
+                      <p className=" text-gray-500">{viewModal.collection.house_id?.address}</p>
                     </div>
                   ) : (
                     <div>
                       <p className="font-medium text-gray-900 dark:text-white">{viewModal.collection.contributor_name}</p>
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{viewModal.collection.contributor_place}</p>
-                      <p className="text-sm text-gray-500">{viewModal.collection.contributor_mobile}</p>
+                      <p className=" text-gray-600 dark:text-gray-400">{viewModal.collection.contributor_place}</p>
+                      <p className=" text-gray-500">{viewModal.collection.contributor_mobile}</p>
                     </div>
                   )}
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Type</p>
+                    <p className=" text-gray-500 dark:text-gray-400">Type</p>
                     <ContributorTypeBadge type={viewModal.collection.contributor_type} />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Amount</p>
+                    <p className=" text-gray-500 dark:text-gray-400">Amount</p>
                     <p className="font-bold text-xl text-gray-900 dark:text-white">₹{viewModal.collection.amount.toLocaleString()}</p>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Payment Method</p>
+                    <p className=" text-gray-500 dark:text-gray-400">Payment Method</p>
                     <PaymentMethodBadge method={viewModal.collection.payment_method} />
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Collected By</p>
+                    <p className=" text-gray-500 dark:text-gray-400">Collected By</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.collection.created_by?.name}</p>
                   </div>
                 </div>
 
                 {viewModal.collection.notes && (
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Notes</p>
-                    <p className="text-sm text-gray-700 dark:text-gray-300">{viewModal.collection.notes}</p>
+                    <p className=" text-gray-500 dark:text-gray-400">Notes</p>
+                    <p className=" text-gray-700 dark:text-gray-300">{viewModal.collection.notes}</p>
                   </div>
                 )}
               </div>
@@ -897,7 +897,7 @@ const QuickHadiya = ({ onRefresh }) => {
 
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Amount *
                   </label>
                   <div className="relative">
@@ -907,19 +907,19 @@ const QuickHadiya = ({ onRefresh }) => {
                       value={editForm.amount}
                       onChange={(e) => setEditForm({ ...editForm, amount: e.target.value })}
                       onWheel={(e) => e.target.blur()}
-                      className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                      className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Payment Method *
                   </label>
                   <select
                     value={editForm.payment_method}
                     onChange={(e) => setEditForm({ ...editForm, payment_method: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   >
                     <option value="cash">Cash</option>
                     <option value="upi">UPI</option>
@@ -928,26 +928,26 @@ const QuickHadiya = ({ onRefresh }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Date
                   </label>
                   <input
                     type="date"
                     value={editForm.date}
                     onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Notes
                   </label>
                   <textarea
                     value={editForm.notes}
                     onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
                     rows={3}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div>
               </div>
@@ -1037,45 +1037,45 @@ const QuickHadiya = ({ onRefresh }) => {
               <div className="p-6 space-y-4">
                 <div className="text-center pb-4 border-b border-gray-100 dark:border-gray-800">
                   <p className="text-lg font-bold text-gray-900 dark:text-white">Hadiya Receipt</p>
-                  <p className="text-sm text-gray-500">Receipt No: {receiptModal.collection.receipt_no}</p>
+                  <p className=" text-gray-500">Receipt No: {receiptModal.collection.receipt_no}</p>
                 </div>
 
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Collection Code</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">{receiptModal.collection.collection_code}</span>
+                    <span className=" text-gray-500">Collection Code</span>
+                    <span className=" font-medium text-gray-900 dark:text-white">{receiptModal.collection.collection_code}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Date</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">{new Date(receiptModal.collection.date).toLocaleDateString()}</span>
+                    <span className=" text-gray-500">Date</span>
+                    <span className=" font-medium text-gray-900 dark:text-white">{new Date(receiptModal.collection.date).toLocaleDateString()}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Contributor</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    <span className=" text-gray-500">Contributor</span>
+                    <span className=" font-medium text-gray-900 dark:text-white">
                       {receiptModal.collection.contributor_type === 'house' 
                         ? receiptModal.collection.house_id?.householder_name 
                         : receiptModal.collection.contributor_name}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Type</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                    <span className=" text-gray-500">Type</span>
+                    <span className=" font-medium text-gray-900 dark:text-white capitalize">
                       {receiptModal.collection.contributor_type}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Amount</span>
+                    <span className=" text-gray-500">Amount</span>
                     <span className="text-lg font-bold text-gray-900 dark:text-white">₹{receiptModal.collection.amount.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Payment Method</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                    <span className=" text-gray-500">Payment Method</span>
+                    <span className=" font-medium text-gray-900 dark:text-white capitalize">
                       {receiptModal.collection.payment_method}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-gray-500">Collected By</span>
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    <span className=" text-gray-500">Collected By</span>
+                    <span className=" font-medium text-gray-900 dark:text-white">
                       {receiptModal.collection.created_by?.name}
                     </span>
                   </div>

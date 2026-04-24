@@ -103,7 +103,7 @@ Thank you for your payment!
                   </div>
                   <div>
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white">Income Receipt</h2>
-                    <p className="text-sm text-gray-500">{income.income_code}</p>
+                    <p className=" text-gray-500">{income.income_code}</p>
                   </div>
                 </div>
                 <button
@@ -118,13 +118,13 @@ Thank you for your payment!
               <div ref={receiptRef} className="flex-1 overflow-y-auto p-6">
                 <div className="bg-gray-50 dark:bg-[#252731] rounded-xl p-6 border border-gray-200 dark:border-gray-800">
                   {/* Receipt Info */}
-                  <div className="flex justify-between mb-4 text-sm">
+                  <div className="flex justify-between mb-4 ">
                     <div>
-                      <p className="text-xs text-gray-500 uppercase">Receipt No</p>
+                      <p className=" text-gray-500 uppercase">Receipt No</p>
                       <p className="font-bold text-gray-900 dark:text-white">{income.receipt_no || 'N/A'}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-gray-500 uppercase">Date</p>
+                      <p className=" text-gray-500 uppercase">Date</p>
                       <p className="font-bold text-gray-900 dark:text-white">
                         {new Date(income.date || income.created_at).toLocaleDateString()}
                       </p>
@@ -133,8 +133,8 @@ Thank you for your payment!
 
                   {/* Details */}
                   <div className="mb-4">
-                    <h3 className="text-xs font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">Income Details</h3>
-                    <div className="space-y-1 text-xs">
+                    <h3 className=" font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">Income Details</h3>
+                    <div className="space-y-1 ">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Category:</span>
                         <span className="font-medium capitalize">{income.category?.replace('_', ' ')}</span>
@@ -194,13 +194,13 @@ Thank you for your payment!
 
                   {income.notes && (
                     <div className="mb-4">
-                      <h3 className="text-xs font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">Notes</h3>
-                      <p className="text-xs text-gray-600">{income.notes}</p>
+                      <h3 className=" font-bold text-gray-700 uppercase border-b border-gray-200 pb-1 mb-2">Notes</h3>
+                      <p className=" text-gray-600">{income.notes}</p>
                     </div>
                   )}
 
                   <div className="text-center pt-4 border-t border-gray-200">
-                    <p className="text-xs text-gray-500">Thank you for your payment!</p>
+                    <p className=" text-gray-500">Thank you for your payment!</p>
                   </div>
                 </div>
               </div>
@@ -209,14 +209,14 @@ Thank you for your payment!
               <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#252731]">
                 <button
                   onClick={handleDownload}
-                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm"
+                  className="flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors "
                 >
                   <Download size={18} />
                   Download
                 </button>
                 <button
                   onClick={handlePrint}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg transition-colors text-sm"
+                  className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] hover:bg-[#0959c9] text-white rounded-lg transition-colors "
                 >
                   <Printer size={18} />
                   Print

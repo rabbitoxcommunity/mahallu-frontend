@@ -91,7 +91,7 @@ const PaymentMethodBadge = ({ method }) => {
   const Icon = icons[method] || Banknote;
 
   return (
-    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${styles[method] || styles.cash}`}>
+    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full  font-medium border ${styles[method] || styles.cash}`}>
       <Icon size={12} />
       <span className="capitalize">{method}</span>
     </span>
@@ -363,9 +363,9 @@ const Expense = () => {
     <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
+          <p className=" text-gray-500 dark:text-gray-400">{title}</p>
           <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</h3>
-          {subtext && <p className="text-xs text-gray-400 mt-1">{subtext}</p>}
+          {subtext && <p className=" text-gray-400 mt-1">{subtext}</p>}
         </div>
         <div className={`p-3 rounded-xl ${color}`}>
           <Icon size={24} className="text-white" />
@@ -431,7 +431,7 @@ const Expense = () => {
         <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-sm text-red-100">{t('finance.expense.totalExpense')}</p>
+              <p className=" text-red-100">{t('finance.expense.totalExpense')}</p>
               <h3 className="text-2xl font-bold text-white mt-1">₹{summaryData.total.toLocaleString()}</h3>
             </div>
             <div className="p-3 rounded-xl bg-white/20">
@@ -453,20 +453,20 @@ const Expense = () => {
                   placeholder={t('finance.expense.searchPlaceholder')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 />
               </div>
               <input
                 type="date"
                 value={dateFrom}
                 onChange={(e) => setDateFrom(e.target.value)}
-                className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               />
               <input
                 type="date"
                 value={dateTo}
                 onChange={(e) => setDateTo(e.target.value)}
-                className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               />
               <Select
                 value={categoryFilter ? { value: categoryFilter, label: categoryFilter } : null}
@@ -581,14 +581,14 @@ const Expense = () => {
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-100 dark:border-gray-800">
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.expense.voucherNo')}</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.expense.paidTo')}</th>
-                      <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
-                      {/* <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Method</th> */}
-                      <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.expense.createdBy')}</th>
-                      <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.expense.voucherNo')}</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.expense.paidTo')}</th>
+                      <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
+                      {/* <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">Method</th> */}
+                      <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.expense.createdBy')}</th>
+                      <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -597,26 +597,26 @@ const Expense = () => {
                         <td colSpan={8} className="py-12 text-center text-gray-400 dark:text-gray-500">
                           <div className="flex flex-col items-center gap-2">
                             <Wallet size={32} className="opacity-30" />
-                            <p className="text-sm">{t('common.noData')}</p>
+                            <p className="">{t('common.noData')}</p>
                           </div>
                         </td>
                       </tr>
                     ) : (
                       expensesData.expenses.map((expense) => (
                         <tr key={expense._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
-                          <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{expense.voucher_no}</td>
-                          <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                          <td className="py-3 px-4  font-medium text-gray-900 dark:text-white">{expense.voucher_no}</td>
+                          <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                             {moment(expense.updatedAt).format('DD MMM YYYY, h:mm A')}
                           </td>
-                          <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.category}</td>
-                          <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
-                          <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">
+                          <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{expense.category}</td>
+                          <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
+                          <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">
                             ₹{expense.amount.toLocaleString()}
                           </td>
                           {/* <td className="py-3 px-4 text-center">
                             <PaymentMethodBadge method={expense.payment_method} />
                           </td> */}
-                          <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.created_by?.name || '-'}</td>
+                          <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{expense.created_by?.name || '-'}</td>
                           <td className="py-3 px-4">
                             <div className="flex items-center justify-center gap-2">
                               <button
@@ -677,12 +677,12 @@ const Expense = () => {
                       <div className="flex justify-between items-start">
                         <div>
                           <p className="font-medium text-gray-900 dark:text-white">{expense.voucher_no}</p>
-                          <p className="text-sm text-gray-500">{moment(expense.updatedAt).format('DD MMM YYYY, h:mm A')}</p>
+                          <p className=" text-gray-500">{moment(expense.updatedAt).format('DD MMM YYYY, h:mm A')}</p>
                         </div>
                         <PaymentMethodBadge method={expense.payment_method} />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">
+                        <p className=" text-gray-700 dark:text-gray-300">
                           <span className="font-medium">{expense.category}</span> - {expense.paid_to}
                         </p>
                       </div>
@@ -692,7 +692,7 @@ const Expense = () => {
                       <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                         <button
                           onClick={() => setViewModal({ isOpen: true, expense })}
-                          className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium"
+                          className="flex-1 py-2 bg-blue-600 text-white rounded-lg  font-medium"
                         >
                           View
                         </button>
@@ -701,14 +701,14 @@ const Expense = () => {
                             href={`http://localhost:5005/uploads/${expense.bill_file}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium text-center"
+                            className="flex-1 py-2 bg-green-600 text-white rounded-lg  font-medium text-center"
                           >
                             Receipt
                           </a>
                         )}
                         <button
                           onClick={() => setVoucherModal({ isOpen: true, expense })}
-                          className="flex-1 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium"
+                          className="flex-1 py-2 bg-purple-600 text-white rounded-lg  font-medium"
                         >
                           Voucher
                         </button>
@@ -721,7 +721,7 @@ const Expense = () => {
               {/* Pagination */}
               {expensesData.pages > 1 && (
                 <div className="flex items-center justify-between mt-4">
-                  <p className="text-sm text-gray-500">
+                  <p className=" text-gray-500">
                     Showing {((expensesData.page - 1) * 20) + 1} to {Math.min(expensesData.page * 20, expensesData.total)} of {expensesData.total} entries
                   </p>
                   <div className="flex items-center gap-2">
@@ -732,7 +732,7 @@ const Expense = () => {
                     >
                       <ChevronLeft size={18} />
                     </button>
-                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                    <span className=" text-gray-700 dark:text-gray-300">
                       Page {expensesData.page} of {expensesData.pages}
                     </span>
                     <button
@@ -777,16 +777,16 @@ const Expense = () => {
 
               <form onSubmit={handleSubmitAdd(handleCreate)} className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.date')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.date')} *</label>
                   <input
                     type="date"
                     {...registerAdd('date', { required: t('finance.expense.dateRequired') })}
-                    className={`w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.date ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
+                    className={`w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.date ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
                   />
-                  {addErrors.date && <p className="text-red-500 text-xs mt-1">{addErrors.date.message}</p>}
+                  {addErrors.date && <p className="text-red-500  mt-1">{addErrors.date.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.category')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.category')} *</label>
                   <Controller
                     name="category"
                     control={controlAdd}
@@ -826,19 +826,19 @@ const Expense = () => {
                       />
                     )}
                   />
-                  {addErrors.category && <p className="text-red-500 text-xs mt-1">{addErrors.category.message}</p>}
+                  {addErrors.category && <p className="text-red-500  mt-1">{addErrors.category.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Paid To *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Paid To *</label>
                   <input
                     type="text"
                     {...registerAdd('paid_to', { required: 'Paid To is required' })}
-                    className={`w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.paid_to ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
+                    className={`w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.paid_to ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
                   />
-                  {addErrors.paid_to && <p className="text-red-500 text-xs mt-1">{addErrors.paid_to.message}</p>}
+                  {addErrors.paid_to && <p className="text-red-500  mt-1">{addErrors.paid_to.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.amount')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.amount')} *</label>
                   <div className="relative">
                     <IndianRupee size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
@@ -848,13 +848,13 @@ const Expense = () => {
                         min: { value: 0.01, message: t('finance.expense.amountPositive') }
                       })}
                       onWheel={(e) => e.target.blur()}
-                      className={`w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.amount ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
+                      className={`w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${addErrors.amount ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`}
                     />
                   </div>
-                  {addErrors.amount && <p className="text-red-500 text-xs mt-1">{addErrors.amount.message}</p>}
+                  {addErrors.amount && <p className="text-red-500  mt-1">{addErrors.amount.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.paymentMethod')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.paymentMethod')} *</label>
                   <Controller
                     name="payment_method"
                     control={controlAdd}
@@ -898,33 +898,33 @@ const Expense = () => {
                       />
                     )}
                   />
-                  {addErrors.payment_method && <p className="text-red-500 text-xs mt-1">{addErrors.payment_method.message}</p>}
+                  {addErrors.payment_method && <p className="text-red-500  mt-1">{addErrors.payment_method.message}</p>}
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
                   <input
                     type="file"
                     accept="image/*,.pdf"
                     ref={fileInputRef}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Accepts images (JPEG, PNG) and PDF files (Max 5MB)</p>
+                  <p className=" text-gray-500 mt-1">Accepts images (JPEG, PNG) and PDF files (Max 5MB)</p>
                 </div>
                 {/* <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reference No</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Reference No</label>
                   <input
                     type="text"
                     value={addForm.reference_no}
                     onChange={(e) => setAddForm({ ...addForm, reference_no: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div> */}
                 {/* <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
                   <textarea
                     value={addForm.notes}
                     onChange={(e) => setAddForm({ ...addForm, notes: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     rows="3"
                   />
                 </div> */}
@@ -977,16 +977,16 @@ const Expense = () => {
 
               <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.date')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.date')} *</label>
                   <input
                     type="date"
                     value={editForm.date}
                     onChange={(e) => setEditForm({ ...editForm, date: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.category')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.category')} *</label>
                   <Select
                     value={editForm.category ? { value: editForm.category, label: editForm.category } : null}
                     onChange={(selected) => setEditForm({ ...editForm, category: selected ? selected.value : '' })}
@@ -1026,28 +1026,28 @@ const Expense = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Paid To *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Paid To *</label>
                   <input
                     type="text"
                     value={editForm.paid_to}
                     onChange={(e) => setEditForm({ ...editForm, paid_to: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.amount')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.amount')} *</label>
                   <div className="relative">
                     <IndianRupee size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                       type="number"
                       value={editForm.amount}
                       onChange={(e) => setEditForm({ ...editForm, amount: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                      className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.paymentMethod')} *</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.paymentMethod')} *</label>
                   <Select
                     value={editForm.payment_method ? { value: editForm.payment_method, label: editForm.payment_method.charAt(0).toUpperCase() + editForm.payment_method.slice(1) } : null}
                     onChange={(selected) => setEditForm({ ...editForm, payment_method: selected ? selected.value : '' })}
@@ -1091,14 +1091,14 @@ const Expense = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
                   {editModal.expense?.bill_file && (
                     <div className="mb-2">
                       <a
                         href={`http://localhost:5005/uploads/${editModal.expense.bill_file}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-blue-600 hover:underline"
+                        className=" text-blue-600 hover:underline"
                       >
                         View Current File
                       </a>
@@ -1111,25 +1111,25 @@ const Expense = () => {
                       const file = e.target.files[0];
                       setEditForm({ ...editForm, bill_file: file });
                     }}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
-                  <p className="text-xs text-gray-500 mt-1">Accepts images (JPEG, PNG) and PDF files (Max 5MB). Leave empty to keep existing file.</p>
+                  <p className=" text-gray-500 mt-1">Accepts images (JPEG, PNG) and PDF files (Max 5MB). Leave empty to keep existing file.</p>
                 </div>
                 {/* <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reference No</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Reference No</label>
                   <input
                     type="text"
                     value={editForm.reference_no}
                     onChange={(e) => setEditForm({ ...editForm, reference_no: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                   />
                 </div> */}
                 {/* <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
+                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Notes</label>
                   <textarea
                     value={editForm.notes}
                     onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                     rows="3"
                   />
                 </div> */}
@@ -1179,44 +1179,44 @@ const Expense = () => {
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-gray-500">Voucher No</p>
+                    <p className=" text-gray-500">Voucher No</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense?.voucher_no}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t('common.date')}</p>
+                    <p className=" text-gray-500">{t('common.date')}</p>
                     <p className="font-medium text-gray-900 dark:text-white">{moment(viewModal.expense?.updatedAt).format('DD MMM YYYY, h:mm A')}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t('common.category')}</p>
+                    <p className=" text-gray-500">{t('common.category')}</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense?.category}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">Paid To</p>
+                    <p className=" text-gray-500">Paid To</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense?.paid_to}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t('common.amount')}</p>
+                    <p className=" text-gray-500">{t('common.amount')}</p>
                     <p className="font-medium text-gray-900 dark:text-white">₹{viewModal.expense?.amount.toLocaleString()}</p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-500">{t('common.paymentMethod')}</p>
+                    <p className=" text-gray-500">{t('common.paymentMethod')}</p>
                     <p className="font-medium text-gray-900 dark:text-white capitalize">{viewModal.expense?.payment_method}</p>
                   </div>
                 </div>
                 {viewModal.expense?.reference_no && (
                   <div>
-                    <p className="text-sm text-gray-500">Reference No</p>
+                    <p className=" text-gray-500">Reference No</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense.reference_no}</p>
                   </div>
                 )}
                 {viewModal.expense?.notes && (
                   <div>
-                    <p className="text-sm text-gray-500">Notes</p>
+                    <p className=" text-gray-500">Notes</p>
                     <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense.notes}</p>
                   </div>
                 )}
                 <div>
-                  <p className="text-sm text-gray-500">Added By</p>
+                  <p className=" text-gray-500">Added By</p>
                   <p className="font-medium text-gray-900 dark:text-white">{viewModal.expense?.created_by?.name || '-'}</p>
                 </div>
               </div>
@@ -1250,7 +1250,7 @@ const Expense = () => {
                     <Trash2 size={24} className="text-red-600" />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{t('finance.expense.deleteExpense')}?</h3>
-                  <p className="text-sm text-gray-500 mb-6">
+                  <p className=" text-gray-500 mb-6">
                     {t('finance.expense.deleteConfirm')}
                   </p>
                   <div className="flex justify-center gap-3">
@@ -1300,7 +1300,7 @@ const Expense = () => {
                 <div ref={voucherRef} className="border-2 border-gray-200 dark:border-gray-700 rounded-xl p-6" style={{ width: '80mm', margin: '0 auto' }}>
                   <div className="text-center mb-6">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white">EXPENSE VOUCHER</h3>
-                    <p className="text-sm text-gray-500">{voucherModal.expense?.voucher_no}</p>
+                    <p className=" text-gray-500">{voucherModal.expense?.voucher_no}</p>
                   </div>
                   <div className="space-y-3">
                     <div className="flex justify-between">
@@ -1415,27 +1415,27 @@ const Expense = () => {
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="border-b-2 border-gray-200 dark:border-gray-700">
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Voucher No</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Date</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Category</th>
-                      <th className="text-left py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Paid To</th>
-                      <th className="text-right py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Amount</th>
-                      <th className="text-center py-3 px-4 text-sm font-semibold text-gray-900 dark:text-white">Method</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-900 dark:text-white">Voucher No</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-900 dark:text-white">Date</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-900 dark:text-white">Category</th>
+                      <th className="text-left py-3 px-4  font-semibold text-gray-900 dark:text-white">Paid To</th>
+                      <th className="text-right py-3 px-4  font-semibold text-gray-900 dark:text-white">Amount</th>
+                      <th className="text-center py-3 px-4  font-semibold text-gray-900 dark:text-white">Method</th>
                     </tr>
                   </thead>
                   <tbody>
                     {printModal.allExpenses.map((expense) => (
                       <tr key={expense._id} className="border-b border-gray-100 dark:border-gray-800">
-                        <td className="py-3 px-4 text-sm text-gray-900 dark:text-white">{expense.voucher_no}</td>
-                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                        <td className="py-3 px-4  text-gray-900 dark:text-white">{expense.voucher_no}</td>
+                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">
                           {moment(expense.updatedAt).format('DD MMM YYYY, h:mm A')}
                         </td>
-                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.category}</td>
-                        <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
-                        <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">
+                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{expense.category}</td>
+                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
+                        <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">
                           ₹{expense.amount.toLocaleString()}
                         </td>
-                        <td className="py-3 px-4 text-center text-sm text-gray-700 dark:text-gray-300 capitalize">
+                        <td className="py-3 px-4 text-center  text-gray-700 dark:text-gray-300 capitalize">
                           {expense.payment_method}
                         </td>
                       </tr>
@@ -1450,10 +1450,10 @@ const Expense = () => {
                   </tbody>
                   <tfoot>
                     <tr className="border-t-2 border-gray-200 dark:border-gray-700">
-                      <td colSpan={4} className="py-3 px-4 text-sm font-bold text-gray-900 dark:text-white text-right">
+                      <td colSpan={4} className="py-3 px-4  font-bold text-gray-900 dark:text-white text-right">
                         Total:
                       </td>
-                      <td className="py-3 px-4 text-sm font-bold text-gray-900 dark:text-white text-right">
+                      <td className="py-3 px-4  font-bold text-gray-900 dark:text-white text-right">
                         ₹{printModal.allExpenses.reduce((sum, e) => sum + e.amount, 0).toLocaleString()}
                       </td>
                       <td></td>

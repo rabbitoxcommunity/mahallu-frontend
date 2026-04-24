@@ -133,7 +133,7 @@ export default function HouseDetailedView() {
                 </div>
                 <button
                     onClick={() => navigate('/family/house/register')}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
+                    className="flex items-center justify-center gap-2 px-4 py-2.5  font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                 >
                     <ArrowLeft size={16} />
                     തിരികെ പോവുക (Back)
@@ -154,19 +154,19 @@ export default function HouseDetailedView() {
                             </div>
                             <div>
                                 <h3 className="font-bold text-gray-900 dark:text-white text-lg">{house.householder_name}</h3>
-                                <div className="text-xs text-gray-500 uppercase font-semibold tracking-wider flex items-center gap-2">
+                                <div className=" text-gray-500 uppercase font-semibold tracking-wider flex items-center gap-2">
                                     {house.house_code}
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0 self-start md:self-auto ml-[60px] md:ml-0">
-                            <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold ${house.economic_status === 'Poor' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                            <span className={`inline-block px-3 py-1 rounded-lg  font-bold ${house.economic_status === 'Poor' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
                                 house.economic_status === 'Miskeen' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' :
                                 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}>
                                 {house.economic_status}
                             </span>
                             {house.zakat_eligible && (
-                                <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400`}>
+                                <span className={`inline-block px-3 py-1 rounded-lg  font-bold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400`}>
                                     Zakat Eligible
                                 </span>
                             )}
@@ -178,7 +178,7 @@ export default function HouseDetailedView() {
                             <Users size={16} className="text-gray-400 mt-0.5" />
                             <div>
                                 <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">കുടുംബം (Family)</p>
-                                <p className="text-sm text-gray-900 dark:text-gray-200 font-medium">
+                                <p className=" text-gray-900 dark:text-gray-200 font-medium">
                                     {house.family_id?.family_name || "-"}
                                 </p>
                             </div>
@@ -188,7 +188,7 @@ export default function HouseDetailedView() {
                             <Phone size={16} className="text-gray-400 mt-0.5" />
                             <div>
                                 <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">കോൺടാക്റ്റ് (Contact)</p>
-                                <p className="text-sm text-gray-900 dark:text-gray-200 font-medium">
+                                <p className=" text-gray-900 dark:text-gray-200 font-medium">
                                     {house.primary_contact || "-"}
                                 </p>
                             </div>
@@ -198,7 +198,7 @@ export default function HouseDetailedView() {
                             <MapPin size={16} className="text-gray-400 mt-0.5" />
                             <div>
                                 <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">മേൽവിലാസം (Address)</p>
-                                <p className="text-sm text-gray-900 dark:text-gray-200 font-medium leading-relaxed">
+                                <p className=" text-gray-900 dark:text-gray-200 font-medium leading-relaxed">
                                     {house.address || "-"}
                                 </p>
                             </div>
@@ -208,7 +208,7 @@ export default function HouseDetailedView() {
                     {house.notes && (
                         <div className="bg-orange-50 dark:bg-orange-500/10 rounded-xl p-3 border border-orange-100 dark:border-orange-500/20 mt-6">
                             <p className="text-[10px] text-orange-600 dark:text-orange-400 uppercase tracking-wider font-bold mb-1">കുറിപ്പുകൾ (Notes)</p>
-                            <p className="text-xs text-gray-700 dark:text-gray-300">{house.notes}</p>
+                            <p className=" text-gray-700 dark:text-gray-300">{house.notes}</p>
                         </div>
                     )}
                 </motion.div>

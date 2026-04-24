@@ -99,7 +99,7 @@ export default function Dashboard() {
                     className="text-gray-700 dark:text-gray-300 group-hover:text-[#0B65F6] dark:group-hover:text-[#0B65F6] transition-colors duration-300"
                   />
                 </div>
-                <h3 className="text-xs font-semibold text-center text-gray-700 dark:text-gray-300 group-hover:text-[#0B65F6] dark:group-hover:text-[#0B65F6] line-clamp-2 leading-tight">
+                <h3 className=" font-semibold text-center text-gray-700 dark:text-gray-300 group-hover:text-[#0B65F6] dark:group-hover:text-[#0B65F6] line-clamp-2 leading-tight">
                   {item.name}
                 </h3>
               </Link>

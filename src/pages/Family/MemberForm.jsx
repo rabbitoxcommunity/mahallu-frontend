@@ -124,11 +124,11 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                 {/* Select House Section */}
                 <div className="bg-gray-50 dark:bg-[#16171d] p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <h3 className=" font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                         <Info size={18} className="text-[#0B65F6]" />
                         {t('family.form.houseSelection')}
                     </h3>
-                    <div className="max-w-md text-xs">
+                    <div className="max-w-md ">
                         <SearchableSelect
                             name="house_id"
                             label={t('family.form.houseLabel')}
@@ -143,12 +143,12 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 {/* Basic Info */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="md:col-span-3 pb-2 border-b border-gray-100 dark:border-gray-800">
-                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.basicInformation')}</h3>
+                        <h3 className=" font-semibold text-gray-900 dark:text-white">{t('family.form.basicInformation')}</h3>
                     </div>
 
                     {/* Full Name */}
                     <div className="md:col-span-2">
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {t('family.form.fullNameLabel')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
@@ -158,18 +158,18 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                             <input
                                 type="text"
                                 className={`block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border ${errors.full_name ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800 focus:ring-[#0B65F6]'
-                                    } rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
+                                    } rounded-xl  text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
                                 placeholder={t('family.form.fullNamePlaceholder')}
                                 {...register("full_name", { required: t('family.form.fullNameRequired') })}
                             />
                         </div>
                         {errors.full_name && (
-                            <p className="mt-1.5 text-xs text-red-500">{errors.full_name.message}</p>
+                            <p className="mt-1.5  text-red-500">{errors.full_name.message}</p>
                         )}
                     </div>
 
                     {/* Gender */}
-                    <div className="text-xs">
+                    <div className="">
                         <SearchableSelect
                             name="gender"
                             label={t('family.form.genderLabel')}
@@ -179,14 +179,14 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                     {/* DOB */}
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.dobLabel')}</label>
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.dobLabel')}</label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <Calendar size={18} className="text-gray-400" />
                             </div>
                             <input
                                 type="date"
-                                className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                                className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                                 {...register("dob")}
                             />
                         </div>
@@ -194,17 +194,17 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                     {/* Relation to Head */}
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.relationToHeadLabel')}</label>
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.relationToHeadLabel')}</label>
                         <input
                             type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             placeholder={t('family.form.relationToHeadPlaceholder')}
                             {...register("relation_to_head")}
                         />
                     </div>
 
                     {/* Marital Status */}
-                    <div className="text-xs">
+                    <div className="">
                         <SearchableSelect
                             name="marital_status"
                             label={t('family.form.maritalStatusLabel')}
@@ -215,34 +215,34 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                 {/* Contact Details */}
                 <div className="bg-white dark:bg-[#1e1f25] pb-2 border-b border-gray-100 dark:border-gray-800">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.contactDetails')}</h3>
+                    <h3 className=" font-semibold text-gray-900 dark:text-white">{t('family.form.contactDetails')}</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                             {t('family.form.contactNumberLabel')}
                         </label>
                         <input
                             type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             placeholder="e.g. 9876543210"
                             {...register("contact_number")}
                         />
                     </div>
 
                     <div className="flex flex-col gap-2 justify-start">
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300">
                             {t('family.form.whatsappNumberLabel')}
                         </label>
                         {!isWhatsappSame && (
                             <input
                                 type="text"
-                                className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                                className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                                 placeholder="e.g. 9876543210"
                                 {...register("whatsapp")}
                             />
                         )}
-                        <label className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 cursor-pointer mt-1">
+                        <label className="flex items-center gap-2  text-gray-600 dark:text-gray-400 cursor-pointer mt-1">
                             <input 
                                 type="checkbox" 
                                 checked={isWhatsappSame} 
@@ -257,47 +257,47 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 {/* Education & Work */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                     <div className="md:col-span-2 pb-2 border-b border-gray-100 dark:border-gray-800">
-                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.educationCareer')}</h3>
+                        <h3 className=" font-semibold text-gray-900 dark:text-white">{t('family.form.educationCareer')}</h3>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
                             <GraduationCap size={16} /> {t('family.form.religiousEducationLabel')}
                         </label>
                         <input
                             type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             {...register("religious_education")}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
                             <GraduationCap size={16} /> {t('family.form.generalEducationLabel')}
                         </label>
                         <input
                             type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             {...register("general_education")}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
                             <Briefcase size={16} /> {t('family.form.occupationLabel')}
                         </label>
                         <input
                             type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             {...register("occupation")}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.monthlyIncomeLabel')}</label>
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.monthlyIncomeLabel')}</label>
                         <input
                             type="number"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             {...register("monthly_income")}
                         />
                     </div>
@@ -306,43 +306,43 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 {/* Health & Skills */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                     <div className="md:col-span-2 pb-2 border-b border-gray-100 dark:border-gray-800">
-                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.healthSkills')}</h3>
+                        <h3 className=" font-semibold text-gray-900 dark:text-white">{t('family.form.healthSkills')}</h3>
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
                             <Droplets size={16} className="text-red-500" /> {t('family.form.bloodGroupLabel')}
                         </label>
                         <input
                             type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             placeholder={t('family.form.bloodGroupPlaceholder')}
                             {...register("blood_group")}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.skillsLabel')}</label>
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.skillsLabel')}</label>
                         <input
                             type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
                             placeholder={t('family.form.skillsPlaceholder')}
                             {...register("skills")}
                         />
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.medicalNotesLabel')}</label>
+                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.medicalNotesLabel')}</label>
                         <textarea
                             rows={2}
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none resize-none"
+                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none resize-none"
                             {...register("medical_notes")}
                         />
                     </div>
                 </div>
 
                 {/* Status Toggles */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 text-xs">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 ">
                     <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" className="sr-only peer" {...register("is_family_head")} />
@@ -373,7 +373,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                         <button
                             type="button"
                             onClick={onCancel}
-                            className="px-6 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
+                            className="px-6 py-2.5  font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                         >
                             {t('family.form.cancel')}
                         </button>
@@ -381,7 +381,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="flex items-center justify-center gap-2 px-8 py-2.5 text-xs font-semibold text-white bg-[#0B65F6] rounded-xl hover:bg-[#0653d1] transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50"
+                        className="flex items-center justify-center gap-2 px-8 py-2.5  font-semibold text-white bg-[#0B65F6] rounded-xl hover:bg-[#0653d1] transition-all shadow-lg shadow-blue-500/20 disabled:opacity-50"
                     >
                         {isSubmitting ? (
                             <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
