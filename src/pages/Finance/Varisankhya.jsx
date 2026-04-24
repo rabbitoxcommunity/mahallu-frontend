@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import {
   Wallet,
   Users,
@@ -35,6 +36,7 @@ import PaymentModal from './PaymentModal';
 import Receipt from './Receipt';
 
 const Varisankhya = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('monthly');
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
@@ -357,8 +359,8 @@ console.log(paymentHistoryData,'paymentHistoryData')
       <div className="mb-8">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Varisankhya Management</h1>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">Manage monthly subscription collections per house</p>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('finance.varisankhya.title')}</h1>
+            <p className="text-gray-500 dark:text-gray-400 mt-1">{t('finance.varisankhya.description')}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <select
@@ -383,7 +385,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
               type="number"
               value={defaultAmount}
               onChange={(e) => setDefaultAmount(e.target.value)}
-              placeholder="Default Amount"
+              placeholder={t('finance.varisankhya.defaultAmount')}
               className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] w-32"
             />
             <button
@@ -392,7 +394,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
               className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               <Plus size={18} />
-              {generating ? 'Generating...' : 'Generate Dues'}
+              {generating ? t('finance.varisankhya.generating') : t('finance.varisankhya.generateDues')}
             </button>
           </div>
         </div>
@@ -402,31 +404,31 @@ console.log(paymentHistoryData,'paymentHistoryData')
       {activeTab === 'monthly' && monthlyData.summary && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
           <SummaryCard
-            title="Total Houses"
+            title={t('finance.varisankhya.totalHouses')}
             value={monthlyData.summary.total_houses || 0}
             icon={Users}
             color="bg-blue-500"
           />
           <SummaryCard
-            title="Paid Houses"
+            title={t('finance.varisankhya.paidHouses')}
             value={monthlyData.summary.paid_houses || 0}
             icon={CheckCircle}
             color="bg-green-500"
           />
           <SummaryCard
-            title="Unpaid Houses"
+            title={t('finance.varisankhya.unpaidHouses')}
             value={monthlyData.summary.unpaid_houses || 0}
             icon={XCircle}
             color="bg-red-500"
           />
           <SummaryCard
-            title="Total Expected"
+            title={t('finance.varisankhya.totalCollected')}
             value={`₹${(monthlyData.summary.total_expected || 0).toLocaleString()}`}
             icon={IndianRupee}
             color="bg-purple-500"
           />
           <SummaryCard
-            title="Pending Amount"
+            title={t('finance.varisankhya.pendingAmount')}
             value={`₹${(monthlyData.summary.pending_amount || 0).toLocaleString()}`}
             icon={AlertCircle}
             color="bg-orange-500"
@@ -447,7 +449,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
           >
             <div className="flex items-center justify-center gap-2">
               <Calendar size={18} />
-              Monthly Collection
+              {t('finance.varisankhya.monthlyCollection')}
             </div>
           </button>
           <button
@@ -460,7 +462,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
           >
             <div className="flex items-center justify-center gap-2">
               <AlertCircle size={18} />
-              Defaulters
+              {t('finance.varisankhya.defaulters')}
             </div>
           </button>
           <button
@@ -473,7 +475,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
           >
             <div className="flex items-center justify-center gap-2">
               <History size={18} />
-              Payment History
+              {t('finance.varisankhya.paymentHistory')}
             </div>
           </button>
         </div>
@@ -487,7 +489,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
               <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
               <input
                 type="text"
-                placeholder={`Search ${activeTab === 'monthly' ? 'houses' : activeTab === 'defaulters' ? 'defaulters' : 'payments'}...`}
+                placeholder={`${t('common.search')} ${activeTab === 'monthly' ? t('finance.varisankhya.houses') : activeTab === 'defaulters' ? t('finance.varisankhya.defaulters') : t('finance.varisankhya.payments')}...`}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
@@ -505,12 +507,12 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   }}
                   className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
-                  <option value="">All Time</option>
-                  <option value="today">Today</option>
-                  <option value="this_month">This Month</option>
-                  <option value="last_month">Last Month</option>
-                  <option value="this_year">This Year</option>
-                  <option value="custom">Custom Range</option>
+                  <option value="">{t('finance.varisankhya.allTime')}</option>
+                  <option value="today">{t('finance.varisankhya.today')}</option>
+                  <option value="this_month">{t('finance.varisankhya.thisMonth')}</option>
+                  <option value="last_month">{t('finance.varisankhya.lastMonth')}</option>
+                  <option value="this_year">{t('finance.varisankhya.thisYear')}</option>
+                  <option value="custom">{t('finance.varisankhya.customRange')}</option>
                 </select>
 
                 {dateFilter === 'custom' && (
@@ -559,7 +561,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             <TrendingUp size={16} className="text-white" />
                           </div>
                           <div>
-                            <p className="text-xs text-white/90">Total Collected</p>
+                            <p className="text-xs text-white/90">{t('finance.varisankhya.totalCollected')}</p>
                             <h3 className="text-xl font-bold text-white">
                               ₹{calculateTotalCollected().toLocaleString()}
                             </h3>
@@ -593,13 +595,13 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">House</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Family</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Contact</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Due</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Paid</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -690,8 +692,8 @@ console.log(paymentHistoryData,'paymentHistoryData')
                           <StatusBadge status={record.status} />
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Due: <span className="font-medium text-gray-900">₹{record.amount_due}</span></span>
-                          <span className="text-gray-500">Paid: <span className="font-medium text-green-600">₹{record.amount_paid}</span></span>
+                          <span className="text-gray-500">{t('finance.varisankhya.due')}: <span className="font-medium text-gray-900">₹{record.amount_due}</span></span>
+                          <span className="text-gray-500">{t('finance.varisankhya.paid')}: <span className="font-medium text-green-600">₹{record.amount_paid}</span></span>
                         </div>
                         <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                           {record.status !== 'paid' && (
@@ -699,7 +701,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                               onClick={() => setPaymentModal({ isOpen: true, record })}
                               className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium"
                             >
-                              Pay
+                              {t('finance.varisankhya.pay')}
                             </button>
                           )}
                           {record.receipt_no && (
@@ -707,7 +709,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                               onClick={() => setReceiptModal({ isOpen: true, record })}
                               className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium"
                             >
-                              Receipt
+                              {t('finance.varisankhya.receipt')}
                             </button>
                           )}
                           <button
@@ -771,11 +773,11 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">House</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Family</th>
                           <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Pending</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Amount Due</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.amountDue')}</th>
+                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -837,7 +839,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         </div>
                         <p className="text-xs text-gray-400">{defaulter.family_name}</p>
                         <div className="flex justify-between items-center pt-2 border-t border-red-200 dark:border-red-800">
-                          <span className="text-sm text-gray-500">Due: <span className="font-bold text-red-600">₹{defaulter.pending_amount.toLocaleString()}</span></span>
+                          <span className="text-sm text-gray-500">{t('finance.varisankhya.due')}: <span className="font-bold text-red-600">₹{defaulter.pending_amount.toLocaleString()}</span></span>
                           <button
                               onClick={() => openDefaulterHistoryModal(defaulter)}
                               className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors"
@@ -891,12 +893,12 @@ console.log(paymentHistoryData,'paymentHistoryData')
                     <table className="w-full">
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Receipt</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">House</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Month/Year</th>
-                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Amount</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Date</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.receipt')}</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                          <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
+                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1003,7 +1005,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                           <span>{payment.paid_date ? new Date(payment.paid_date).toLocaleDateString() : '-'}</span>
                         </div>
                         <div className="flex justify-between text-sm">
-                          <span className="text-gray-500">Receipt: <span className="font-medium text-gray-700">{payment.receipt_no}</span></span>
+                          <span className="text-gray-500">{t('finance.varisankhya.receipt')}: <span className="font-medium text-gray-700">{payment.receipt_no}</span></span>
                           <span className="text-gray-500 capitalize">{payment.payment_method}</span>
                         </div>
                         <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
@@ -1011,7 +1013,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             onClick={() => setReceiptModal({ isOpen: true, record: payment })}
                             className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium"
                           >
-                            View
+                            {t('common.view')}
                           </button>
                           <button
                             onClick={() => {
@@ -1051,13 +1053,13 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             }}
                             className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium"
                           >
-                            Print
+                            {t('common.print')}
                           </button>
                         </div>
                       </div>
                     ))}
                     {paymentHistoryData.payments.length === 0 && (
-                      <p className="py-12 text-center text-gray-500">No payment history found.</p>
+                      <p className="py-12 text-center text-gray-500">{t('finance.varisankhya.noPaymentHistory')}</p>
                     )}
                   </div>
 
@@ -1065,7 +1067,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   <div className="mt-4 p-4 bg-gray-50 dark:bg-[#252731] rounded-xl">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <div>
-                        <span className="text-sm text-gray-600 dark:text-gray-400">Total Collected</span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">{t('finance.varisankhya.totalCollected')}</span>
                         {dateFilter && (
                           <p className="text-xs text-gray-500">
                             {dateFilter === 'today' && 'Today'}
@@ -1156,7 +1158,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <History size={24} className="text-purple-600" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">Payment History</h2>
+                      <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.varisankhya.paymentHistory')}</h2>
                       <p className="text-sm text-gray-500">{historyModal.houseName}</p>
                     </div>
                   </div>
@@ -1177,15 +1179,15 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <div className="mb-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
                         <div className="grid grid-cols-3 gap-4 text-center">
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">Total Due</p>
+                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalDue')}</p>
                             <p className="text-lg font-bold text-gray-900 dark:text-white">₹{historyModal.data.summary?.total_due?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">Total Paid</p>
+                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalPaid')}</p>
                             <p className="text-lg font-bold text-green-600">₹{historyModal.data.summary?.total_paid?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">Payments Made</p>
+                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.paymentsMade')}</p>
                             <p className="text-lg font-bold text-blue-600">{historyModal.data.summary?.payments_count || 0}</p>
                           </div>
                         </div>
@@ -1193,11 +1195,11 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-gray-100 dark:border-gray-800">
-                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Month/Year</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Due</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Paid</th>
-                            <th className="text-center py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
-                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Date</th>
+                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                            <th className="text-center py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1275,19 +1277,19 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <div className="mb-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">Total Due</p>
+                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalDue')}</p>
                             <p className="text-lg font-bold text-red-600">₹{defaulterHistoryData.summary?.total_due?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">Total Paid</p>
+                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.totalPaid')}</p>
                             <p className="text-lg font-bold text-green-600">₹{defaulterHistoryData.summary?.total_paid?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">Pending</p>
+                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.pending')}</p>
                             <p className="text-lg font-bold text-orange-600">₹{defaulterHistoryData.summary?.pending_amount?.toLocaleString() || 0}</p>
                           </div>
                           <div>
-                            <p className="text-xs text-gray-500 uppercase">Pending Months</p>
+                            <p className="text-xs text-gray-500 uppercase">{t('finance.varisankhya.pendingMonths')}</p>
                             <p className="text-lg font-bold text-blue-600">{defaulterHistoryData.summary?.pending_months_count || 0}</p>
                           </div>
                         </div>
@@ -1295,10 +1297,10 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <table className="w-full">
                         <thead>
                           <tr className="border-b border-gray-100 dark:border-gray-800">
-                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Month/Year</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Due</th>
-                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Paid</th>
-                            <th className="text-center py-2 px-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                            <th className="text-left py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                            <th className="text-right py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                            <th className="text-center py-2 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
                           </tr>
                         </thead>
                         <tbody>

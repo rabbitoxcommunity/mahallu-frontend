@@ -2,9 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Users } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import FamilyForm from './FamilyForm';
 
 export default function AddFamily() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     return (
@@ -14,16 +16,16 @@ export default function AddFamily() {
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                         <Users className="text-[#0B65F6]" />
-                        കുടുംബം ചേർക്കുക (Add Family)
+                        {t('family.addFamily')}
                     </h1>
-                    <p className="text-gray-500 dark:text-gray-400 mt-1">Register a new family entity to the system.</p>
+                    <p className="text-gray-500 dark:text-gray-400 mt-1">{t('family.addDescription')}</p>
                 </div>
                 <Link
                     to="/family/register"
                     className="flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                 >
                     <ArrowLeft size={16} />
-                    തിരികെ പോവുക (Back)
+                    {t('common.back')}
                 </Link>
             </div>
 

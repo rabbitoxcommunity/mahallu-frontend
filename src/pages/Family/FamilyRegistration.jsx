@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Edit } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
 import SlideOver from '../../components/ui/SlideOver';
 import FamilyForm from './FamilyForm';
 
 export default function FamilyRegistration() {
+    const { t } = useTranslation();
     const [families, setFamilies] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -57,17 +59,17 @@ export default function FamilyRegistration() {
 
     const columns = [
         {
-            header: "കോഡ് (Code)",
+            header: t('family.code'),
             accessor: "family_code",
             cellClassName: "font-semibold text-gray-900 dark:text-white whitespace-nowrap"
         },
         {
-            header: "കുടുംബത്തിന്റെ പേര് (Family Name)",
+            header: t('family.familyName'),
             accessor: "family_name",
             cellClassName: "font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap"
         },
         {
-            header: "കുറിപ്പുകൾ (Notes)",
+            header: t('common.notes'),
             cell: (row) => (
                 <div className="truncate max-w-[200px] text-gray-500 dark:text-gray-400" title={row.notes}>
                     {row.notes || "-"}
@@ -75,18 +77,18 @@ export default function FamilyRegistration() {
             )
         },
         {
-            header: "സ്റ്റാറ്റസ് (Status)",
+            header: t('common.status'),
             cell: (row) => (
                 <span className={`px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider rounded-full ${row.is_active
                     ? 'bg-green-100 text-green-800 dark:bg-green-500/10 dark:text-green-500'
                     : 'bg-red-100 text-red-800 dark:bg-red-500/10 dark:text-red-500'
                     }`}>
-                    {row.is_active ? 'Active' : 'Inactive'}
+                    {row.is_active ? t('common.active') : t('common.inactive')}
                 </span>
             )
         },
         {
-            header: "Actions",
+            header: t('common.actions'),
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
@@ -104,8 +106,8 @@ export default function FamilyRegistration() {
     return (
         <>
             <DataTable
-                title="കുടുംബ വിവരങ്ങൾ (Families)"
-                subtitle="Manage and view all registered families."
+                title={t('family.title')}
+                subtitle={t('family.description')}
                 columns={columns}
                 data={families}
                 loading={loading}
@@ -120,10 +122,10 @@ export default function FamilyRegistration() {
                 search={{
                     value: searchTerm,
                     onChange: setSearchTerm,
-                    placeholder: "കുടുംബം അന്വേഷിക്കുക (Search...)"
+                    placeholder: t('family.searchPlaceholder')
                 }}
                 createButton={{
-                    label: "പുതിയ കുടുംബം (Add Family)",
+                    label: t('family.addFamily'),
                     path: "/family/register/create"
                 }}
             />
@@ -131,8 +133,8 @@ export default function FamilyRegistration() {
             <SlideOver
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
-                title="കുടുംബ വിവരങ്ങൾ മാറ്റുക (Edit Family)"
-                subtitle={`Editing details for ${selectedFamily?.family_name}`}
+                title={t('family.editFamily')}
+                subtitle={`${t('family.editing')} ${selectedFamily?.family_name}`}
             >
                 <FamilyForm
                     initialData={selectedFamily}

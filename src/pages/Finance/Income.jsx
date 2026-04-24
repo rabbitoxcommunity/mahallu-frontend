@@ -529,7 +529,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total Paid</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.totalPaid')}</p>
                 <h3 className="text-2xl font-bold text-green-600 mt-1">₹{(summary?.due_based?.total_paid || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
@@ -544,7 +544,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Pending</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.pending')}</p>
                 <h3 className="text-2xl font-bold text-orange-600 mt-1">₹{(summary?.due_based?.total_pending || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-orange-500">
@@ -559,7 +559,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Paid Count</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.paidCount')}</p>
                 <h3 className="text-2xl font-bold text-green-600 mt-1">{summary?.due_based?.paid_count || 0}</h3>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
@@ -592,7 +592,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Total Income</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.totalIncome')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{(summary?.direct?.total_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
@@ -791,9 +791,8 @@ export const Income = () => {
                   className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   <option value="">All Status</option>
-                  <option value="paid">Paid</option>
-                  <option value="partial">Partial</option>
-                  <option value="unpaid">Unpaid</option>
+                  <option value="paid">{t('common.paid')}</option>
+                  <option value="unpaid">{t('common.unpaid')}</option>
                   <option value="overdue">Overdue</option>
                 </select>
               )}
@@ -843,14 +842,13 @@ export const Income = () => {
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Code</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Category</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Source</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Month/Year</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Due</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Paid</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Balance</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.monthYear')}</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.due')}</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.paid')}</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -918,13 +916,13 @@ export const Income = () => {
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Code</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Date</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Category</th>
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Source</th>
-                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Amount</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Method</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Receipt</th>
-                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Actions</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
+                    <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.method')}</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.receipt')}</th>
+                    <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1161,25 +1159,25 @@ export const Income = () => {
                 <div className="p-6">
                   <div className="grid grid-cols-3 gap-3 mb-6 p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
                     <div className="text-center">
-                      <p className="text-xs text-gray-500">Total Due</p>
+                      <p className="text-xs text-gray-500">{t('finance.income.totalDue')}</p>
                       <p className="text-lg font-bold text-gray-900 dark:text-white">₹{paymentModal.income.amount_due}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs text-gray-500">Already Paid</p>
+                      <p className="text-xs text-gray-500">{t('finance.income.alreadyPaid')}</p>
                       <p className="text-lg font-bold text-green-600">₹{paymentModal.income.amount_paid}</p>
                     </div>
                     <div className="text-center">
-                      <p className="text-xs text-gray-500">Remaining</p>
+                      <p className="text-xs text-gray-500">{t('finance.income.remaining')}</p>
                       <p className="text-lg font-bold text-orange-600">₹{paymentModal.income.balance}</p>
                     </div>
                   </div>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Amount</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.paymentAmount')}</label>
                       <input type="number" value={paymentForm.payment_amount} onChange={(e) => setPaymentForm({ ...paymentForm, payment_amount: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Payment Method</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.paymentMethod')}</label>
                       <select value={paymentForm.payment_method} onChange={(e) => setPaymentForm({ ...paymentForm, payment_method: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
                         <option value="cash">Cash</option>
                         <option value="upi">UPI</option>
@@ -1197,7 +1195,7 @@ export const Income = () => {
                   </div>
                 </div>
                 <div className="flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
-                  <button onClick={() => setPaymentModal({ isOpen: false, income: null })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
+                  <button onClick={() => setPaymentModal({ isOpen: false, income: null })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">{t('common.cancel')}</button>
                   <button onClick={handleMarkPayment} className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">Record Payment</button>
                 </div>
               </div>
@@ -1214,7 +1212,7 @@ export const Income = () => {
             <motion.div key="history-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Payment History</h2>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.income.paymentHistory')}</h2>
                   <button onClick={() => setHistoryModal({ isOpen: false, history: [] })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
@@ -1229,7 +1227,7 @@ export const Income = () => {
                             <span className="text-sm text-gray-500">{new Date(payment.payment_date).toLocaleDateString()}</span>
                           </div>
                           <div className="flex justify-between text-sm">
-                            <span className="text-gray-600">Method: {payment.payment_method}</span>
+                            <span className="text-gray-600">{t('finance.income.method')}: {payment.payment_method}</span>
                             {payment.reference_no && <span className="text-gray-600">Ref: {payment.reference_no}</span>}
                           </div>
                           {payment.notes && <p className="text-sm text-gray-500 mt-2">{payment.notes}</p>}
@@ -1255,19 +1253,19 @@ export const Income = () => {
             <motion.div key="view-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-md">
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Income Details</h2>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.income.incomeDetails')}</h2>
                   <button onClick={() => setViewModal({ isOpen: false, income: null })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="p-6 space-y-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div><p className="text-xs text-gray-500">Income Code</p><p className="font-medium">{viewModal.income.income_code}</p></div>
-                    <div><p className="text-xs text-gray-500">Date</p><p className="font-medium">{new Date(viewModal.income.date).toLocaleDateString()}</p></div>
+                    <div><p className="text-xs text-gray-500">{t('finance.income.incomeCode')}</p><p className="font-medium">{viewModal.income.income_code}</p></div>
+                    <div><p className="text-xs text-gray-500">{t('common.date')}</p><p className="font-medium">{new Date(viewModal.income.date).toLocaleDateString()}</p></div>
                   </div>
                   {/* FIX: Use formatCategory helper with replaceAll */}
-                  <div><p className="text-xs text-gray-500">Category</p><p className="font-medium capitalize">{formatCategory(viewModal.income.category)}</p></div>
-                  <div><p className="text-xs text-gray-500">Source</p><p className="font-medium">{viewModal.income.source_name}</p></div>
-                  <div><p className="text-xs text-gray-500">Amount</p><p className="font-medium text-green-600 text-lg">₹{viewModal.income.amount?.toLocaleString()}</p></div>
-                  <div><p className="text-xs text-gray-500">Payment Method</p><p className="font-medium capitalize">{viewModal.income.payment_method}</p></div>
+                  <div><p className="text-xs text-gray-500">{t('common.category')}</p><p className="font-medium capitalize">{formatCategory(viewModal.income.category)}</p></div>
+                  <div><p className="text-xs text-gray-500">{t('finance.income.source')}</p><p className="font-medium">{viewModal.income.source_name}</p></div>
+                  <div><p className="text-xs text-gray-500">{t('common.amount')}</p><p className="font-medium text-green-600 text-lg">₹{viewModal.income.amount?.toLocaleString()}</p></div>
+                  <div><p className="text-xs text-gray-500">{t('finance.income.paymentMethod')}</p><p className="font-medium capitalize">{viewModal.income.payment_method}</p></div>
                   {viewModal.income.reference_no && <div><p className="text-xs text-gray-500">Reference</p><p className="font-medium">{viewModal.income.reference_no}</p></div>}
                   {viewModal.income.description && <div><p className="text-xs text-gray-500">Description</p><p className="font-medium">{viewModal.income.description}</p></div>}
                 </div>

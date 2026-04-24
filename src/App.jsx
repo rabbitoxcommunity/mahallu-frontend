@@ -14,7 +14,7 @@ import StaffList from "./pages/SuperAdmin/StaffList";
 import CreateStaff from "./pages/SuperAdmin/CreateStaff";
 import EditStaffPermissions from "./pages/SuperAdmin/EditStaffPermissions";
 import FamilyRegistration from "./pages/Family/FamilyRegistration";
-import HouseRegistration from "./pages/Family/Houseregistration";
+import HouseRegistration from "./pages/Family/HouseRegistration";
 import AddFamily from "./pages/Family/AddFamily";
 import AddHouse from "./pages/Family/AddHouse";
 import MemberRegistration from "./pages/Family/MemberRegistration";

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Edit, Eye, User, UserCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
 import SlideOver from '../../components/ui/SlideOver';
 import MemberForm from './MemberForm';
 
 export default function MemberRegistration() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -59,7 +61,7 @@ export default function MemberRegistration() {
 
     const columns = [
         {
-            header: "പേര് (Name)",
+            header: t('family.name'),
             accessor: "full_name",
             cell: (row) => (
                 <div className="flex items-center gap-3">
@@ -74,7 +76,7 @@ export default function MemberRegistration() {
             )
         },
         {
-            header: "വീട്ടുടമ (Householder)",
+            header: t('family.householder'),
             cell: (row) => (
                 <div className="flex flex-col">
                     <span className="font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">{row.house_id?.householder_name || "N/A"}</span>
@@ -83,12 +85,12 @@ export default function MemberRegistration() {
             )
         },
         {
-            header: "ലിംഗം (Gender)",
+            header: t('family.gender'),
             accessor: "gender",
             cellClassName: "text-gray-600 dark:text-gray-400"
         },
         {
-            header: "വയസ്സ് (Age)",
+            header: t('family.age'),
             cell: (row) => {
                 if (!row.dob) return "-";
                 const age = new Date().getFullYear() - new Date(row.dob).getFullYear();
@@ -96,22 +98,22 @@ export default function MemberRegistration() {
             }
         },
         {
-            header: "Head",
+            header: t('family.head'),
             cell: (row) => row.is_family_head ? (
                 <span className="flex items-center gap-1 text-[#0B65F6] font-medium text-[11px]">
-                    <UserCheck size={14} /> Head
+                    <UserCheck size={14} /> {t('family.head')}
                 </span>
             ) : null
         },
         {
-            header: "Actions",
+            header: t('common.actions'),
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
                     <button
                         onClick={() => navigate(`/family/member/${row._id}`)}
                         className="p-2 text-gray-400 text-[#0B65F6] cursor-pointer bg-[#0B65F6]/10 rounded-lg transition-colors group"
-                        title="View Details"
+                        title={t('common.viewDetails')}
                     >
                         <Eye size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
@@ -129,8 +131,8 @@ export default function MemberRegistration() {
     return (
         <>
             <DataTable
-                title="അംഗങ്ങൾ (Members)"
-                subtitle="Manage and view all registered members."
+                title={t('family.memberTitle')}
+                subtitle={t('family.memberDescription')}
                 columns={columns}
                 data={members}
                 loading={loading}
@@ -145,10 +147,10 @@ export default function MemberRegistration() {
                 search={{
                     value: searchTerm,
                     onChange: setSearchTerm,
-                    placeholder: "അംഗത്തെ തിരയുക (Search member...)"
+                    placeholder: t('family.searchMember')
                 }}
                 createButton={{
-                    label: "പുതിയ അംഗം (Add Member)",
+                    label: t('family.addMember'),
                     path: "/family/member/add"
                 }}
             />
@@ -156,8 +158,8 @@ export default function MemberRegistration() {
             <SlideOver
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
-                title="അംഗത്തിന്റെ വിവരങ്ങൾ മാറ്റുക (Edit Member)"
-                subtitle={`Editing details for ${selectedMember?.full_name}`}
+                title={t('family.editMember')}
+                subtitle={`${t('family.editing')} ${selectedMember?.full_name}`}
                 width='max-w-4xl'
             >
                 <MemberForm

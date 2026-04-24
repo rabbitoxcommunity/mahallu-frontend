@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Edit, Eye, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
 import SlideOver from '../../components/ui/SlideOver';
 import HouseForm from './HouseForm';
 
 export default function HouseRegistration() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [houses, setHouses] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -59,12 +61,12 @@ export default function HouseRegistration() {
 
     const columns = [
         {
-            header: "കോഡ് (Code)",
+            header: t('family.code'),
             accessor: "house_code",
             cellClassName: "font-semibold text-gray-900 dark:text-white whitespace-nowrap"
         },
         {
-            header: "വീട്ടുടമയുടെ പേര് (Householder Name)",
+            header: t('family.householderName'),
             accessor: "householder_name",
             cell: (row) => (
                 <div className="flex items-center gap-3">
@@ -76,7 +78,7 @@ export default function HouseRegistration() {
             )
         },
         {
-            header: "കുടുംബം (Family)",
+            header: t('family.family'),
             cell: (row) => (
                 <div className="flex flex-col">
                     <span className="text-gray-800 dark:text-gray-200 whitespace-nowrap">{row.family_id?.family_name || "-"}</span>
@@ -85,7 +87,7 @@ export default function HouseRegistration() {
             )
         },
         {
-            header: "സാമ്പത്തിക നില (Status)",
+            header: t('family.economicStatus'),
             cell: (row) => (
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${row.economic_status === 'Poor' ? 'bg-red-100 text-red-700' :
                     row.economic_status === 'Miskeen' ? 'bg-orange-100 text-orange-700' :
@@ -96,14 +98,14 @@ export default function HouseRegistration() {
             )
         },
         {
-            header: "Actions",
+            header: t('common.actions'),
             align: "right",
             cell: (row) => (
                 <div className="flex items-center justify-end gap-2">
                     <button
                         onClick={() => navigate(`/family/house/${row._id}`)}
                         className="p-2 text-gray-400 text-[#0B65F6] cursor-pointer bg-[#0B65F6]/10 rounded-lg transition-colors group"
-                        title="View Details"
+                        title={t('common.viewDetails')}
                     >
                         <Eye size={16} className="group-hover:scale-110 transition-transform" />
                     </button>
@@ -121,8 +123,8 @@ export default function HouseRegistration() {
     return (
         <>
             <DataTable
-                title="വീട് വിവരങ്ങൾ (Houses)"
-                subtitle="Manage and view all registered houses."
+                title={t('family.houseTitle')}
+                subtitle={t('family.houseDescription')}
                 columns={columns}
                 data={houses}
                 loading={loading}
@@ -137,10 +139,10 @@ export default function HouseRegistration() {
                 search={{
                     value: searchTerm,
                     onChange: setSearchTerm,
-                    placeholder: "വീട് തിരയുക (Search house...)"
+                    placeholder: t('family.searchHouse')
                 }}
                 createButton={{
-                    label: "പുതിയ വീട് (Add House)",
+                    label: t('family.addHouse'),
                     path: "/family/house/add"
                 }}
             />
@@ -148,8 +150,8 @@ export default function HouseRegistration() {
             <SlideOver
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
-                title="വീട് വിവരങ്ങൾ മാറ്റുക (Edit House)"
-                subtitle={`Editing details for ${selectedHouse?.householder_name}`}
+                title={t('family.editHouse')}
+                subtitle={`${t('family.editing')} ${selectedHouse?.householder_name}`}
                 width="max-w-3xl"
             >
                 <HouseForm

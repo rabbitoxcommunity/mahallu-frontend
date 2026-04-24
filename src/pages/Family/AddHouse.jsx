@@ -2,9 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Home } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import HouseForm from './HouseForm';
 
 export default function AddHouse() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
     return (
@@ -14,16 +16,16 @@ export default function AddHouse() {
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                         <Home className="text-[#0B65F6]" />
-                        കുടുംബ വീട് ചേർക്കുക (Add House)
+                        {t('family.addHouse')}
                     </h1>
-                    <p className="text-gray-500 dark:text-gray-400 mt-1">Register a house and link it to a family.</p>
+                    <p className="text-gray-500 dark:text-gray-400 mt-1">{t('family.addHouseDescription')}</p>
                 </div>
                 <Link
                     to="/family/house/register"
                     className="flex items-center justify-center gap-2 px-4 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                 >
                     <ArrowLeft size={16} />
-                    തിриകെ പോവുക (Back)
+                    {t('common.back')}
                 </Link>
             </div>
 

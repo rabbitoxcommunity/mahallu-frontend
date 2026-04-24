@@ -1,9 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Users, Settings, BarChart3, Plus, Shield, Building2 } from 'lucide-react';
 
 export default function SuperAdminDashboard() {
+  const { t } = useTranslation();
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -19,24 +21,24 @@ export default function SuperAdminDashboard() {
 
   const dashboardItems = [
     { 
-      name: "Manage Staff", 
+      name: t('superAdmin.manageStaff'), 
       icon: Users, 
       path: "/super-admin/staff",
-      description: "Create and manage tenant staff"
+      description: t('superAdmin.manageStaffDesc')
     },
     { 
-      name: "Create Staff", 
+      name: t('superAdmin.createStaff'), 
       icon: Plus, 
       path: "/super-admin/staff/create",
-      description: "Add new staff to your tenant"
+      description: t('superAdmin.createStaffDesc')
     },
   ];
 
   return (
     <div className="w-full">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Super Admin Dashboard</h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">Manage your tenant staff and permissions</p>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('superAdmin.title')}</h1>
+        <p className="text-gray-500 dark:text-gray-400 mt-1">{t('superAdmin.description')}</p>
       </div>
 
       <motion.div
