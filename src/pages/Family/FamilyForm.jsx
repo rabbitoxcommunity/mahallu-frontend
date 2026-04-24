@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Save, Users, FileText } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import { toast } from 'react-toastify';
 
 export default function FamilyForm({ initialData, onSuccess, onCancel }) {
+    const { t } = useTranslation();
     const isEdit = !!initialData?._id;
 
     const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
@@ -29,10 +31,10 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
         try {
             if (isEdit) {
                 await axios.put(`/family/${initialData._id}`, data);
-                toast.success('Family updated successfully!');
+                toast.success(t('family.form.familyUpdated'));
             } else {
                 await axios.post('/family/create', data);
-                toast.success('Family registered successfully!');
+                toast.success(t('family.form.familySaved'));
             }
             if (onSuccess) onSuccess();
         } catch (error) {
@@ -45,7 +47,7 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
             {/* Family Name */}
             <div>
                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    കുടുംബത്തിന്റെ പേര് (Family Name) <span className="text-red-500">*</span>
+                    {t('family.form.familyNameLabel')} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -56,8 +58,8 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
                         className={`block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border ${
                             errors.family_name ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800 focus:ring-[#0B65F6]'
                         } rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
-                        placeholder="ഉദാ: മാളിയേക്കൽ (e.g. Maliyekkal)"
-                        {...register("family_name", { required: "Family Name is required" })}
+                        placeholder={t('family.form.familyNamePlaceholder')}
+                        {...register("family_name", { required: t('family.form.familyNameRequired') })}
                     />
                 </div>
                 {errors.family_name && (
@@ -68,7 +70,7 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
             {/* Notes */}
             <div>
                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    കുറിപ്പുകൾ (Notes)
+                    {t('family.form.notesLabel')}
                 </label>
                 <div className="relative">
                     <div className="absolute top-3 left-3 pointer-events-none">
@@ -77,7 +79,7 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
                     <textarea
                         rows={4}
                         className="block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] focus:border-[#0B65F6] focus:outline-none transition-colors resize-none"
-                        placeholder="കുടുംബത്തെക്കുറിച്ചുള്ള അധിക വിവരങ്ങൾ (Any additional notes...)"
+                        placeholder={t('family.form.notesPlaceholder')}
                         {...register("notes")}
                     />
                 </div>
@@ -91,11 +93,11 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
                         className="sr-only peer" 
                         {...register("is_active")}
                     />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] dark:peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#0B65F6]"></div>
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] dark:peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#0B65F6]"></div>
                 </label>
                 <div>
                     <p className="text-xs font-medium text-gray-900 dark:text-white flex items-center gap-1.5">
-                        സജീവം (Active Status)
+                        {t('family.form.activeStatus')}
                     </p>
                 </div>
             </div>
@@ -107,7 +109,7 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
                         onClick={onCancel}
                         className="px-6 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                     >
-                        റദ്ദാക്കുക (Cancel)
+                        {t('family.form.cancel')}
                     </button>
                 )}
                 <button
@@ -120,7 +122,7 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
                     ) : (
                         <Save size={18} />
                     )}
-                    {isEdit ? 'മാറ്റങ്ങൾ വരുത്തുക (Update Family)' : 'സേവ് ചെയ്യുക (Save Family)'}
+                    {isEdit ? t('family.form.updateFamily') : t('family.form.saveFamily')}
                 </button>
             </div>
         </form>

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Save, User, Calendar, Heart, Shield, GraduationCap, Briefcase, Droplets, Info } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import { toast } from 'react-toastify';
 import SearchableSelect from '../../components/ui/SearchableSelect';
 
 export default function MemberForm({ initialData, onSuccess, onCancel, defaultHouseId }) {
+    const { t } = useTranslation();
     const isEdit = !!initialData?._id;
     const [houses, setHouses] = useState([]);
     const [loadingHouses, setLoadingHouses] = useState(true);
@@ -87,10 +89,10 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
         try {
             if (isEdit) {
                 await axios.put(`/member/${initialData._id}`, data);
-                toast.success('Member updated successfully!');
+                toast.success(t('family.form.memberUpdated'));
             } else {
                 await axios.post('/member/add', data);
-                toast.success('Member added successfully!');
+                toast.success(t('family.form.memberSaved'));
             }
             if (onSuccess) onSuccess();
         } catch (error) {
@@ -124,12 +126,12 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 <div className="bg-gray-50 dark:bg-[#16171d] p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
                     <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                         <Info size={18} className="text-[#0B65F6]" />
-                        വീട് തിരഞ്ഞെടുക്കുക (House Selection)
+                        {t('family.form.houseSelection')}
                     </h3>
                     <div className="max-w-md text-xs">
                         <SearchableSelect
                             name="house_id"
-                            label="വീട് (House)"
+                            label={t('family.form.houseLabel')}
                             options={houseOptions}
                             isLoading={loadingHouses}
                             required={true}
@@ -141,13 +143,13 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 {/* Basic Info */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="md:col-span-3 pb-2 border-b border-gray-100 dark:border-gray-800">
-                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">അടിസ്ഥാന വിവരങ്ങൾ (Basic Information)</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.basicInformation')}</h3>
                     </div>
 
                     {/* Full Name */}
                     <div className="md:col-span-2">
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            പൂർണ്ണനാമം (Full Name) <span className="text-red-500">*</span>
+                            {t('family.form.fullNameLabel')} <span className="text-red-500">*</span>
                         </label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none z-10">
@@ -157,24 +159,27 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                                 type="text"
                                 className={`block w-full pl-10 pr-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border ${errors.full_name ? 'border-red-500 focus:ring-red-500' : 'border-gray-200 dark:border-gray-800 focus:ring-[#0B65F6]'
                                     } rounded-xl text-xs text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-colors`}
-                                placeholder="ഉദാ: അഹമ്മദ് കുട്ടി (e.g. Ahmed Kutty)"
-                                {...register("full_name", { required: "Full name is required" })}
+                                placeholder={t('family.form.fullNamePlaceholder')}
+                                {...register("full_name", { required: t('family.form.fullNameRequired') })}
                             />
                         </div>
+                        {errors.full_name && (
+                            <p className="mt-1.5 text-xs text-red-500">{errors.full_name.message}</p>
+                        )}
                     </div>
 
                     {/* Gender */}
                     <div className="text-xs">
                         <SearchableSelect
                             name="gender"
-                            label="ലിംഗം (Gender)"
+                            label={t('family.form.genderLabel')}
                             options={genderOptions}
                         />
                     </div>
 
                     {/* DOB */}
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">ജനനത്തീയതി (Date of Birth)</label>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.dobLabel')}</label>
                         <div className="relative">
                             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <Calendar size={18} className="text-gray-400" />
@@ -189,11 +194,11 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                     {/* Relation to Head */}
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">നാഥനുമായുള്ള ബന്ധം (Relation to Head)</label>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.relationToHeadLabel')}</label>
                         <input
                             type="text"
                             className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
-                            placeholder="ഉദാ: മകൻ, ഭാര്യ (e.g. Son, Wife)"
+                            placeholder={t('family.form.relationToHeadPlaceholder')}
                             {...register("relation_to_head")}
                         />
                     </div>
@@ -202,7 +207,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                     <div className="text-xs">
                         <SearchableSelect
                             name="marital_status"
-                            label="വൈവാഹിക നില (Marital Status)"
+                            label={t('family.form.maritalStatusLabel')}
                             options={maritalOptions}
                         />
                     </div>
@@ -210,12 +215,12 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                 {/* Contact Details */}
                 <div className="bg-white dark:bg-[#1e1f25] pb-2 border-b border-gray-100 dark:border-gray-800">
-                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">സമ്പർക്ക വിവരങ്ങൾ (Contact Details)</h3>
+                    <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.contactDetails')}</h3>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                     <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            ഫോൺ നമ്പർ (Contact Number)
+                            {t('family.form.contactNumberLabel')}
                         </label>
                         <input
                             type="text"
@@ -227,7 +232,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                     <div className="flex flex-col gap-2 justify-start">
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300">
-                            വാട്ട്‌സ്ആപ്പ് നമ്പർ (WhatsApp Number)
+                            {t('family.form.whatsappNumberLabel')}
                         </label>
                         {!isWhatsappSame && (
                             <input
@@ -244,7 +249,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                                 onChange={(e) => setIsWhatsappSame(e.target.checked)}
                                 className="rounded text-[#0B65F6] focus:ring-[#0B65F6] dark:bg-gray-800 dark:border-gray-700" 
                             />
-                            ഫോൺ നമ്പർ തന്നെയാണ് വാട്ട്‌സ്ആപ്പ് നമ്പർ (Same as Contact Number)
+                            {t('family.form.whatsappSameAsContact')}
                         </label>
                     </div>
                 </div>
@@ -252,12 +257,12 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 {/* Education & Work */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                     <div className="md:col-span-2 pb-2 border-b border-gray-100 dark:border-gray-800">
-                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">വിദ്യാഭ്യാസവും തൊഴിലും (Education & Career)</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.educationCareer')}</h3>
                     </div>
 
                     <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
-                            <GraduationCap size={16} /> മതവിദ്യാഭ്യാസം (Religious Education)
+                            <GraduationCap size={16} /> {t('family.form.religiousEducationLabel')}
                         </label>
                         <input
                             type="text"
@@ -268,7 +273,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                     <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
-                            <GraduationCap size={16} /> പൊതു വിദ്യാഭ്യാസം (General Education)
+                            <GraduationCap size={16} /> {t('family.form.generalEducationLabel')}
                         </label>
                         <input
                             type="text"
@@ -279,7 +284,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                     <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
-                            <Briefcase size={16} /> ജോലി (Occupation)
+                            <Briefcase size={16} /> {t('family.form.occupationLabel')}
                         </label>
                         <input
                             type="text"
@@ -289,7 +294,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">പ്രതിമാസ വരുമാനം (Monthly Income)</label>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.monthlyIncomeLabel')}</label>
                         <input
                             type="number"
                             className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
@@ -301,33 +306,33 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 {/* Health & Skills */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4">
                     <div className="md:col-span-2 pb-2 border-b border-gray-100 dark:border-gray-800">
-                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">ആരോഗ്യവും കഴിവുകളും (Health & Skills)</h3>
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t('family.form.healthSkills')}</h3>
                     </div>
 
                     <div>
                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
-                            <Droplets size={16} className="text-red-500" /> രക്തഗ്രൂപ്പ് (Blood Group)
+                            <Droplets size={16} className="text-red-500" /> {t('family.form.bloodGroupLabel')}
                         </label>
                         <input
                             type="text"
                             className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
-                            placeholder="e.g. O+ve"
+                            placeholder={t('family.form.bloodGroupPlaceholder')}
                             {...register("blood_group")}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">കഴിവുകൾ (Skills)</label>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.skillsLabel')}</label>
                         <input
                             type="text"
                             className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
-                            placeholder="e.g. Carpentry, Teaching"
+                            placeholder={t('family.form.skillsPlaceholder')}
                             {...register("skills")}
                         />
                     </div>
 
                     <div className="md:col-span-2">
-                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">ആരോഗ്യ കുറിപ്പുകൾ (Medical Notes)</label>
+                        <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.medicalNotesLabel')}</label>
                         <textarea
                             rows={2}
                             className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl text-xs text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none resize-none"
@@ -341,25 +346,25 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                     <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" className="sr-only peer" {...register("is_family_head")} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
                         </label>
-                        <span className="font-medium text-gray-900 dark:text-white">കുടുംബനാഥൻ (Head)</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{t('family.form.isFamilyHead')}</span>
                     </div>
 
                     <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" className="sr-only peer" {...register("yateem_status")} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
                         </label>
-                        <span className="font-medium text-gray-900 dark:text-white">യത്തീം (Yateem)</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{t('family.form.yateemStatus')}</span>
                     </div>
 
                     <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
                         <label className="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" className="sr-only peer" {...register("is_active")} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
                         </label>
-                        <span className="font-medium text-gray-900 dark:text-white">സജീവം (Active)</span>
+                        <span className="font-medium text-gray-900 dark:text-white">{t('family.form.active')}</span>
                     </div>
                 </div>
 
@@ -370,7 +375,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                             onClick={onCancel}
                             className="px-6 py-2.5 text-xs font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
                         >
-                            റദ്ദാക്കുക (Cancel)
+                            {t('family.form.cancel')}
                         </button>
                     )}
                     <button
@@ -383,7 +388,7 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                         ) : (
                             <Save size={18} />
                         )}
-                        {isEdit ? 'മാറ്റങ്ങൾ വരുത്തുക (Update Member)' : 'അംഗത്തെ ചേർക്കുക (Save Member)'}
+                        {isEdit ? t('family.form.updateMember') : t('family.form.saveMember')}
                     </button>
                 </div>
             </form>

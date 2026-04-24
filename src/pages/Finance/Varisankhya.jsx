@@ -589,9 +589,9 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Family</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.family')}</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.category')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Contact</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.contact')}</th>
                           <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
                           <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
                           <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.status')}</th>
@@ -611,7 +611,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                               {record.house_id?.family_name || '-'}
                             </td>
                             <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
-                              {record.house_id?.family_id?.economic_status || 'Normal'}
+                              {record.house_id?.family_id?.economic_status || t('finance.varisankhya.normal')}
                             </td>
                             <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
                               {record.house_id?.primary_contact || '-'}
@@ -640,7 +640,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                                   <button
                                     onClick={() => setReceiptModal({ isOpen: true, record })}
                                     className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                    title="View Receipt"
+                                    title={t('finance.varisankhya.viewReceipt')}
                                   >
                                     <Eye size={18} />
                                   </button>
@@ -685,7 +685,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                             <p className="font-medium text-gray-900 dark:text-white">{record.house_id?.house_code}</p>
                             <p className="text-sm text-gray-500">{record.house_id?.householder_name}</p>
                             <p className="text-xs text-gray-400">{record.house_id?.family_name}</p>
-                            <p className="text-xs text-gray-400">{t('finance.varisankhya.category')}: {record.house_id?.family_id?.economic_status || 'Normal'}</p>
+                            <p className="text-xs text-gray-400">{t('finance.varisankhya.category')}: {record.house_id?.family_id?.economic_status || t('finance.varisankhya.normal')}</p>
                           </div>
                           <StatusBadge status={record.status} />
                         </div>
@@ -729,7 +729,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       </div>
                     ))}
                     {monthlyData.varisankhya.length === 0 && (
-                      <p className="py-12 text-center text-gray-500">No records found.</p>
+                      <p className="py-12 text-center text-gray-500">{t('finance.varisankhya.noRecordsFound')}</p>
                     )}
                   </div>
 
@@ -772,8 +772,8 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       <thead>
                         <tr className="border-b border-gray-100 dark:border-gray-800">
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.house')}</th>
-                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Family</th>
-                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Pending</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.family')}</th>
+                          <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.pending')}</th>
                           <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.varisankhya.amountDue')}</th>
                           <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                         </tr>
@@ -849,7 +849,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                       </div>
                     ))}
                     {defaultersData.defaulters.length === 0 && (
-                      <p className="py-12 text-center text-gray-500">No defaulters found. All houses are up to date!</p>
+                      <p className="py-12 text-center text-gray-500">{t('finance.varisankhya.noDefaultersFound')}</p>
                     )}
                   </div>
 
@@ -925,7 +925,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                                 <button
                                   onClick={() => setReceiptModal({ isOpen: true, record: payment })}
                                   className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                  title="View Receipt"
+                                  title={t('finance.varisankhya.viewReceipt')}
                                 >
                                   <Eye size={18} />
                                 </button>
@@ -977,7 +977,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         {paymentHistoryData.payments.length === 0 && (
                           <tr>
                             <td colSpan="6" className="py-12 text-center text-gray-500">
-                              No payment history found.
+                              {t('finance.varisankhya.noPaymentHistory')}
                             </td>
                           </tr>
                         )}
@@ -1068,10 +1068,10 @@ console.log(paymentHistoryData,'paymentHistoryData')
                         <span className="text-sm text-gray-600 dark:text-gray-400">{t('finance.varisankhya.totalCollected')}</span>
                         {dateFilter && (
                           <p className="text-xs text-gray-500">
-                            {dateFilter === 'today' && 'Today'}
-                            {dateFilter === 'this_month' && 'This Month'}
-                            {dateFilter === 'last_month' && 'Last Month'}
-                            {dateFilter === 'this_year' && 'This Year'}
+                            {dateFilter === 'today' && t('finance.varisankhya.today')}
+                            {dateFilter === 'this_month' && t('finance.varisankhya.thisMonth')}
+                            {dateFilter === 'last_month' && t('finance.varisankhya.lastMonth')}
+                            {dateFilter === 'this_year' && t('finance.varisankhya.thisYear')}
                             {dateFilter === 'custom' && `${customDateRange.from || '...'} to ${customDateRange.to || '...'}`}
                           </p>
                         )}

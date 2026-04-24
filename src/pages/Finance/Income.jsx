@@ -190,9 +190,9 @@ export const Income = () => {
       setIncomeCategories(incCats);
     } catch (error) {
       console.error('Error fetching categories:', error);
-      toast.error('Failed to fetch categories');
+      toast.error(t('finance.income.fetchCategoriesFailed'));
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     fetchCategories();
@@ -224,9 +224,9 @@ export const Income = () => {
       });
       setDueData(data);
     } catch {
-      toast.error('Failed to fetch due income');
+      toast.error(t('finance.income.fetchDueFailed'));
     }
-  }, [searchTerm, month, year, categoryFilter, statusFilter]);
+  }, [searchTerm, month, year, categoryFilter, statusFilter, t]);
 
   const fetchDirect = useCallback(async (page = 1) => {
     try {
@@ -236,9 +236,9 @@ export const Income = () => {
       });
       setDirectData(data);
     } catch {
-      toast.error('Failed to fetch direct income');
+      toast.error(t('finance.income.fetchDirectFailed'));
     }
-  }, [searchTerm, month, year, categoryFilter, paymentMethodFilter]);
+  }, [searchTerm, month, year, categoryFilter, paymentMethodFilter, t]);
 
   useEffect(() => {
     fetchSummary();
@@ -264,7 +264,7 @@ export const Income = () => {
         due_date: data.date
       };
       await createDueIncome(payload);
-      toast.success('Due income created successfully');
+      toast.success(t('finance.income.dueIncomeCreated'));
       setDueModal({ isOpen: false, income: null, isEdit: false });
       resetDue();
       setSelectedDueCategory(null);
@@ -285,7 +285,7 @@ export const Income = () => {
         due_date: data.date
       };
       await updateDueIncome(dueModal.income._id, payload);
-      toast.success('Due income updated successfully');
+      toast.success(t('finance.income.dueIncomeUpdated'));
       setDueModal({ isOpen: false, income: null, isEdit: false });
       resetDue();
       setSelectedDueCategory(null);
@@ -296,11 +296,11 @@ export const Income = () => {
   };
 
   const handleDeleteDue = async (id) => {
-    const result = await Swal.fire({ title: 'Are you sure?', text: 'This will delete the income record', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: 'Yes, delete it!' });
+    const result = await Swal.fire({ title: t('finance.income.deleteConfirm'), text: t('finance.income.deleteConfirmText'), icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: t('finance.income.yesDelete') });
     if (result.isConfirmed) {
       try {
         await deleteDueIncome(id);
-        toast.success('Income deleted successfully');
+        toast.success(t('finance.income.incomeDeleted'));
         fetchDue(); fetchSummary();
       } catch (error) {
         toast.error(error.response?.data?.message || 'Failed to delete');
@@ -311,12 +311,12 @@ export const Income = () => {
   const handleMarkPayment = async () => {
     try {
       await markDuePayment(paymentModal.income._id, paymentForm);
-      toast.success('Payment recorded successfully');
+      toast.success(t('finance.income.paymentRecorded'));
       setPaymentModal({ isOpen: false, income: null });
       setPaymentForm({ payment_amount: '', payment_method: 'cash', reference_no: '', notes: '' });
       fetchDue(); fetchSummary();
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to record payment');
+      toast.error(error.response?.data?.message || t('finance.income.paymentRecorded'));
     }
   };
 
@@ -330,7 +330,7 @@ export const Income = () => {
         payment_method: data.payment_method
       };
       await createDirectIncome(payload);
-      toast.success('Direct income recorded successfully');
+      toast.success(t('finance.income.directIncomeCreated'));
       setDirectModal({ isOpen: false, income: null, isEdit: false });
       resetDirect();
       setSelectedDirectCategory(null);
@@ -350,7 +350,7 @@ export const Income = () => {
         payment_method: data.payment_method
       };
       await updateDirectIncome(directModal.income._id, payload);
-      toast.success('Direct income updated successfully');
+      toast.success(t('finance.income.directIncomeUpdated'));
       setDirectModal({ isOpen: false, income: null, isEdit: false });
       resetDirect();
       setSelectedDirectCategory(null);
@@ -361,11 +361,11 @@ export const Income = () => {
   };
 
   const handleDeleteDirect = async (id) => {
-    const result = await Swal.fire({ title: 'Are you sure?', text: 'This will delete the income record', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: 'Yes, delete it!' });
+    const result = await Swal.fire({ title: t('finance.income.deleteConfirm'), text: t('finance.income.deleteConfirmText'), icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', cancelButtonColor: '#6b7280', confirmButtonText: t('finance.income.yesDelete') });
     if (result.isConfirmed) {
       try {
         await deleteDirectIncome(id);
-        toast.success('Income deleted successfully');
+        toast.success(t('finance.income.incomeDeleted'));
         fetchDirect(); fetchSummary();
       } catch (error) {
         toast.error(error.response?.data?.message || 'Failed to delete');
@@ -378,7 +378,7 @@ export const Income = () => {
       const data = await getIncomePaymentHistory(income._id);
       setHistoryModal({ isOpen: true, history: data.payments });
     } catch {
-      toast.error('Failed to fetch payment history');
+      toast.error(t('finance.income.fetchPaymentHistoryFailed'));
     }
   };
 
@@ -574,7 +574,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Overdue</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.overdue')}</p>
                 <h3 className="text-2xl font-bold text-red-600 mt-1">{summary?.due_based?.overdue_count || 0}</h3>
               </div>
               <div className="p-3 rounded-xl bg-red-500">
@@ -607,7 +607,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Cash Income</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.cashIncome')}</p>
                 <h3 className="text-2xl font-bold text-green-600 mt-1">₹{(summary?.direct?.cash_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
@@ -622,7 +622,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">UPI Income</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.upiIncome')}</p>
                 <h3 className="text-2xl font-bold text-purple-600 mt-1">₹{(summary?.direct?.upi_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-purple-500">
@@ -637,7 +637,7 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Bank Income</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.bankIncome')}</p>
                 <h3 className="text-2xl font-bold text-blue-600 mt-1">₹{(summary?.direct?.bank_income || 0).toLocaleString()}</h3>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
@@ -655,9 +655,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Today Total</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.todayTotal')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.today_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.today_count} collections</p>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.today_count} {t('finance.income.collections')}</p>
               </div>
               <div className="p-3 rounded-xl bg-blue-500">
                 <Calendar size={24} className="text-white" />
@@ -671,9 +671,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">This Month Total</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.thisMonthTotal')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.month_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.month_count} collections</p>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.month_count} {t('finance.income.collections')}</p>
               </div>
               <div className="p-3 rounded-xl bg-green-500">
                 <Wallet size={24} className="text-white" />
@@ -687,9 +687,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">House Contributions</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.houseContributions')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.house_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.house_count} houses</p>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.house_count} {t('finance.income.houses')}</p>
               </div>
               <div className="p-3 rounded-xl bg-purple-500">
                 <Building2 size={24} className="text-white" />
@@ -703,9 +703,9 @@ export const Income = () => {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400">External Contributions</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('finance.income.externalContributions')}</p>
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">₹{hadiyaSummary.external_total.toLocaleString()}</h3>
-                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.external_count} guests</p>
+                <p className="text-xs text-gray-400 mt-1">{hadiyaSummary.external_count} {t('finance.income.guests')}</p>
               </div>
               <div className="p-3 rounded-xl bg-orange-500">
                 <Heart size={24} className="text-white" />
@@ -728,7 +728,7 @@ export const Income = () => {
           >
             <div className="flex items-center justify-center gap-2">
               <Calendar size={18} />
-              Due Based Income
+              {t('finance.income.dueBasedIncome')}
             </div>
           </button>
           <button
@@ -754,7 +754,7 @@ export const Income = () => {
           >
             <div className="flex items-center justify-center gap-2">
               <Heart size={18} />
-              Quick Hadiya Collection
+              {t('finance.income.quickHadiya')}
             </div>
           </button>
         </div>
@@ -779,7 +779,7 @@ export const Income = () => {
                 value={categoryFilter ? { value: categoryFilter, label: activeTab === 'due' ? dueCategories.find(c => c.name === categoryFilter)?.name : incomeCategories.find(c => c.name === categoryFilter)?.name } : null}
                 onChange={(selected) => setCategoryFilter(selected ? selected.value : '')}
                 options={activeTab === 'due' ? dueCategories.map(c => ({ value: c.name, label: c.name })) : incomeCategories.map(c => ({ value: c.name, label: c.name }))}
-                placeholder="All Categories"
+                placeholder={t('finance.income.allCategories')}
                 className="w-48"
                 styles={selectStyles}
               />
@@ -790,10 +790,10 @@ export const Income = () => {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
-                  <option value="">All Status</option>
+                  <option value="">{t('finance.income.allStatus')}</option>
                   <option value="paid">{t('common.paid')}</option>
                   <option value="unpaid">{t('common.unpaid')}</option>
-                  <option value="overdue">Overdue</option>
+                  <option value="overdue">{t('finance.income.overdue')}</option>
                 </select>
               )}
 
@@ -803,7 +803,7 @@ export const Income = () => {
                   onChange={(e) => setPaymentMethodFilter(e.target.value)}
                   className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
-                  <option value="">All Methods</option>
+                  <option value="">{t('finance.income.allMethods')}</option>
                   <option value="cash">Cash</option>
                   <option value="upi">UPI</option>
                   <option value="bank">Bank</option>
@@ -841,7 +841,7 @@ export const Income = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Code</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.monthYear')}</th>
@@ -882,12 +882,12 @@ export const Income = () => {
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
                             {income.status !== 'paid' && (
-                              <button onClick={() => openPaymentModal(income)} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="Mark Payment"><IndianRupee size={18} /></button>
+                              <button onClick={() => openPaymentModal(income)} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title={t('finance.income.markPayment')}><IndianRupee size={18} /></button>
                             )}
-                            <button onClick={() => viewHistory(income)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View History"><History size={18} /></button>
-                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'due' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Receipt"><Printer size={18} /></button>
-                            <button onClick={() => openEditDue(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Edit"><Edit2 size={18} /></button>
-                            <button onClick={() => handleDeleteDue(income._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={18} /></button>
+                            <button onClick={() => viewHistory(income)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title={t('finance.income.viewHistory')}><History size={18} /></button>
+                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'due' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title={t('finance.income.receipt')}><Printer size={18} /></button>
+                            <button onClick={() => openEditDue(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title={t('common.edit')}><Edit2 size={18} /></button>
+                            <button onClick={() => handleDeleteDue(income._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title={t('common.delete')}><Trash2 size={18} /></button>
                           </div>
                         </td>
                       </tr>
@@ -898,7 +898,7 @@ export const Income = () => {
             </div>
             {dueData.pages > 1 && (
               <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
-                <p className="text-sm text-gray-500">Page {dueData.page} of {dueData.pages}</p>
+                <p className="text-sm text-gray-500">{t('finance.income.pageOf', { page: dueData.page, pages: dueData.pages })}</p>
                 <div className="flex gap-2">
                   <button onClick={() => fetchDue(dueData.page - 1)} disabled={dueData.page === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronLeft size={18} /></button>
                   <button onClick={() => fetchDue(dueData.page + 1)} disabled={dueData.page === dueData.pages} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronRight size={18} /></button>
@@ -915,7 +915,7 @@ export const Income = () => {
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Code</th>
+                    <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.date')}</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('common.category')}</th>
                     <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
@@ -962,10 +962,10 @@ export const Income = () => {
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
                             {/* FIX: Eye was used but not imported — now imported at top */}
-                            <button onClick={() => setViewModal({ isOpen: true, income })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="View"><Eye size={18} /></button>
-                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'direct' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Receipt"><Printer size={18} /></button>
-                            <button onClick={() => openEditDirect(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Edit"><Edit2 size={18} /></button>
-                            <button onClick={() => handleDeleteDirect(income._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={18} /></button>
+                            <button onClick={() => setViewModal({ isOpen: true, income })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title={t('common.view')}><Eye size={18} /></button>
+                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'direct' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title={t('finance.income.receipt')}><Printer size={18} /></button>
+                            <button onClick={() => openEditDirect(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title={t('common.edit')}><Edit2 size={18} /></button>
+                            <button onClick={() => handleDeleteDirect(income._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title={t('common.delete')}><Trash2 size={18} /></button>
                           </div>
                         </td>
                       </tr>
@@ -976,7 +976,7 @@ export const Income = () => {
             </div>
             {directData.pages > 1 && (
               <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
-                <p className="text-sm text-gray-500">Page {directData.page} of {directData.pages}</p>
+                <p className="text-sm text-gray-500">{t('finance.income.pageOf', { page: directData.page, pages: directData.pages })}</p>
                 <div className="flex gap-2">
                   <button onClick={() => fetchDirect(directData.page - 1)} disabled={directData.page === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronLeft size={18} /></button>
                   <button onClick={() => fetchDirect(directData.page + 1)} disabled={directData.page === directData.pages} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronRight size={18} /></button>
@@ -1050,10 +1050,10 @@ export const Income = () => {
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
-                    <select {...registerDue('payment_method', { required: 'Payment method is required' })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                      <option value="cash">Cash</option>
-                      <option value="upi">UPI</option>
-                      <option value="bank">Bank Transfer</option>
+                    <select {...registerDue('payment_method', { required: t('finance.income.paymentMethodRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
+                      <option value="cash">{t('finance.income.cash')}</option>
+                      <option value="upi">{t('finance.income.upi')}</option>
+                      <option value="bank">{t('finance.income.bankTransfer')}</option>
                     </select>
                     {dueErrors.payment_method && <p className="text-red-500 text-xs mt-1">{dueErrors.payment_method.message}</p>}
                   </div>
@@ -1128,9 +1128,9 @@ export const Income = () => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
                     <select {...registerDirect('payment_method', { required: t('finance.income.paymentMethodRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                      <option value="cash">Cash</option>
-                      <option value="upi">UPI</option>
-                      <option value="bank">Bank Transfer</option>
+                      <option value="cash">{t('finance.income.cash')}</option>
+                      <option value="upi">{t('finance.income.upi')}</option>
+                      <option value="bank">{t('finance.income.bankTransfer')}</option>
                     </select>
                     {directErrors.payment_method && <p className="text-red-500 text-xs mt-1">{directErrors.payment_method.message}</p>}
                   </div>
@@ -1153,7 +1153,7 @@ export const Income = () => {
             <motion.div key="payment-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-md">
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">Mark Payment</h2>
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.income.markPayment')}</h2>
                   <button onClick={() => setPaymentModal({ isOpen: false, income: null })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="p-6">
@@ -1179,24 +1179,24 @@ export const Income = () => {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.paymentMethod')}</label>
                       <select value={paymentForm.payment_method} onChange={(e) => setPaymentForm({ ...paymentForm, payment_method: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                        <option value="cash">Cash</option>
-                        <option value="upi">UPI</option>
-                        <option value="bank">Bank Transfer</option>
+                        <option value="cash">{t('finance.income.cash')}</option>
+                        <option value="upi">{t('finance.income.upi')}</option>
+                        <option value="bank">{t('finance.income.bankTransfer')}</option>
                       </select>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Reference No</label>
-                      <input type="text" value={paymentForm.reference_no} onChange={(e) => setPaymentForm({ ...paymentForm, reference_no: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="Optional" />
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.referenceNo')}</label>
+                      <input type="text" value={paymentForm.reference_no} onChange={(e) => setPaymentForm({ ...paymentForm, reference_no: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.optional')} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
-                      <textarea value={paymentForm.notes} onChange={(e) => setPaymentForm({ ...paymentForm, notes: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" rows="2" placeholder="Optional" />
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t('finance.income.notes')}</label>
+                      <textarea value={paymentForm.notes} onChange={(e) => setPaymentForm({ ...paymentForm, notes: e.target.value })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" rows="2" placeholder={t('finance.income.optional')} />
                     </div>
                   </div>
                 </div>
                 <div className="flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
                   <button onClick={() => setPaymentModal({ isOpen: false, income: null })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">{t('common.cancel')}</button>
-                  <button onClick={handleMarkPayment} className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">Record Payment</button>
+                  <button onClick={handleMarkPayment} className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">{t('finance.income.recordPayment')}</button>
                 </div>
               </div>
             </motion.div>
@@ -1217,7 +1217,7 @@ export const Income = () => {
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
                   {historyModal.history.length === 0 ? (
-                    <p className="text-center text-gray-500">No payment history found</p>
+                    <p className="text-center text-gray-500">{t('finance.income.noPaymentHistory')}</p>
                   ) : (
                     <div className="space-y-3">
                       {historyModal.history.map((payment, index) => (
