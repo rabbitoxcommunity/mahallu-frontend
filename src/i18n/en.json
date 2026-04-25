@@ -77,6 +77,38 @@
     "createStaff": "Create Staff",
     "createStaffDesc": "Add new staff members to the system"
   },
+  "public": {
+    "welcome": "Welcome to Mahallu Portal",
+    "verify": "Verify Family",
+    "viewDetails": "View Details",
+    "applyCertificate": "Apply Certificate",
+    "comingSoon": "Coming Soon",
+    "searchPlaceholder": "Search by mobile number or house name...",
+    "search": "Search",
+    "searchResults": "Search Results",
+    "noResults": "No results found",
+    "houseName": "House Name",
+    "headName": "Head Name",
+    "area": "Area",
+    "phone": "Phone",
+    "familyDetails": "Family Details",
+    "members": "Members",
+    "contact": "Contact",
+    "varisankhyaInfo": "Varisankhya Information",
+    "currentMonthDue": "Current Month Due",
+    "paid": "Paid",
+    "unpaid": "Unpaid",
+    "balance": "Balance",
+    "paymentHistory": "Payment History",
+    "status": "Status",
+    "relation": "Relation",
+    "gender": "Gender",
+    "age": "Age",
+    "familyHead": "Family Head",
+    "economicStatus": "Economic Status",
+    "backToSearch": "Back to Search",
+    "selectHouse": "Select a house to view details"
+  },
   "family": {
     "code": "Code",
     "familyName": "Family Name",
@@ -427,5 +459,124 @@
   "language": {
     "english": "English",
     "malayalam": "Malayalam"
+  },
+  "website": {
+    "header": {
+      "logo": "MahalluCRM",
+      "home": "Home",
+      "features": "Features",
+      "contact": "Contact",
+      "login": "Login"
+    },
+    "hero": {
+      "title": "Modern Mahallu Management System",
+      "subtitle": "Simplify your Mahallu committee operations with our comprehensive digital solution. Track finances, manage families, and ensure transparency - all in one place.",
+      "exploreFeatures": "Explore Features",
+      "visitPortal": "Visit Portal"
+    },
+    "problem": {
+      "title": "The Challenge",
+      "subtitle": "Traditional Mahallu management is time-consuming and error-prone",
+      "manualRecords": "Manual record-keeping leads to errors",
+      "lackTransparency": "Lack of financial transparency",
+      "difficultTracking": "Difficult to track payments and dues",
+      "noPublicAccess": "No public access for members",
+      "solution": "Our Solution",
+      "solutionDesc": "A complete digital platform that modernizes Mahallu management"
+    },
+    "features": {
+      "title": "Powerful Features",
+      "subtitle": "Everything you need to manage your Mahallu efficiently",
+      "varisankhya": {
+        "title": "Varisankhya Management",
+        "description": "Track monthly collections, manage defaulters, and generate payment receipts effortlessly"
+      },
+      "income": {
+        "title": "Income Tracking",
+        "description": "Monitor all income sources including donations, funds, and miscellaneous collections"
+      },
+      "expense": {
+        "title": "Expense Tracking",
+        "description": "Record and categorize expenses with detailed reports and audit trails"
+      },
+      "reports": {
+        "title": "Reports & Analytics",
+        "description": "Generate comprehensive financial reports and gain insights into your Mahallu's health"
+      },
+      "publicPortal": {
+        "title": "Public Portal",
+        "description": "Allow members to verify family details and check payment status online"
+      },
+      "multilanguage": {
+        "title": "Multi-language Support",
+        "description": "Available in English and Malayalam for maximum accessibility"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "subtitle": "Get started in 5 simple steps",
+      "step1": {
+        "title": "Register Mahallu",
+        "description": "Create your Mahallu account with basic details"
+      },
+      "step2": {
+        "title": "Add Families",
+        "description": "Register families and houses in your system"
+      },
+      "step3": {
+        "title": "Track Finance",
+        "description": "Start tracking income, expenses, and varisankhya"
+      },
+      "step4": {
+        "title": "Generate Reports",
+        "description": "Create reports for committee meetings and audits"
+      },
+      "step5": {
+        "title": "Public Access",
+        "description": "Enable public portal for member access"
+      }
+    },
+    "portalPreview": {
+      "title": "Subdomain-Based Portal",
+      "subtitle": "Each Mahallu gets its own branded portal",
+      "description": "Your Mahallu will have a dedicated subdomain like: yourmahallu.mahallucrm.com",
+      "benefits": {
+        "custom": "Custom branding",
+        "secure": "Secure access",
+        "dedicated": "Dedicated database"
+      }
+    },
+    "benefits": {
+      "title": "Why Choose Us?",
+      "subtitle": "Benefits that transform your Mahallu management",
+      "transparency": {
+        "title": "Complete Transparency",
+        "description": "All financial transactions are recorded and traceable"
+      },
+      "easyTracking": {
+        "title": "Easy Tracking",
+        "description": "Track payments, dues, and expenses with ease"
+      },
+      "mobileFriendly": {
+        "title": "Mobile-Friendly",
+        "description": "Access your data from anywhere, anytime"
+      },
+      "centralized": {
+        "title": "Centralized System",
+        "description": "All your Mahallu data in one secure location"
+      }
+    },
+    "cta": {
+      "title": "Start Your Mahallu Digitally Today",
+      "subtitle": "Join the modern Mahallu management revolution",
+      "contactUs": "Contact Us",
+      "requestDemo": "Request Demo"
+    },
+    "footer": {
+      "rights": "All rights reserved",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "contact": "Contact Us"
+    }
   }
 }

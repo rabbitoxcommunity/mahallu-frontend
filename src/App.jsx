@@ -28,6 +28,10 @@ import Expense from "./pages/Finance/Expense";
 import Reports from "./pages/Finance/Reports";
 import GeneralSettings from "./pages/Settings/GeneralSettings";
 import VarisankhyaConfig from "./pages/Settings/VarisankhyaConfig";
+import PublicHome from "./pages/public/Home";
+import PublicSearch from "./pages/public/Search";
+import PublicFamilyView from "./pages/public/FamilyView";
+import Landing from "./pages/Landing";
 
 function App() {
     return (
@@ -40,8 +44,16 @@ function App() {
                         theme="colored"
                     />
                     <Routes>
-                        {/* Public Route */}
-                        <Route path="/" element={<Login />} />
+                        {/* SaaS Landing Page */}
+                        <Route path="/" element={<Landing />} />
+
+                        {/* Public Portal Routes */}
+                        <Route path="/public" element={<PublicHome />} />
+                        <Route path="/public/search" element={<PublicSearch />} />
+                        <Route path="/public/family/:id" element={<PublicFamilyView />} />
+
+                        {/* Login Route */}
+                        <Route path="/login" element={<Login />} />
 
                         {/* Protected Routes Wrapper */}
                         <Route element={<PrivateRoute />}>
