@@ -2,7 +2,8 @@ import {
   Wallet,
   LayoutDashboard,
   Box,
-  Settings
+  Settings,
+  Heart
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -49,6 +50,17 @@ export const permissionModules = [
     ]
   },
   {
+    key: 'marriages',
+    label: "marriage.title",
+    icon: Heart,
+    path: "/admin/marriages",
+    description: 'Manage marriage records and certificates',
+    roles: ["admin", "superAdmin"],
+    subItems: [
+      { label: "marriage.title", path: "/admin/marriages", roles: ["admin", "superAdmin"] }
+    ]
+  },
+    {
     key: 'settings',
     label: "sidebar.settings",
     icon: Settings,

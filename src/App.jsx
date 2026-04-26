@@ -28,9 +28,11 @@ import Expense from "./pages/Finance/Expense";
 import Reports from "./pages/Finance/Reports";
 import GeneralSettings from "./pages/Settings/GeneralSettings";
 import VarisankhyaConfig from "./pages/Settings/VarisankhyaConfig";
+import Marriages from "./pages/Admin/Marriages";
 import PublicHome from "./pages/public/Home";
 import PublicSearch from "./pages/public/Search";
 import PublicFamilyView from "./pages/public/FamilyView";
+import MarriageCertificate from "./pages/Public/MarriageCertificate";
 import Landing from "./pages/Landing";
 
 function App() {
@@ -51,6 +53,7 @@ function App() {
                         <Route path="/public" element={<PublicHome />} />
                         <Route path="/public/search" element={<PublicSearch />} />
                         <Route path="/public/family/:id" element={<PublicFamilyView />} />
+                        <Route path="/certificate/marriage" element={<MarriageCertificate />} />
 
                         {/* Login Route */}
                         <Route path="/login" element={<Login />} />
@@ -93,6 +96,9 @@ function App() {
                             {/* Settings Routes */}
                             <Route path="/settings/general" element={<GeneralSettings />} />
                             <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
+                            
+                            {/* Admin Routes */}
+                            <Route path="/admin/marriages" element={<Marriages />} />
                             
                             {/* Add other protected pages here */}
                         </Route>
