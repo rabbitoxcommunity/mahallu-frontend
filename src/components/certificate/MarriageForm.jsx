@@ -27,39 +27,41 @@ const MarriageForm = ({ onSubmit, onCancel, initialValues = {} }) => {
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
             {t('certificate.groomName')}
           </h3>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('certificate.groomName')}
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                {...register('groom_name', { required: t('certificate.groomNameRequired') })}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-                placeholder={t('certificate.groomName')}
-              />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('certificate.groomName')}
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  {...register('groom_name', { required: t('certificate.groomNameRequired') })}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                  placeholder={t('certificate.groomName')}
+                />
+              </div>
+              {errors.groom_name && (
+                <p className="mt-1 text-sm text-red-600">{errors.groom_name.message}</p>
+              )}
             </div>
-            {errors.groom_name && (
-              <p className="mt-1 text-sm text-red-600">{errors.groom_name.message}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('certificate.groomFather')}
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                {...register('groom_father', { required: t('certificate.groomFatherRequired') })}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-                placeholder={t('certificate.groomFather')}
-              />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('certificate.groomFather')}
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  {...register('groom_father', { required: t('certificate.groomFatherRequired') })}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                  placeholder={t('certificate.groomFather')}
+                />
+              </div>
+              {errors.groom_father && (
+                <p className="mt-1 text-sm text-red-600">{errors.groom_father.message}</p>
+              )}
             </div>
-            {errors.groom_father && (
-              <p className="mt-1 text-sm text-red-600">{errors.groom_father.message}</p>
-            )}
           </div>
         </div>
 
@@ -68,39 +70,41 @@ const MarriageForm = ({ onSubmit, onCancel, initialValues = {} }) => {
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
             {t('certificate.brideName')}
           </h3>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('certificate.brideName')}
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                {...register('bride_name', { required: t('certificate.brideNameRequired') })}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-                placeholder={t('certificate.brideName')}
-              />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('certificate.brideName')}
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  {...register('bride_name', { required: t('certificate.brideNameRequired') })}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                  placeholder={t('certificate.brideName')}
+                />
+              </div>
+              {errors.bride_name && (
+                <p className="mt-1 text-sm text-red-600">{errors.bride_name.message}</p>
+              )}
             </div>
-            {errors.bride_name && (
-              <p className="mt-1 text-sm text-red-600">{errors.bride_name.message}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('certificate.brideFather')}
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                {...register('bride_father', { required: t('certificate.brideFatherRequired') })}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-                placeholder={t('certificate.brideFather')}
-              />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('certificate.brideFather')}
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  {...register('bride_father', { required: t('certificate.brideFatherRequired') })}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                  placeholder={t('certificate.brideFather')}
+                />
+              </div>
+              {errors.bride_father && (
+                <p className="mt-1 text-sm text-red-600">{errors.bride_father.message}</p>
+              )}
             </div>
-            {errors.bride_father && (
-              <p className="mt-1 text-sm text-red-600">{errors.bride_father.message}</p>
-            )}
           </div>
         </div>
 
@@ -109,58 +113,60 @@ const MarriageForm = ({ onSubmit, onCancel, initialValues = {} }) => {
           <h3 className="text-sm font-semibold text-gray-900 dark:text-white">
             {t('certificate.marriageDate')}
           </h3>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('certificate.marriageDate')}
-            </label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="date"
-                {...register('date', { required: t('certificate.dateRequired') })}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-              />
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('certificate.marriageDate')}
+              </label>
+              <div className="relative">
+                <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="date"
+                  {...register('date', { required: t('certificate.dateRequired') })}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                />
+              </div>
+              {errors.date && (
+                <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
+              )}
             </div>
-            {errors.date && (
-              <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('certificate.place')}
-            </label>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="text"
-                {...register('place', { required: t('certificate.placeRequired') })}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-                placeholder={t('certificate.place')}
-              />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('certificate.place')}
+              </label>
+              <div className="relative">
+                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  {...register('place', { required: t('certificate.placeRequired') })}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                  placeholder={t('certificate.place')}
+                />
+              </div>
+              {errors.place && (
+                <p className="mt-1 text-sm text-red-600">{errors.place.message}</p>
+              )}
             </div>
-            {errors.place && (
-              <p className="mt-1 text-sm text-red-600">{errors.place.message}</p>
-            )}
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('certificate.mobile')}
-            </label>
-            <div className="relative">
-              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
-              <input
-                type="tel"
-                {...register('mobile', { 
-                  required: t('certificate.mobileRequired'),
-                  pattern: { value: /^[0-9]{10}$/, message: 'Invalid mobile number' }
-                })}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
-                placeholder="9876543210"
-              />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                {t('certificate.mobile')}
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="tel"
+                  {...register('mobile', {
+                    required: t('certificate.mobileRequired'),
+                    pattern: { value: /^[0-9]{10}$/, message: 'Invalid mobile number' }
+                  })}
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+                  placeholder="9876543210"
+                />
+              </div>
+              {errors.mobile && (
+                <p className="mt-1 text-sm text-red-600">{errors.mobile.message}</p>
+              )}
             </div>
-            {errors.mobile && (
-              <p className="mt-1 text-sm text-red-600">{errors.mobile.message}</p>
-            )}
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
