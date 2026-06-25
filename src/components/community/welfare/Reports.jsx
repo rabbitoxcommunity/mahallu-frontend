@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileText, RefreshCw, Printer, IndianRupee, Users, BarChart3 } from 'lucide-react';
+import { FileText, RefreshCw, Printer, IndianRupee, Wallet, BarChart3 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
@@ -271,8 +271,9 @@ const Reports = () => {
           value={formatAmount(data?.summary?.total_amount)} color="bg-gradient-to-br from-blue-500 to-blue-600" />
         <SummaryCard icon={BarChart3} label={t('welfare.reports.totalDistributions')}
           value={data?.summary?.total_distributions || 0} color="bg-gradient-to-br from-green-500 to-green-600" />
-        <SummaryCard icon={Users} label={t('welfare.reports.uniqueFamilies')}
-          value={data?.summary?.unique_families || 0} color="bg-gradient-to-br from-purple-500 to-purple-600" />
+        <SummaryCard icon={Wallet} label="Total Available Balance"
+          value={formatAmount(programs.reduce((sum, p) => sum + (p.balance || 0), 0))}
+          color="bg-gradient-to-br from-emerald-500 to-emerald-600" />
       </div>
 
       {!data || (data.distributions?.length === 0) ? (

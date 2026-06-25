@@ -6,8 +6,7 @@ import {
   Users,
   Gift,
   FolderHeart,
-  BarChart3,
-  HandHeart
+  BarChart3
 } from 'lucide-react';
 import WelfareDashboard from '../../components/community/welfare/Dashboard';
 import Beneficiaries from '../../components/community/welfare/Beneficiaries';
@@ -62,18 +61,13 @@ const Welfare = () => {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0">
-          <HandHeart size={20} className="text-white" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            {t('welfare.title')}
-          </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-            {t('welfare.description')}
-          </p>
-        </div>
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+          {t('welfare.title')}
+        </h1>
+        <p className="text-base text-gray-500 dark:text-gray-400 mt-0.5">
+          {t('welfare.description')}
+        </p>
       </div>
 
       {/* Tab Navigation */}
