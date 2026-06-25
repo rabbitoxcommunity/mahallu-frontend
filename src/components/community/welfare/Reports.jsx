@@ -5,9 +5,42 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
+import Select from 'react-select';
 import { getWelfareReports, getWelfarePrograms } from '../../../api/welfareService';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+
+const getSelectStyles = () => ({
+  control: (base, state) => ({
+    ...base,
+    backgroundColor: 'transparent',
+    borderColor: state.isFocused ? '#0B65F6' : 'transparent',
+    borderRadius: '0.75rem',
+    minHeight: '42px',
+    boxShadow: state.isFocused ? '0 0 0 1px #0B65F6' : 'none',
+    '&:hover': { borderColor: '#0B65F6' }
+  }),
+  menu: (base) => ({
+    ...base,
+    borderRadius: '0.75rem',
+    border: '1px solid #e5e7eb',
+    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
+    zIndex: 100
+  }),
+  option: (base, state) => ({
+    ...base,
+    fontSize: '0.875rem',
+    backgroundColor: state.isSelected ? '#0B65F6' : state.isFocused ? '#f3f4f6' : 'transparent',
+    color: state.isSelected ? '#fff' : '#374151',
+    cursor: 'pointer'
+  }),
+  placeholder: (base) => ({ ...base, color: '#9ca3af', fontSize: '0.875rem' }),
+  singleValue: (base) => ({ ...base, color: 'inherit', fontSize: '0.875rem' }),
+  input: (base) => ({ ...base, color: 'inherit', fontSize: '0.875rem' }),
+  clearIndicator: (base) => ({ ...base, padding: '4px', cursor: 'pointer' }),
+  dropdownIndicator: (base) => ({ ...base, padding: '4px' }),
+  noOptionsMessage: (base) => ({ ...base, fontSize: '0.875rem' })
+});
 
 const formatAmount = (n) => `₹${(n || 0).toLocaleString('en-IN')}`;
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-IN') : '—';
@@ -39,14 +72,18 @@ const Reports = () => {
   const [filters, setFilters] = useState({
     from_date: '',
     to_date: '',
-    program_id: '',
-    funding_source: '',
-    distribution_type: ''
+    program_id: null,
+    funding_source: null,
+    distribution_type: null
   });
 
   useEffect(() => {
     getWelfarePrograms({ limit: 100 }).then(d => setPrograms(d.programs || [])).catch(() => {});
   }, []);
+
+  const programOptions = programs.map(p => ({ value: p._id, label: p.program_name }));
+  const sourceOptions = FUNDING_SOURCES.map(s => ({ value: s, label: s }));
+  const typeOptions = DIST_TYPES.map(t => ({ value: t, label: t }));
 
   const fetchData = useCallback(async () => {
     try {
@@ -54,9 +91,9 @@ const Reports = () => {
       const params = {};
       if (filters.from_date) params.from_date = filters.from_date;
       if (filters.to_date) params.to_date = filters.to_date;
-      if (filters.program_id) params.program_id = filters.program_id;
-      if (filters.funding_source) params.funding_source = filters.funding_source;
-      if (filters.distribution_type) params.distribution_type = filters.distribution_type;
+      if (filters.program_id) params.program_id = filters.program_id.value;
+      if (filters.funding_source) params.funding_source = filters.funding_source.value;
+      if (filters.distribution_type) params.distribution_type = filters.distribution_type.value;
       const result = await getWelfareReports(params);
       setData(result);
     } catch (e) {
@@ -69,7 +106,7 @@ const Reports = () => {
 
   const handleApply = () => fetchData();
   const handleClear = () => {
-    setFilters({ from_date: '', to_date: '', program_id: '', funding_source: '', distribution_type: '' });
+    setFilters({ from_date: '', to_date: '', program_id: null, funding_source: null, distribution_type: null });
   };
 
   const handlePrint = () => {
@@ -125,66 +162,105 @@ const Reports = () => {
     doc.save('welfare-report.pdf');
   };
 
-  const inputClass = 'py-2.5 px-3 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500';
+  const dateInputClass = 'w-full py-2.5 px-3 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500';
+  const selectWrapClass = 'bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl';
+  const labelClass = 'block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2';
 
   return (
     <div className="space-y-5">
       {/* Filters Panel */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-5 border border-gray-100 dark:border-gray-800">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Filters</h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          <div className="col-span-1">
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">{t('welfare.reports.fromDate')}</label>
-            <input type="date" value={filters.from_date}
-              onChange={e => setFilters(f => ({ ...f, from_date: e.target.value }))}
-              className={inputClass} />
-          </div>
-          <div className="col-span-1">
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">{t('welfare.reports.toDate')}</label>
-            <input type="date" value={filters.to_date}
-              onChange={e => setFilters(f => ({ ...f, to_date: e.target.value }))}
-              className={inputClass} />
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">{t('welfare.reports.filterProgram')}</label>
-            <select value={filters.program_id} onChange={e => setFilters(f => ({ ...f, program_id: e.target.value }))} className={inputClass + ' w-full'}>
-              <option value="">{t('welfare.reports.allPrograms')}</option>
-              {programs.map(p => <option key={p._id} value={p._id}>{p.program_name}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">{t('welfare.reports.filterSource')}</label>
-            <select value={filters.funding_source} onChange={e => setFilters(f => ({ ...f, funding_source: e.target.value }))} className={inputClass + ' w-full'}>
-              <option value="">{t('welfare.reports.allSources')}</option>
-              {FUNDING_SOURCES.map(s => <option key={s} value={s}>{s}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1.5">{t('welfare.reports.filterType')}</label>
-            <select value={filters.distribution_type} onChange={e => setFilters(f => ({ ...f, distribution_type: e.target.value }))} className={inputClass + ' w-full'}>
-              <option value="">{t('welfare.reports.allTypes')}</option>
-              {DIST_TYPES.map(tp => <option key={tp} value={tp}>{tp}</option>)}
-            </select>
+        <div className="flex items-center justify-between mb-5">
+          <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Filters</h3>
+          <div className="flex items-center gap-2">
+            <button onClick={handlePrint}
+              className="flex items-center gap-1.5 px-3 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <Printer size={13} /> {t('welfare.reports.print')}
+            </button>
+            <button onClick={handleExportPDF}
+              className="flex items-center gap-1.5 px-3 py-2 bg-red-600 text-white rounded-xl text-xs font-medium hover:bg-red-700 transition-colors">
+              <FileText size={13} /> {t('welfare.reports.exportPDF')}
+            </button>
           </div>
         </div>
-        <div className="flex items-center gap-3 mt-4">
-          <button onClick={handleApply} disabled={loading}
-            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm font-medium disabled:opacity-60">
+
+        {/* 5-column filter row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-5">
+          <div>
+            <label className={labelClass}>{t('welfare.reports.fromDate')}</label>
+            <input
+              type="date"
+              value={filters.from_date}
+              onChange={e => setFilters(f => ({ ...f, from_date: e.target.value }))}
+              className={dateInputClass}
+            />
+          </div>
+          <div>
+            <label className={labelClass}>{t('welfare.reports.toDate')}</label>
+            <input
+              type="date"
+              value={filters.to_date}
+              onChange={e => setFilters(f => ({ ...f, to_date: e.target.value }))}
+              className={dateInputClass}
+            />
+          </div>
+          <div>
+            <label className={labelClass}>{t('welfare.reports.filterProgram')}</label>
+            <div className={selectWrapClass}>
+              <Select
+                options={programOptions}
+                value={filters.program_id}
+                onChange={opt => setFilters(f => ({ ...f, program_id: opt }))}
+                placeholder="All Programs"
+                styles={getSelectStyles()}
+                isClearable
+                isSearchable
+              />
+            </div>
+          </div>
+          <div>
+            <label className={labelClass}>{t('welfare.reports.filterSource')}</label>
+            <div className={selectWrapClass}>
+              <Select
+                options={sourceOptions}
+                value={filters.funding_source}
+                onChange={opt => setFilters(f => ({ ...f, funding_source: opt }))}
+                placeholder="All Sources"
+                styles={getSelectStyles()}
+                isClearable
+              />
+            </div>
+          </div>
+          <div>
+            <label className={labelClass}>{t('welfare.reports.filterType')}</label>
+            <div className={selectWrapClass}>
+              <Select
+                options={typeOptions}
+                value={filters.distribution_type}
+                onChange={opt => setFilters(f => ({ ...f, distribution_type: opt }))}
+                placeholder="All Types"
+                styles={getSelectStyles()}
+                isClearable
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+          <button
+            onClick={handleApply}
+            disabled={loading}
+            className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 text-sm font-medium disabled:opacity-60 transition-colors"
+          >
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
             {t('welfare.reports.applyFilters')}
           </button>
-          <button onClick={handleClear}
-            className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-gray-700">
+          <button
+            onClick={handleClear}
+            className="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          >
             {t('welfare.reports.clearFilters')}
-          </button>
-          <div className="flex-1" />
-          <button onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl text-sm hover:bg-gray-200 dark:hover:bg-gray-700">
-            <Printer size={14} /> {t('welfare.reports.print')}
-          </button>
-          <button onClick={handleExportPDF}
-            className="flex items-center gap-2 px-4 py-2.5 bg-red-600 text-white rounded-xl text-sm hover:bg-red-700">
-            <FileText size={14} /> {t('welfare.reports.exportPDF')}
           </button>
         </div>
       </div>
