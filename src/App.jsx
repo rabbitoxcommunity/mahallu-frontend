@@ -29,6 +29,7 @@ import Reports from "./pages/Finance/Reports";
 import GeneralSettings from "./pages/Settings/GeneralSettings";
 import VarisankhyaConfig from "./pages/Settings/VarisankhyaConfig";
 import Marriages from "./pages/Admin/Marriages";
+import Welfare from "./pages/community/Welfare";
 import PublicHome from "./pages/public/Home";
 import PublicSearch from "./pages/public/Search";
 import PublicFamilyView from "./pages/public/FamilyView";
@@ -97,6 +98,9 @@ function App() {
                             <Route path="/settings/general" element={<GeneralSettings />} />
                             <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
                             
+                            {/* Community Routes */}
+                            <Route path="/community/welfare" element={<Welfare />} />
+
                             {/* Admin Routes */}
                             <Route path="/admin/marriages" element={<Marriages />} />
                             

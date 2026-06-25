@@ -3,7 +3,8 @@ import {
   LayoutDashboard,
   Box,
   Settings,
-  Heart
+  Heart,
+  HandHeart
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -58,6 +59,17 @@ export const permissionModules = [
     roles: ["admin", "superAdmin"],
     subItems: [
       { label: "marriage.title", path: "/admin/marriages", roles: ["admin", "superAdmin"] }
+    ]
+  },
+  {
+    key: 'community',
+    label: 'sidebar.community',
+    icon: HandHeart,
+    path: '/community/welfare',
+    description: 'Manage community welfare programs',
+    roles: ['admin', 'superAdmin'],
+    subItems: [
+      { label: 'sidebar.welfare', path: '/community/welfare', roles: ['admin', 'superAdmin'] }
     ]
   },
     {
