@@ -3,7 +3,6 @@ import {
   LayoutDashboard,
   Box,
   Settings,
-  Heart,
   HandHeart,
   BookOpen
 } from 'lucide-react';
@@ -52,17 +51,6 @@ export const permissionModules = [
     ]
   },
   {
-    key: 'marriages',
-    label: "marriage.title",
-    icon: Heart,
-    path: "/admin/marriages",
-    description: 'Manage marriage records and certificates',
-    roles: ["admin", "superAdmin"],
-    subItems: [
-      { label: "marriage.title", path: "/admin/marriages", roles: ["admin", "superAdmin"] }
-    ]
-  },
-  {
     key: 'community',
     label: 'sidebar.community',
     icon: HandHeart,
@@ -71,7 +59,8 @@ export const permissionModules = [
     roles: ['admin', 'superAdmin'],
     subItems: [
       { label: 'sidebar.welfare', path: '/community/welfare', roles: ['admin', 'superAdmin'] },
-      { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] }
+      { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] },
+      { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] }
     ]
   },
     {
