@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FileText,
   Plus,
   Search,
-  RefreshCw
+  RefreshCw,
+  X,
+  ChevronLeft,
+  ChevronRight
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import {
@@ -27,6 +30,8 @@ const Marriages = () => {
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const [inputValue, setInputValue] = useState('');
+  const debounceRef = useRef(null);
 
   const [showForm, setShowForm] = useState(false);
   const [editingMarriage, setEditingMarriage] = useState(null);
@@ -36,18 +41,14 @@ const Marriages = () => {
   });
 
   useEffect(() => {
-    fetchMarriages();
+    fetchMarriages(page, searchTerm);
   }, [page, searchTerm]);
 
-  const fetchMarriages = async () => {
+  const fetchMarriages = async (currentPage, currentSearch) => {
     try {
       setLoading(true);
-      const params = {
-        page,
-        limit: 10
-      };
-      if (searchTerm) params.search = searchTerm;
-
+      const params = { page: currentPage, limit: 10 };
+      if (currentSearch) params.search = currentSearch;
       const data = await getAllMarriages(params);
       setMarriages(data.marriages);
       setTotal(data.total);
@@ -58,6 +59,30 @@ const Marriages = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSearchInput = (e) => {
+    const value = e.target.value;
+    setInputValue(value);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setPage(1);
+      setSearchTerm(value);
+    }, 400);
+  };
+
+  const clearSearch = () => {
+    setInputValue('');
+    setSearchTerm('');
+    setPage(1);
+    clearTimeout(debounceRef.current);
+  };
+
+  const getPageNumbers = () => {
+    if (pages <= 7) return Array.from({ length: pages }, (_, i) => i + 1);
+    if (page <= 4) return [1, 2, 3, 4, 5, '...', pages];
+    if (page >= pages - 3) return [1, '...', pages - 4, pages - 3, pages - 2, pages - 1, pages];
+    return [1, '...', page - 1, page, page + 1, '...', pages];
   };
 
   const handleCreate = async (data) => {
@@ -209,26 +234,39 @@ const Marriages = () => {
 
       {/* Search */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-4 border border-gray-100 dark:border-gray-800 mb-6">
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
             <input
               type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder={`${t('certificate.marriageId')} / ${t('certificate.groomName')} / ${t('certificate.brideName')} / ${t('certificate.mobile')}`}
-              className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+              value={inputValue}
+              onChange={handleSearchInput}
+              placeholder="Search by Marriage ID, Groom Name, Bride Name or Mobile..."
+              className="w-full pl-10 pr-10 py-2.5 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
             />
+            {inputValue && (
+              <button
+                onClick={clearSearch}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+              >
+                <X size={16} />
+              </button>
+            )}
           </div>
           <button
-            onClick={fetchMarriages}
+            onClick={() => fetchMarriages(page, searchTerm)}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 text-sm"
           >
-            <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
+            <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
             {t('common.refresh')}
           </button>
         </div>
+        {searchTerm && (
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            {loading ? 'Searching…' : `${total} result${total !== 1 ? 's' : ''} for "${searchTerm}"`}
+          </p>
+        )}
       </div>
 
       {/* Form Modal */}
@@ -268,25 +306,46 @@ const Marriages = () => {
       />
 
       {/* Pagination */}
-      {pages > 1 && (
-        <div className="flex items-center justify-between mt-6 px-4 py-3 bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800">
-          <p className="text-sm text-gray-500">
-            {t('common.showing')} {((page - 1) * 10) + 1} to {Math.min(page * 10, total)} of {total}
+      {total > 0 && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 mt-6 px-4 py-3 bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Showing {((page - 1) * 10) + 1}–{Math.min(page * 10, total)} of {total} records
           </p>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => setPage(p => Math.max(1, p - 1))}
               disabled={page === 1}
-              className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg disabled:opacity-50"
+              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {t('common.previous')}
+              <ChevronLeft size={16} />
             </button>
+
+            {getPageNumbers().map((num, idx) =>
+              num === '...'
+                ? (
+                  <span key={`ellipsis-${idx}`} className="px-2 text-gray-400 text-sm select-none">…</span>
+                )
+                : (
+                  <button
+                    key={num}
+                    onClick={() => setPage(num)}
+                    className={`min-w-8 h-8 rounded-lg text-sm font-medium transition-colors ${
+                      page === num
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    }`}
+                  >
+                    {num}
+                  </button>
+                )
+            )}
+
             <button
               onClick={() => setPage(p => Math.min(pages, p + 1))}
               disabled={page === pages}
-              className="px-3 py-1 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-lg disabled:opacity-50"
+              className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed"
             >
-              {t('common.next')}
+              <ChevronRight size={16} />
             </button>
           </div>
         </div>
