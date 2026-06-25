@@ -4,7 +4,8 @@ import {
   Box,
   Settings,
   Heart,
-  HandHeart
+  HandHeart,
+  BookOpen
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -69,7 +70,8 @@ export const permissionModules = [
     description: 'Manage community welfare programs',
     roles: ['admin', 'superAdmin'],
     subItems: [
-      { label: 'sidebar.welfare', path: '/community/welfare', roles: ['admin', 'superAdmin'] }
+      { label: 'sidebar.welfare', path: '/community/welfare', roles: ['admin', 'superAdmin'] },
+      { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] }
     ]
   },
     {

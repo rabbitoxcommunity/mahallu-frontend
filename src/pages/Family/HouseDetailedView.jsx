@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Home, MapPin, Phone, Users, User, Calendar, Droplets, Briefcase, Heart, Edit, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
 
 export default function HouseDetailedView() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
     
     const [house, setHouse] = useState(null);
     const [members, setMembers] = useState([]);
@@ -112,9 +114,13 @@ export default function HouseDetailedView() {
         },
         {
             header: "സ്റ്റാറ്റസ് (Status)",
-            cell: (row) => (
+            cell: (row) => row.is_deceased ? (
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                    {t('family.deceased')}
+                </span>
+            ) : (
                 <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${row.is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
-                    {row.is_active ? 'Active' : 'Inactive'}
+                    {row.is_active ? t('family.active') : t('family.inactive')}
                 </span>
             )
         }

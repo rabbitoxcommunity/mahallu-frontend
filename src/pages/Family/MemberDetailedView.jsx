@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, User, Home, Calendar, Phone, Mail, Droplets, Briefcase, GraduationCap, Heart, Activity, Stethoscope, Star } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 
 export default function MemberDetailedView() {
     const { id } = useParams();
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     const [member, setMember] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -99,11 +101,18 @@ export default function MemberDetailedView() {
                             </div>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 shrink-0 self-start md:self-auto ml-[80px] md:ml-0">
-                            <span className={`inline-block px-3 py-1.5 rounded-lg  font-bold ${member.is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
-                                {member.is_active ? 'Active Status' : 'Inactive Status'}
-                            </span>
+                            {member.is_deceased ? (
+                                <span className="inline-block px-3 py-1.5 rounded-lg font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400">
+                                    {t('family.deceased')}
+                                </span>
+                            ) : (
+                                <span className={`inline-block px-3 py-1.5 rounded-lg font-bold ${member.is_active ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'}`}>
+                                    {member.is_active ? t('family.active') : t('family.inactive')}
+                                </span>
+                            )}
                             {member.yateem_status && (
-                                <span className={`inline-block px-3 py-1.5 rounded-lg  font-bold bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400`}>
+                                <span className="inline-block px-3 py-1.5 rounded-lg font-bold bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400">
+                                    Yateem
                                 </span>
                             )}
                         </div>
@@ -159,6 +168,17 @@ export default function MemberDetailedView() {
                                     </div>
                                 </div>
                             </div>
+                            {member.is_deceased && member.date_of_death && (
+                                <div className="mt-4 flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+                                    <Calendar size={16} className="text-gray-500 mt-0.5 shrink-0" />
+                                    <div>
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">{t('family.dateOfDeath')}</p>
+                                        <p className="text-gray-900 dark:text-gray-200 font-medium">
+                                            {new Date(member.date_of_death).toLocaleDateString()}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {/* Section: Contact & Education */}
