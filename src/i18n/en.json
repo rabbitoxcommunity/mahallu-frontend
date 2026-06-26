@@ -117,7 +117,9 @@
       "allStatus": "All Status",
       "allPrograms": "All Programs",
       "distributionCount": "Distributions",
-      "neverAssisted": "Never"
+      "neverAssisted": "Never",
+      "yes": "Yes",
+      "no": "No"
     },
     "distribution": {
       "title": "Distribution",

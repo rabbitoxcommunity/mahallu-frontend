@@ -117,7 +117,9 @@
       "allStatus": "എല്ലാ നിലകളും",
       "allPrograms": "എല്ലാ പദ്ധതികളും",
       "distributionCount": "വിതരണങ്ങൾ",
-      "neverAssisted": "ഒരിക്കലുമില്ല"
+      "neverAssisted": "ഒരിക്കലുമില്ല",
+      "yes": "അതെ",
+      "no": "അല്ല"
     },
     "distribution": {
       "title": "വിതരണം",
