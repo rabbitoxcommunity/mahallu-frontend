@@ -7,7 +7,7 @@ import {
   Gift,
   FolderHeart,
   BarChart3
-} from 'lucide-react';
+} from 'lucide-react';;;
 import WelfareDashboard from '../../components/community/welfare/Dashboard';
 import Beneficiaries from '../../components/community/welfare/Beneficiaries';
 import Distribution from '../../components/community/welfare/Distribution';

@@ -4,7 +4,8 @@ import {
   Box,
   Settings,
   HandHeart,
-  BookOpen
+  BookOpen,
+  MessageSquare
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -60,7 +61,8 @@ export const permissionModules = [
     subItems: [
       { label: 'sidebar.welfare', path: '/community/welfare', roles: ['admin', 'superAdmin'] },
       { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] },
-      { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] }
+      { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] },
+      { label: 'sidebar.communication', path: '/community/communication', roles: ['admin', 'superAdmin'] }
     ]
   },
     {

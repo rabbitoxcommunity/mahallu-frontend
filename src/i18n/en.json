@@ -72,6 +72,7 @@
     "community": "Community",
     "welfare": "Welfare",
     "deathRegistry": "Death Registry",
+    "communication": "Communication",
     "settings": "Settings",
     "incomeCategory": "Income Category"
   },
@@ -1100,6 +1101,197 @@
       "witnessedBy": "Witnessed by",
       "signature": "Signature",
       "seal": "Seal"
+    }
+  },
+  "comm": {
+    "title": "Communication Center",
+    "description": "Manage and publish announcements for your community",
+    "tabs": {
+      "announcements": "Announcements",
+      "templates": "Templates",
+      "published": "Published",
+      "archive": "Archive",
+      "settings": "Settings"
+    },
+    "form": {
+      "newTitle": "New Announcement",
+      "editTitle": "Edit Announcement",
+      "subtitle": "Create and preview your announcement message",
+      "type": "Announcement Type",
+      "typeRequired": "Type is required",
+      "typePlaceholder": "Select type",
+      "titleLabel": "Title",
+      "titleRequired": "Title is required",
+      "titlePlaceholder": "Enter announcement title",
+      "bodyLabel": "Description",
+      "bodyRequired": "Description is required",
+      "bodyPlaceholder": "Enter the announcement message body...",
+      "announcementDate": "Announcement Date",
+      "visibility": "Visibility",
+      "visibilityPublic": "Public",
+      "visibilityMembers": "Members Only",
+      "visibilityCommittee": "Committee Only"
+    },
+    "preview": {
+      "title": "Live Preview",
+      "empty": "Fill the form to see your message preview",
+      "salutation": "Assalamu Alaikum",
+      "defaultOrg": "Mahallu Office",
+      "defaultSig": "Secretary"
+    },
+    "actions": {
+      "newAnnouncement": "New Announcement",
+      "copy": "Copy",
+      "share": "Share",
+      "publish": "Publish",
+      "saveDraft": "Save Draft",
+      "archive": "Archive",
+      "restore": "Restore",
+      "copied": "Copied successfully",
+      "copyFailed": "Failed to copy message",
+      "shareNotSupported": "Sharing is not supported on this device. Message copied successfully.",
+      "shareToWhatsapp": "Share to WhatsApp"
+    },
+    "filter": {
+      "search": "Search announcements...",
+      "allStatus": "All Status"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "visibility": {
+      "public": "Public",
+      "members_only": "Members Only",
+      "committee_only": "Committee Only"
+    },
+    "table": {
+      "no": "No.",
+      "type": "Type",
+      "title": "Title",
+      "status": "Status",
+      "visibility": "Visibility",
+      "date": "Date",
+      "publishedDate": "Published Date",
+      "whatsapp": "WhatsApp",
+      "noRecords": "No announcements found"
+    },
+    "messages": {
+      "saved": "Announcement saved as draft",
+      "published": "Announcement published successfully",
+      "updated": "Announcement updated successfully",
+      "deleted": "Announcement deleted",
+      "archived": "Announcement archived",
+      "restored": "Announcement restored to drafts"
+    },
+    "delete": {
+      "title": "Delete Announcement",
+      "text": "This action cannot be undone."
+    },
+    "published": {
+      "noRecords": "No published announcements found"
+    },
+    "archive": {
+      "noRecords": "No archived announcements found"
+    },
+    "template": {
+      "newTitle": "New Template",
+      "editTitle": "Edit Template",
+      "subtitle": "Create reusable announcement templates",
+      "name": "Template Name",
+      "nameRequired": "Template name is required",
+      "namePlaceholder": "e.g. Death Notice Template",
+      "category": "Category",
+      "categoryRequired": "Category is required",
+      "selectCategory": "Select category",
+      "variables": "Insert Variables",
+      "messageBody": "Message Body",
+      "messageRequired": "Message body is required",
+      "messagePlaceholder": "Write your template message here. Click variables above to insert them.",
+      "detectedVars": "Detected variables",
+      "noVars": "None",
+      "searchPlaceholder": "Search templates...",
+      "newTemplate": "New Template",
+      "noRecords": "No templates found",
+      "variablesCount": "Variables",
+      "vars": "vars",
+      "created": "Template created successfully",
+      "updated": "Template updated successfully",
+      "deleted": "Template deleted"
+    },
+    "settings": {
+      "orgInfo": "Organization Information",
+      "organizationName": "Organization Name",
+      "organizationNamePlaceholder": "e.g. Al-Noor Mahallu",
+      "signature": "Signature",
+      "signaturePlaceholder": "e.g. Secretary, Al-Noor Mahallu",
+      "defaultFooter": "Default Footer",
+      "defaultFooterPlaceholder": "Add a footer message...",
+      "language": "Default Language",
+      "announcementTypes": "Announcement Types",
+      "announcementTypesDesc": "Manage the list of available announcement types.",
+      "newTypePlaceholder": "Add new type...",
+      "typeExists": "This type already exists",
+      "whatsapp": "WhatsApp Business",
+      "whatsappNumber": "WhatsApp Business Number",
+      "whatsappNumberPlaceholder": "e.g. 919876543210",
+      "whatsappNumberHint": "Enter country code without +. e.g. 919876543210 for India. Used when sharing announcements via WhatsApp.",
+      "save": "Save Settings",
+      "saved": "Settings saved successfully"
+    },
+    "mode": {
+      "title": "Create Announcement",
+      "subtitle": "Choose how you'd like to create this announcement",
+      "standaloneTitle": "Standalone Announcement",
+      "standaloneDesc": "Write a free-form announcement for any occasion without using a module template.",
+      "moduleTitle": "Module-Based Announcement",
+      "moduleDesc": "Select a module and template to auto-generate a structured announcement with dynamic fields."
+    },
+    "builder": {
+      "subtitle": "Build a reusable announcement template in 3 steps",
+      "step1": "Basic Info",
+      "step2": "Configure Fields",
+      "step3": "Write Message",
+      "step1Hint": "Choose the module this template belongs to. Module-based templates can be used to auto-generate announcements from specific modules like Death Registry or Welfare.",
+      "module": "Module",
+      "moduleRequired": "Module is required",
+      "modulePlaceholder": "Select module",
+      "fieldsDesc": "Add dynamic fields that will appear in the announcement form when this template is used.",
+      "addField": "Add Field",
+      "noFields": "No fields added yet. Click \"Add Field\" to start.",
+      "fieldLabel": "Field Label",
+      "fieldLabelRequired": "Field label is required",
+      "fieldKey": "Field Key",
+      "fieldKeyRequired": "Field key is required",
+      "fieldKeyHint": "Auto-generated from label. Used as {{key}} placeholder in message.",
+      "inputType": "Input Type",
+      "placeholder": "Placeholder (optional)",
+      "required": "Required field",
+      "selectOptions": "Dropdown Options",
+      "selectOptionsHint": "Enter comma-separated values, e.g.: Option A, Option B",
+      "saveField": "Save Field",
+      "availableFields": "Available Fields — click to insert",
+      "messagePlaceholder": "Write your template message here. Use the field chips above to insert placeholders...",
+      "preview": "Preview",
+      "previewEmpty": "Write a message to see the preview",
+      "previewHint": "Field labels shown as [Label] — actual values will appear when filling the form."
+    },
+    "moduleForm": {
+      "title": "Module-Based Announcement",
+      "subtitle": "Select a module and template, then fill in the details",
+      "step1": "Select Module",
+      "step2": "Select Template",
+      "step3": "Fill Details",
+      "moduleLabel": "Module",
+      "modulePlaceholder": "Select a module",
+      "selectModule": "Please select a module to continue",
+      "selectTemplate": "Please select a template to continue",
+      "noTemplates": "No templates found for this module.",
+      "noTemplatesHint": "Create a template in the Templates tab with this module selected.",
+      "templateFields": "Template Fields",
+      "titleRequired": "Title is required",
+      "typeRequired": "Announcement type is required"
     }
   }
 }

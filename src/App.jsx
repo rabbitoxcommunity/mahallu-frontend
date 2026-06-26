@@ -31,6 +31,7 @@ import VarisankhyaConfig from "./pages/Settings/VarisankhyaConfig";
 import Marriages from "./pages/Admin/Marriages";
 import Welfare from "./pages/community/Welfare";
 import DeathRegistry from "./pages/community/DeathRegistry";
+import CommunicationCenter from "./pages/community/CommunicationCenter";
 import PublicHome from "./pages/public/Home";
 import PublicSearch from "./pages/public/Search";
 import PublicFamilyView from "./pages/public/FamilyView";
@@ -102,6 +103,7 @@ function App() {
                             {/* Community Routes */}
                             <Route path="/community/welfare" element={<Welfare />} />
                             <Route path="/community/death-registry" element={<DeathRegistry />} />
+                            <Route path="/community/communication" element={<CommunicationCenter />} />
 
                             {/* Admin Routes */}
                             <Route path="/admin/marriages" element={<Marriages />} />
