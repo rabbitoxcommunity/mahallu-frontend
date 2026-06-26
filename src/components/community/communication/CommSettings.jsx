@@ -5,56 +5,57 @@ import { Save, Plus, X, Settings2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { getCommSettings, updateCommSettings } from '../../../api/communicationService';
 
-const DEFAULT_TYPES = [
-    'Death Notice', 'Marriage Notice', 'Welfare', 'Meeting',
-    'General', 'Ramadan', 'Eid', 'Emergency', 'Other',
-];
-
 const CommSettings = () => {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
-    const [announcementTypes, setAnnouncementTypes] = useState(DEFAULT_TYPES);
+    const [announcementTypes, setAnnouncementTypes] = useState([]);
     const [newType, setNewType] = useState('');
 
     const { register, handleSubmit, reset, formState: { isSubmitting } } = useForm({
-        defaultValues: {
-            organization_name: '',
-            signature: '',
-        },
+        defaultValues: { organization_name: '', signature: '' },
     });
 
+    const normalise = (types) =>
+        (types || []).map(t =>
+            typeof t === 'string'
+                ? { name: t }
+                : { _id: t._id, name: t.name || t.id || '' }
+        ).filter(t => t.name);
+
+    const loadSettings = () =>
+        getCommSettings().then(d => {
+            const s = d.settings || {};
+            reset({
+                organization_name: s.organization_name || '',
+                signature: s.signature || '',
+            });
+            setAnnouncementTypes(normalise(s.announcement_types));
+        });
+
     useEffect(() => {
-        getCommSettings()
-            .then(d => {
-                const s = d.settings || {};
-                reset({
-                    organization_name: s.organization_name || '',
-                    signature: s.signature || '',
-                });
-                setAnnouncementTypes(s.announcement_types?.length ? s.announcement_types : DEFAULT_TYPES);
-            })
-            .catch(() => {})
-            .finally(() => setLoading(false));
-    }, [reset]);
+        loadSettings().catch(() => {}).finally(() => setLoading(false));
+    }, []);
 
     const addType = () => {
         const trimmed = newType.trim();
         if (!trimmed) return;
-        if (announcementTypes.includes(trimmed)) {
+        if (announcementTypes.some(t => t.name === trimmed)) {
             toast.error(t('comm.settings.typeExists'));
             return;
         }
-        setAnnouncementTypes(prev => [...prev, trimmed]);
+        setAnnouncementTypes(prev => [...prev, { name: trimmed }]);
         setNewType('');
     };
 
-    const removeType = (type) => {
-        setAnnouncementTypes(prev => prev.filter(t => t !== type));
+    const removeType = (name) => {
+        setAnnouncementTypes(prev => prev.filter(t => t.name !== name));
     };
 
     const onSubmit = async (values) => {
         try {
             await updateCommSettings({ ...values, announcement_types: announcementTypes });
+            // Reload to get proper _id for any newly added types
+            await loadSettings();
             toast.success(t('comm.settings.saved'));
         } catch { /* handled */ }
     };
@@ -107,9 +108,9 @@ const CommSettings = () => {
 
                 <div className="flex flex-wrap gap-2">
                     {announcementTypes.map(type => (
-                        <span key={type} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg text-sm font-medium">
-                            {type}
-                            <button type="button" onClick={() => removeType(type)} className="text-blue-400 hover:text-red-500 transition-colors">
+                        <span key={type._id || type.name} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 rounded-lg text-sm font-medium">
+                            {type.name}
+                            <button type="button" onClick={() => removeType(type.name)} className="text-blue-400 hover:text-red-500 transition-colors">
                                 <X size={12} />
                             </button>
                         </span>

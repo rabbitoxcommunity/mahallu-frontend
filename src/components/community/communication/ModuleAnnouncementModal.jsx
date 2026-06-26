@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Select from 'react-select';
 import { X, ChevronRight, ChevronLeft, Send, Save, Check } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { getTemplates, createAnnouncement, getCommSettings } from '../../../api/communicationService';
+import { getTemplatesByModule, createAnnouncement, getCommSettings } from '../../../api/communicationService';
 import AnnouncementPreview from './AnnouncementPreview';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -138,8 +138,10 @@ const ModuleAnnouncementModal = ({ onClose, onSuccess }) => {
         getCommSettings().then(d => {
             const s = d.settings || {};
             setSettings(s);
-            const types = s.announcement_types || [];
-            setModuleOptions(types.map(t => ({ value: t, label: t })));
+            const types = (s.announcement_types || []).map(t =>
+                typeof t === 'string' ? { name: t } : { _id: t._id, name: t.name || t.id || t }
+            ).filter(t => t.name);
+            setModuleOptions(types.map(t => ({ value: t._id || t.name, label: t.name })));
         }).catch(() => {});
     }, []);
 
@@ -148,7 +150,7 @@ const ModuleAnnouncementModal = ({ onClose, onSuccess }) => {
         if (!selectedModule) return;
         setTemplatesLoading(true);
         setSelectedTemplate(null);
-        getTemplates({ limit: 100 })
+        getTemplatesByModule(selectedModule.value)
             .then(d => setTemplates(d.records || []))
             .catch(() => setTemplates([]))
             .finally(() => setTemplatesLoading(false));
@@ -209,6 +211,7 @@ const ModuleAnnouncementModal = ({ onClose, onSuccess }) => {
             await createAnnouncement({
                 title: title.trim(),
                 body: builtBody,
+                type: selectedModule?.label,
                 visibility: 'members_only',
                 publish_immediately: publishImmediately,
                 announcement_date: announcementDate || null,

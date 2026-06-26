@@ -207,8 +207,10 @@ const TemplateFormModal = ({ editRecord, onClose, onSuccess }) => {
     useEffect(() => {
         getCommSettings()
             .then(d => {
-                const types = (d.settings || {}).announcement_types || [];
-                setModuleOptions(types.map(t => ({ value: t, label: t })));
+                const types = ((d.settings || {}).announcement_types || []).map(t =>
+                    typeof t === 'string' ? { name: t } : { _id: t._id, name: t.name || t.id || t }
+                ).filter(t => t.name);
+                setModuleOptions(types.map(t => ({ value: t._id || t.name, label: t.name })));
             })
             .catch(() => {});
     }, []);
