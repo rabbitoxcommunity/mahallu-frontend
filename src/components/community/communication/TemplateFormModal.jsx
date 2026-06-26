@@ -271,10 +271,12 @@ const TemplateFormModal = ({ editRecord, onClose, onSuccess }) => {
         const tag = `{{${key}}}`;
         const ta = textareaRef.current;
         if (!ta) { setValue('message', (message || '') + tag); return; }
-        const s = ta.selectionStart;
-        const e = ta.selectionEnd;
-        const cur = message || '';
-        setValue('message', cur.slice(0, s) + tag + cur.slice(e));
+        const s = ta.selectionStart ?? ta.value.length;
+        const e = ta.selectionEnd ?? ta.value.length;
+        const cur = ta.value;
+        const newVal = cur.slice(0, s) + tag + cur.slice(e);
+        ta.value = newVal;
+        setValue('message', newVal, { shouldDirty: true });
         setTimeout(() => { ta.focus(); ta.setSelectionRange(s + tag.length, s + tag.length); }, 0);
     };
 
@@ -495,8 +497,10 @@ const TemplateFormModal = ({ editRecord, onClose, onSuccess }) => {
                                                 {t('comm.template.messageBody')} <span className="text-red-500">*</span>
                                             </label>
                                             <textarea
-                                                ref={textareaRef}
-                                                {...register('message', { required: t('comm.template.messageRequired') })}
+                                                {...(() => {
+                                                    const { ref: rhfRef, ...rest } = register('message', { required: t('comm.template.messageRequired') });
+                                                    return { ...rest, ref: (el) => { rhfRef(el); textareaRef.current = el; } };
+                                                })()}
                                                 rows={10}
                                                 placeholder={t('comm.builder.messagePlaceholder')}
                                                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#252731] text-gray-900 dark:text-white placeholder-gray-400 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none font-mono leading-relaxed"
