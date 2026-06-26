@@ -19,12 +19,12 @@ const getSelectStyles = () => ({
         boxShadow: state.isFocused ? '0 0 0 1px #0B65F6' : 'none',
         '&:hover': { borderColor: '#0B65F6' },
     }),
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
     menu: (base) => ({
         ...base,
         borderRadius: '0.75rem',
         border: '1px solid #e5e7eb',
         boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-        zIndex: 300,
     }),
     option: (base, state) => ({
         ...base,
