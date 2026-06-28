@@ -1,22 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Building2, Users, Settings, BarChart3, Plus, Shield } from 'lucide-react';
+import { Building2, Plus } from 'lucide-react';
 
 export default function PlatformAdminDashboard() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { staggerChildren: 0.05 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
-  };
-
   const dashboardItems = [
     { 
       name: "Create Tenant", 
@@ -40,15 +27,19 @@ export default function PlatformAdminDashboard() {
       </div>
 
       <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="show"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
       >
         {dashboardItems.map((item, index) => {
           const Icon = item.icon;
           return (
-            <motion.div key={index} variants={itemVariants}>
+            <motion.div 
+              key={index} 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
               <Link
                 to={item.path}
                 className="group flex flex-col p-6 bg-white dark:bg-[#1e1f25] border border-gray-100 dark:border-gray-800/60 rounded-2xl hover:shadow-xl hover:shadow-[#0B65F6]/5 hover:-translate-y-1 transition-all duration-300 h-full"
@@ -63,7 +54,7 @@ export default function PlatformAdminDashboard() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-[#0B65F6] dark:group-hover:text-[#0B65F6] mb-2">
                   {item.name}
                 </h3>
-                <p className=" text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {item.description}
                 </p>
               </Link>

@@ -109,15 +109,15 @@ export default function CreateTenant() {
               </h3>
               <div className="space-y-3">
                 <div>
-                  <label className=" font-medium text-gray-500 dark:text-gray-400">Name</label>
+                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Name</label>
                   <p className="text-gray-900 dark:text-white">{createdCredentials.tenant.name}</p>
                 </div>
                 <div>
-                  <label className=" font-medium text-gray-500 dark:text-gray-400">Slug</label>
+                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Slug</label>
                   <p className="text-gray-900 dark:text-white font-mono">{createdCredentials.tenant.slug}</p>
                 </div>
                 <div>
-                  <label className=" font-medium text-gray-500 dark:text-gray-400">Status</label>
+                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Status</label>
                   <p className="text-gray-900 dark:text-white capitalize">{createdCredentials.tenant.status}</p>
                 </div>
               </div>
@@ -130,18 +130,18 @@ export default function CreateTenant() {
               </h3>
               <div className="space-y-3">
                 <div>
-                  <label className=" font-medium text-gray-500 dark:text-gray-400">Name</label>
+                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Name</label>
                   <p className="text-gray-900 dark:text-white">{createdCredentials.superAdmin.name}</p>
                 </div>
                 <div>
-                  <label className=" font-medium text-gray-500 dark:text-gray-400">Email</label>
+                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Email</label>
                   <p className="text-gray-900 dark:text-white">{createdCredentials.superAdmin.email}</p>
                 </div>
                 <div>
-                  <label className=" font-medium text-gray-500 dark:text-gray-400">Password</label>
+                  <label className="text-sm font-medium text-gray-500 dark:text-gray-400">Password</label>
                   <div className="flex items-center gap-2">
                     <p className="text-gray-900 dark:text-white font-mono">{createdCredentials.plainPassword}</p>
-                    <span className=" text-red-600 dark:text-red-400 font-medium">
+                    <span className="text-sm text-red-600 dark:text-red-400 font-medium">
                       Save this password
                     </span>
                   </div>
@@ -152,7 +152,7 @@ export default function CreateTenant() {
             <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/60 rounded-xl p-4">
               <div className="flex items-start gap-3">
                 <AlertCircle size={20} className="text-amber-600 dark:text-amber-400 mt-0.5" />
-                <div className=" text-amber-800 dark:text-amber-200">
+                <div className="text-sm text-amber-800 dark:text-amber-200">
                   <strong>Important:</strong> Please save these credentials securely. 
                   The super admin password will not be shown again.
                 </div>
@@ -213,7 +213,7 @@ export default function CreateTenant() {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Tenant Name / Mahallu Name *
                   </label>
                   <div className="relative">
@@ -228,12 +228,12 @@ export default function CreateTenant() {
                     />
                   </div>
                   {errors.name && (
-                    <p className="mt-1  text-red-500">{errors.name.message}</p>
+                    <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Slug (Auto-generated)
                   </label>
                   <div className="relative">
@@ -255,9 +255,9 @@ export default function CreateTenant() {
                     />
                   </div>
                   {errors.slug && (
-                    <p className="mt-1  text-red-500">{errors.slug.message}</p>
+                    <p className="mt-1 text-sm text-red-500">{errors.slug.message}</p>
                   )}
-                  <p className="mt-1  text-gray-500 dark:text-gray-400">
+                  <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                     Slug is automatically generated from tenant name
                   </p>
                 </div>
@@ -272,7 +272,7 @@ export default function CreateTenant() {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Super Admin Name *
                   </label>
                   <div className="relative">
@@ -287,12 +287,12 @@ export default function CreateTenant() {
                     />
                   </div>
                   {errors.superAdminName && (
-                    <p className="mt-1  text-red-500">{errors.superAdminName.message}</p>
+                    <p className="mt-1 text-sm text-red-500">{errors.superAdminName.message}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Super Admin Email *
                   </label>
                   <div className="relative">
@@ -313,12 +313,12 @@ export default function CreateTenant() {
                     />
                   </div>
                   {errors.superAdminEmail && (
-                    <p className="mt-1  text-red-500">{errors.superAdminEmail.message}</p>
+                    <p className="mt-1 text-sm text-red-500">{errors.superAdminEmail.message}</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Password *
                   </label>
                   <div className="relative">
@@ -339,7 +339,7 @@ export default function CreateTenant() {
                     />
                   </div>
                   {errors.password && (
-                    <p className="mt-1  text-red-500">{errors.password.message}</p>
+                    <p className="mt-1 text-sm text-red-500">{errors.password.message}</p>
                   )}
                 </div>
               </div>

@@ -4,6 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from "./routes/PrivateRoute";
+import PlatformAdminRoute from "./routes/PlatformAdminRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { SidebarProvider } from "./context/SidebarContext";
 import PlatformAdminDashboard from "./pages/PlatformAdmin/PlatformAdminDashboard";
@@ -63,15 +64,17 @@ function App() {
                         {/* Login Route */}
                         <Route path="/login" element={<Login />} />
 
-                        {/* Protected Routes Wrapper */}
-                        <Route element={<PrivateRoute />}>
-                            <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/analytics" element={<Analytics />} />
-                            
-                            {/* Platform Admin Routes */}
+                        {/* Platform Admin Routes (Independent Layout) */}
+                        <Route element={<PlatformAdminRoute />}>
                             <Route path="/platform-admin" element={<PlatformAdminDashboard />} />
                             <Route path="/platform-admin/tenants" element={<TenantsList />} />
                             <Route path="/platform-admin/tenants/create" element={<CreateTenant />} />
+                        </Route>
+
+                        {/* Protected Routes Wrapper (With Sidebar) */}
+                        <Route element={<PrivateRoute />}>
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/analytics" element={<Analytics />} />
                             
                             {/* SuperAdmin Routes */}
                             <Route path="/super-admin" element={<SuperAdminDashboard />} />
