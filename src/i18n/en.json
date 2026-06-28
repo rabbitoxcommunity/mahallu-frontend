@@ -940,7 +940,26 @@
     "daughterOf": "Daughter of",
     "witnessedBy": "Witnessed by",
     "signature": "Signature",
-    "seal": "Seal"
+    "seal": "Seal",
+    "sectionNikkah": "Nikkah Details",
+    "sectionGroom": "Groom Details",
+    "sectionBride": "Bride Details",
+    "sectionPlace": "Place of Nikkah",
+    "sectionPerformer": "Performer of Nikkah",
+    "sectionContact": "Contact & Notes",
+    "nikkahTime": "Nikkah Time",
+    "groomDob": "Date of Birth",
+    "groomHouseName": "House Name",
+    "groomMahallu": "Mahallu",
+    "groomAddress": "Full Address",
+    "brideDob": "Date of Birth",
+    "brideHouseName": "House Name",
+    "brideMahallu": "Mahallu",
+    "brideAddress": "Full Address",
+    "nikkahMahallu": "Mahallu",
+    "performerName": "Performer Name",
+    "performerDesignation": "Designation",
+    "brideAgeError": "Bride must be at least 18 years old"
   },
   "settings": {
     "categories": {

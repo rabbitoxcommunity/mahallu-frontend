@@ -939,7 +939,26 @@
     "daughterOf": "മകൾ",
     "witnessedBy": "സാക്ഷി",
     "signature": "ഒപ്പ്",
-    "seal": "മുദ്ര"
+    "seal": "മുദ്ര",
+    "sectionNikkah": "നിക്കാഹ് വിവരങ്ങൾ",
+    "sectionGroom": "വരന്റെ വിവരങ്ങൾ",
+    "sectionBride": "വധുവിന്റെ വിവരങ്ങൾ",
+    "sectionPlace": "നിക്കാഹ് നടന്ന സ്ഥലം",
+    "sectionPerformer": "നിക്കാഹ് ചൊല്ലിയ ആൾ",
+    "sectionContact": "കോൺടാക്റ്റ് & കുറിപ്പുകൾ",
+    "nikkahTime": "നിക്കാഹ് സമയം",
+    "groomDob": "ജനനത്തീയതി",
+    "groomHouseName": "വീടിന്റെ പേര്",
+    "groomMahallu": "മഹല്ല്",
+    "groomAddress": "പൂർണ്ണ വിലാസം",
+    "brideDob": "ജനനത്തീയതി",
+    "brideHouseName": "വീടിന്റെ പേര്",
+    "brideMahallu": "മഹല്ല്",
+    "brideAddress": "പൂർണ്ണ വിലാസം",
+    "nikkahMahallu": "മഹല്ല്",
+    "performerName": "ചൊല്ലിയ ആളുടെ പേര്",
+    "performerDesignation": "പദവി",
+    "brideAgeError": "വധുവിന് കുറഞ്ഞത് 18 വയസ്സ് ആയിരിക്കണം"
   },
   "settings": {
     "categories": {
