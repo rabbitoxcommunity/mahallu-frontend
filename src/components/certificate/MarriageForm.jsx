@@ -45,7 +45,7 @@ const MarriageForm = ({ onSubmit, onCancel, initialValues = {} }) => {
         {/* ── Row 1: Nikkah Details ── */}
         <div className="bg-blue-50/50 dark:bg-blue-900/10 rounded-xl p-4">
           <SectionHeader title={t('certificate.sectionNikkah')} color="blue" />
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <F label={`${t('certificate.marriageDate')} *`} err={errors.date?.message} icon={Calendar}>
               <input type="date" {...register('date', { required: t('certificate.dateRequired') })} />
             </F>
@@ -59,7 +59,7 @@ const MarriageForm = ({ onSubmit, onCancel, initialValues = {} }) => {
         </div>
 
         {/* ── Row 2: Groom | Bride side by side ── */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
           {/* Groom */}
           <div className="bg-gray-50/80 dark:bg-[#252731]/60 rounded-xl p-4">
@@ -127,7 +127,7 @@ const MarriageForm = ({ onSubmit, onCancel, initialValues = {} }) => {
         </div>
 
         {/* ── Row 3: Nikkah Place & Performer ── */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="bg-green-50/50 dark:bg-green-900/10 rounded-xl p-4">
             <SectionHeader title={t('certificate.sectionPlace')} color="green" />
             <F label={t('certificate.nikkahMahallu')} icon={Building2}>
@@ -136,7 +136,7 @@ const MarriageForm = ({ onSubmit, onCancel, initialValues = {} }) => {
           </div>
           <div className="bg-purple-50/50 dark:bg-purple-900/10 rounded-xl p-4">
             <SectionHeader title={t('certificate.sectionPerformer')} color="purple" />
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <F label={t('certificate.performerName')} icon={BookUser}>
                 <input type="text" {...register('performer_name')} placeholder={t('certificate.performerName')} />
               </F>

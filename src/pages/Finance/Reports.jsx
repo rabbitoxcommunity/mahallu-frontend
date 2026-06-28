@@ -506,25 +506,25 @@ const Reports = () => {
   const StatementTab = () => (
     <div>
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 mb-6">
-        <div className="flex flex-wrap gap-4 items-end">
-          <div>
-            <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:items-end">
+          <div className="flex-1 sm:flex-none">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
             <select
               value={statementFilters.month}
               onChange={(e) => setStatementFilters({ ...statementFilters, month: parseInt(e.target.value) })}
-              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="w-full sm:w-auto px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               {Array.from({ length: 12 }, (_, i) => (
                 <option key={i + 1} value={i + 1}>{moment().month(i).format('MMMM')}</option>
               ))}
             </select>
           </div>
-          <div>
-            <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+          <div className="flex-1 sm:flex-none">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
             <select
               value={statementFilters.year}
               onChange={(e) => setStatementFilters({ ...statementFilters, year: parseInt(e.target.value) })}
-              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="w-full sm:w-auto px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               {[2024, 2025, 2026, 2027].map(year => (
                 <option key={year} value={year}>{year}</option>
@@ -533,7 +533,7 @@ const Reports = () => {
           </div>
           <button
             onClick={fetchStatement}
-            className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center gap-2"
+            className="w-full sm:w-auto px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2"
           >
             <RefreshCw size={18} />
             Refresh
@@ -557,14 +557,14 @@ const Reports = () => {
       </div>
 
       <div className={`bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 mb-6 ${statementData.closing_balance >= 0 ? 'border-l-4 border-l-blue-500' : 'border-l-4 border-l-red-500'}`}>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <div>
-            <p className=" text-gray-600 dark:text-gray-400">Closing Balance</p>
-            <p className={`text-4xl font-bold ${statementData.closing_balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{statementData.closing_balance.toLocaleString()}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">Closing Balance</p>
+            <p className={`text-3xl sm:text-4xl font-bold ${statementData.closing_balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{statementData.closing_balance.toLocaleString()}</p>
           </div>
-          <div className="text-right">
-            <p className=" text-gray-500">Formula</p>
-            <p className=" font-medium text-gray-700 dark:text-gray-300">Opening + Income - Expense</p>
+          <div className="sm:text-right">
+            <p className="text-sm text-gray-500">Formula</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Opening + Income - Expense</p>
           </div>
         </div>
       </div>
@@ -687,13 +687,13 @@ const Reports = () => {
   const ExportTab = () => (
     <div>
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 mb-6">
-        <div className="flex flex-wrap gap-4 items-end">
-          <div>
-            <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Report Type</label>
+        <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:items-end">
+          <div className="flex-1 sm:flex-none">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Report Type</label>
             <select
               value={exportFilters.type}
               onChange={(e) => setExportFilters({ ...exportFilters, type: e.target.value })}
-              className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              className="w-full sm:w-auto px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             >
               <option value="monthly">Monthly Report</option>
               <option value="annual">Annual Report</option>
@@ -701,24 +701,24 @@ const Reports = () => {
           </div>
           {exportFilters.type === 'monthly' && (
             <>
-              <div>
-                <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
+              <div className="flex-1 sm:flex-none">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Month</label>
                 <select
                   value={exportFilters.month}
                   onChange={(e) => setExportFilters({ ...exportFilters, month: parseInt(e.target.value) })}
-                  className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="w-full sm:w-auto px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   {Array.from({ length: 12 }, (_, i) => (
                     <option key={i + 1} value={i + 1}>{moment().month(i).format('MMMM')}</option>
                   ))}
                 </select>
               </div>
-              <div>
-                <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+              <div className="flex-1 sm:flex-none">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
                 <select
                   value={exportFilters.year}
                   onChange={(e) => setExportFilters({ ...exportFilters, year: parseInt(e.target.value) })}
-                  className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="w-full sm:w-auto px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 >
                   {[2024, 2025, 2026, 2027].map(year => (
                     <option key={year} value={year}>{year}</option>
@@ -728,12 +728,12 @@ const Reports = () => {
             </>
           )}
           {exportFilters.type === 'annual' && (
-            <div>
-              <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
+            <div className="flex-1 sm:flex-none">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Year</label>
               <select
                 value={exportFilters.year}
                 onChange={(e) => setExportFilters({ ...exportFilters, year: parseInt(e.target.value) })}
-                className="px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="w-full sm:w-auto px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               >
                 {[2024, 2025, 2026, 2027].map(year => (
                   <option key={year} value={year}>{year}</option>
@@ -743,7 +743,7 @@ const Reports = () => {
           )}
           <button
             onClick={fetchExportData}
-            className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center gap-2"
+            className="w-full sm:w-auto px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center justify-center gap-2"
           >
             <RefreshCw size={18} />
             Generate
@@ -753,35 +753,29 @@ const Reports = () => {
 
       {exportData && (
         <div id="report-content" className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-          <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+          <div className="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-800 flex flex-wrap items-center justify-between gap-3">
             <h3 className="text-lg font-bold text-gray-900 dark:text-white">
               {exportData.type === 'monthly' ? 'Monthly Report' : 'Annual Report'}
             </h3>
-            <div className="flex gap-2">
-              {/* <button onClick={handlePrint} className="px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center gap-2">
-                <Printer size={18} />
-                Print
-              </button> */}
-              <button onClick={handleDownloadPDF} className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 flex items-center gap-2">
-                <Download size={18} />
-                Download PDF
-              </button>
-            </div>
+            <button onClick={handleDownloadPDF} className="flex items-center gap-2 px-4 py-2 text-sm bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700">
+              <Download size={16} />
+              Download PDF
+            </button>
           </div>
           <div className="p-6">
             {exportData.type === 'monthly' ? (
               <div className="space-y-4">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
-                    <p className=" text-gray-600 dark:text-gray-400">Opening Balance</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Opening Balance</p>
                     <p className="text-xl font-bold text-blue-600">₹{exportData.opening_balance.toLocaleString()}</p>
                   </div>
                   <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-                    <p className=" text-gray-600 dark:text-gray-400">Income</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Income</p>
                     <p className="text-xl font-bold text-green-600">₹{exportData.income.toLocaleString()}</p>
                   </div>
                   <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
-                    <p className=" text-gray-600 dark:text-gray-400">Expense</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Expense</p>
                     <p className="text-xl font-bold text-red-600">₹{exportData.expense.toLocaleString()}</p>
                   </div>
                 </div>
@@ -792,17 +786,17 @@ const Reports = () => {
               </div>
             ) : (
               <div className="space-y-4">
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div className="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-                    <p className=" text-gray-600 dark:text-gray-400">Total Income</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Income</p>
                     <p className="text-xl font-bold text-green-600">₹{exportData.total_income.toLocaleString()}</p>
                   </div>
                   <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-4">
-                    <p className=" text-gray-600 dark:text-gray-400">Total Expense</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Total Expense</p>
                     <p className="text-xl font-bold text-red-600">₹{exportData.total_expense.toLocaleString()}</p>
                   </div>
-                  <div className={`bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4`}>
-                    <p className=" text-gray-600 dark:text-gray-400">Balance</p>
+                  <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4">
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Balance</p>
                     <p className={`text-xl font-bold ${exportData.balance >= 0 ? 'text-blue-600' : 'text-red-600'}`}>₹{exportData.balance.toLocaleString()}</p>
                   </div>
                 </div>
@@ -850,7 +844,7 @@ const Reports = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2 mb-6">
         {[
           { id: 'dashboard', label: t('finance.reports.dashboard'), icon: BarChart3 },
           { id: 'statement', label: t('finance.reports.financialStatement'), icon: FileText },
@@ -860,14 +854,14 @@ const Reports = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl  font-medium whitespace-nowrap transition-colors ${
+            className={`flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
               activeTab === tab.id
                 ? 'bg-[#0B65F6] text-white'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
             }`}
           >
-            <tab.icon size={18} />
-            {tab.label}
+            <tab.icon size={16} className="shrink-0" />
+            <span>{tab.label}</span>
           </button>
         ))}
       </div>

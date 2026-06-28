@@ -72,8 +72,8 @@ const Welfare = () => {
 
       {/* Tab Navigation */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-1.5">
-        <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide">
-          {TABS.map(tab => {
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-1">
+          {TABS.map((tab, index) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
             return (
@@ -81,8 +81,9 @@ const Welfare = () => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  relative flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap
-                  transition-all duration-200 flex-shrink-0
+                  relative flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium
+                  transition-all duration-200
+                  ${index === TABS.length - 1 ? 'col-span-2 sm:col-span-1' : ''}
                   ${isActive
                     ? 'text-white'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -97,7 +98,7 @@ const Welfare = () => {
                   />
                 )}
                 <span className="relative z-10 flex items-center gap-2">
-                  <Icon size={16} />
+                  <Icon size={16} className="shrink-0" />
                   {t(tab.labelKey)}
                 </span>
               </button>

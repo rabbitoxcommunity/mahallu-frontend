@@ -327,7 +327,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
     };
 
     return (
-      <span className={`px-3 py-1 rounded-full  font-medium border ${styles[status] || styles.unpaid}`}>
+      <span className={`px-2.5 py-1 rounded-full text-xs font-medium border ${styles[status] || styles.unpaid}`}>
         {labels[status] || status}
       </span>
     );
@@ -362,29 +362,31 @@ console.log(paymentHistoryData,'paymentHistoryData')
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('finance.varisankhya.title')}</h1>
             <p className="text-gray-500 dark:text-gray-400 mt-1">{t('finance.varisankhya.description')}</p>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <select
-              value={month}
-              onChange={(e) => setMonth(Number(e.target.value))}
-              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-            >
-              {months.map(m => (
-                <option key={m.value} value={m.value}>{m.label}</option>
-              ))}
-            </select>
-            <select
-              value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
-              className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-            >
-              {years.map(y => (
-                <option key={y} value={y}>{y}</option>
-              ))}
-            </select>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto">
+            <div className="flex items-center gap-2 w-full sm:w-auto">
+              <select
+                value={month}
+                onChange={(e) => setMonth(Number(e.target.value))}
+                className="flex-1 sm:flex-none px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              >
+                {months.map(m => (
+                  <option key={m.value} value={m.value}>{m.label}</option>
+                ))}
+              </select>
+              <select
+                value={year}
+                onChange={(e) => setYear(Number(e.target.value))}
+                className="flex-1 sm:flex-none px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+              >
+                {years.map(y => (
+                  <option key={y} value={y}>{y}</option>
+                ))}
+              </select>
+            </div>
             <button
               onClick={handleGenerateDues}
               disabled={generating}
-              className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
+              className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
               <Plus size={18} />
               {generating ? t('finance.varisankhya.generating') : t('finance.varisankhya.generateDues')}
@@ -431,144 +433,147 @@ console.log(paymentHistoryData,'paymentHistoryData')
 
       {/* Tabs */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-        <div className="flex border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
+        <div className="flex border-b border-gray-100 dark:border-gray-800">
           <button
             onClick={() => setActiveTab('monthly')}
-            className={`flex-1 px-6 py-4  font-medium transition-colors ${
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
               activeTab === 'monthly'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Calendar size={18} />
-              {t('finance.varisankhya.monthlyCollection')}
+            <div className="flex items-center justify-center gap-1.5">
+              <Calendar size={16} className="shrink-0" />
+              <span className="hidden sm:inline">{t('finance.varisankhya.monthlyCollection')}</span>
+              <span className="sm:hidden">Monthly</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('defaulters')}
-            className={`flex-1 px-6 py-4  font-medium transition-colors ${
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
               activeTab === 'defaulters'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <AlertCircle size={18} />
-              {t('finance.varisankhya.defaulters')}
+            <div className="flex items-center justify-center gap-1.5">
+              <AlertCircle size={16} className="shrink-0" />
+              <span className="hidden sm:inline">{t('finance.varisankhya.defaulters')}</span>
+              <span className="sm:hidden">Defaulters</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('history')}
-            className={`flex-1 px-6 py-4  font-medium transition-colors ${
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
               activeTab === 'history'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <History size={18} />
-              {t('finance.varisankhya.paymentHistory')}
+            <div className="flex items-center justify-center gap-1.5">
+              <History size={16} className="shrink-0" />
+              <span className="hidden sm:inline">{t('finance.varisankhya.paymentHistory')}</span>
+              <span className="sm:hidden">History</span>
             </div>
           </button>
         </div>
 
         {/* Search & Filter Bar */}
         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center justify-between">
-            {/* Search Input */}
-          <div className='flex items-center gap-3 col-span-2'>
-              <div className="relative flex-1 max-w-md">
-              <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder={`${t('common.search')} ${activeTab === 'monthly' ? t('finance.varisankhya.houses') : activeTab === 'defaulters' ? t('finance.varisankhya.defaulters') : t('finance.varisankhya.payments')}...`}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-              />
-            </div>
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                {/* Search Input */}
+                <div className="relative w-full sm:w-72 md:w-96">
+                  <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder={`${t('common.search')} ${activeTab === 'monthly' ? t('finance.varisankhya.houses') : activeTab === 'defaulters' ? t('finance.varisankhya.defaulters') : t('finance.varisankhya.payments')}...`}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  />
+                </div>
 
-            {/* Date Filters - Only for Payment History Tab */}
-            {activeTab === 'history' && (
-              <div className="flex flex-wrap gap-2">
-                <select
-                  value={dateFilter}
-                  onChange={(e) => {
-                    setDateFilter(e.target.value);
-                    setCustomDateRange({ from: '', to: '' });
-                  }}
-                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                >
-                  <option value="">{t('finance.varisankhya.allTime')}</option>
-                  <option value="today">{t('finance.varisankhya.today')}</option>
-                  <option value="this_month">{t('finance.varisankhya.thisMonth')}</option>
-                  <option value="last_month">{t('finance.varisankhya.lastMonth')}</option>
-                  <option value="this_year">{t('finance.varisankhya.thisYear')}</option>
-                  <option value="custom">{t('finance.varisankhya.customRange')}</option>
-                </select>
+                {/* Date Filters - Only for Payment History Tab */}
+                {activeTab === 'history' && (
+                  <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                    <select
+                      value={dateFilter}
+                      onChange={(e) => {
+                        setDateFilter(e.target.value);
+                        setCustomDateRange({ from: '', to: '' });
+                      }}
+                      className="w-full sm:w-auto px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                    >
+                      <option value="">{t('finance.varisankhya.allTime')}</option>
+                      <option value="today">{t('finance.varisankhya.today')}</option>
+                      <option value="this_month">{t('finance.varisankhya.thisMonth')}</option>
+                      <option value="last_month">{t('finance.varisankhya.lastMonth')}</option>
+                      <option value="this_year">{t('finance.varisankhya.thisYear')}</option>
+                      <option value="custom">{t('finance.varisankhya.customRange')}</option>
+                    </select>
 
-                {dateFilter === 'custom' && (
-                  <div className="flex gap-2">
-                    <input
-                      type="date"
-                      value={customDateRange.from}
-                      onChange={(e) => setCustomDateRange(prev => ({ ...prev, from: e.target.value }))}
-                      className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                    />
-                    <input
-                      type="date"
-                      value={customDateRange.to}
-                      onChange={(e) => setCustomDateRange(prev => ({ ...prev, to: e.target.value }))}
-                      className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                    />
+                    {dateFilter === 'custom' && (
+                      <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                        <input
+                          type="date"
+                          value={customDateRange.from}
+                          onChange={(e) => setCustomDateRange(prev => ({ ...prev, from: e.target.value }))}
+                          className="w-full sm:w-auto px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        />
+                        <input
+                          type="date"
+                          value={customDateRange.to}
+                          onChange={(e) => setCustomDateRange(prev => ({ ...prev, to: e.target.value }))}
+                          className="w-full sm:w-auto px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                        />
+                      </div>
+                    )}
+
+                    {(dateFilter || customDateRange.from || customDateRange.to) && (
+                      <button
+                        onClick={() => {
+                          setDateFilter('');
+                          setCustomDateRange({ from: '', to: '' });
+                        }}
+                        className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all hover:shadow-md active:scale-95"
+                      >
+                        <X size={16} />
+                        Clear Filters
+                      </button>
+                    )}
                   </div>
                 )}
-
-                {(dateFilter || customDateRange.from || customDateRange.to) && (
-                  <button
-                    onClick={() => {
-                      setDateFilter('');
-                      setCustomDateRange({ from: '', to: '' });
-                    }}
-                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all hover:shadow-md active:scale-95"
-                  >
-                    <X size={16} />
-                    Clear Filters
-                  </button>
-                )}
               </div>
-            )}
-          </div>
-          {
-             activeTab === 'history' && (
-                <div className="flex justify-end mb-6">
-              <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="bg-linear-to-r from-violet-600 via-purple-600 to-indigo-600 rounded-xl p-3 text-white shadow-lg"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <div className="p-1.5 bg-white/20 rounded-lg">
-                            <TrendingUp size={16} className="text-white" />
-                          </div>
-                          <div>
-                            <p className=" text-white/90">{t('finance.varisankhya.totalCollected')}</p>
-                            <h3 className="text-xl font-bold text-white">
-                              ₹{calculateTotalCollected().toLocaleString()}
-                            </h3>
-                          </div>
+
+              {activeTab === 'history' && (
+                <div className="w-full lg:w-auto mt-4 lg:mt-0">
+                  <motion.div
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="bg-linear-to-r from-violet-600 via-purple-600 to-indigo-600 rounded-xl p-3 text-white shadow-lg"
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="p-1.5 bg-white/20 rounded-lg">
+                          <TrendingUp size={16} className="text-white" />
                         </div>
-                        <div className="text-right">
-                          <p className=" text-white/70">{paymentHistoryData.payments?.length || 0} payments</p>
+                        <div>
+                          <p className="text-sm text-white/90">{t('finance.varisankhya.totalCollected')}</p>
+                          <h3 className="text-xl font-bold text-white">
+                            ₹{calculateTotalCollected().toLocaleString()}
+                          </h3>
                         </div>
                       </div>
-                    </motion.div>
+                      <div className="text-right">
+                        <p className="text-sm text-white/70">{paymentHistoryData.payments?.length || 0} payments</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                </div>
+              )}
             </div>
-             )
-          }
-           
           </div>
         </div>
 
@@ -679,7 +684,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   {/* Mobile Cards */}
                   <div className="md:hidden space-y-3">
                     {monthlyData.varisankhya.map((record) => (
-                      <div key={record._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-3">
+                      <div key={record._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-3 break-words">
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">{record.house_id?.house_code}</p>
@@ -735,11 +740,11 @@ console.log(paymentHistoryData,'paymentHistoryData')
 
                   {/* Pagination */}
                   {monthlyData.pages > 1 && (
-                    <div className="flex items-center justify-between mt-4">
-                      <p className=" text-gray-500">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
+                      <p className="text-sm text-gray-500 text-center sm:text-left">
                         Showing {((monthlyData.page - 1) * 20) + 1} to {Math.min(monthlyData.page * 20, monthlyData.total)} of {monthlyData.total} entries
                       </p>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full sm:w-auto">
                         <button
                           onClick={() => fetchMonthlyData(monthlyData.page - 1)}
                           disabled={monthlyData.page === 1}
@@ -825,7 +830,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   {/* Mobile Cards */}
                   <div className="md:hidden space-y-3">
                     {defaultersData.defaulters.map((defaulter) => (
-                      <div key={defaulter.house_id} className="bg-red-50 dark:bg-red-900/10 rounded-xl p-4 space-y-2 border border-red-100 dark:border-red-800">
+                      <div key={defaulter.house_id} className="bg-red-50 dark:bg-red-900/10 rounded-xl p-4 space-y-2 border border-red-100 dark:border-red-800 break-words">
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">{defaulter.house_code}</p>
@@ -855,11 +860,11 @@ console.log(paymentHistoryData,'paymentHistoryData')
 
                   {/* Pagination */}
                   {defaultersData.pages > 1 && (
-                    <div className="flex items-center justify-between mt-4">
-                      <p className=" text-gray-500">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
+                      <p className="text-sm text-gray-500 text-center sm:text-left">
                         Showing {((defaultersData.page - 1) * 20) + 1} to {Math.min(defaultersData.page * 20, defaultersData.total)} of {defaultersData.total} entries
                       </p>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full sm:w-auto">
                         <button
                           onClick={() => fetchDefaulters(defaultersData.page - 1)}
                           disabled={defaultersData.page === 1}
@@ -988,7 +993,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   {/* Mobile Cards */}
                   <div className="md:hidden space-y-3">
                     {paymentHistoryData.payments.map((payment) => (
-                      <div key={payment._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-2">
+                      <div key={payment._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-2 break-words">
                         <div className="flex justify-between items-start">
                           <div>
                             <p className="font-medium text-gray-900 dark:text-white">{payment.house_id?.house_code}</p>
@@ -1084,11 +1089,11 @@ console.log(paymentHistoryData,'paymentHistoryData')
 
                   {/* Pagination */}
                   {paymentHistoryData.pages > 1 && (
-                    <div className="flex items-center justify-between mt-4">
-                      <p className=" text-gray-500">
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-4">
+                      <p className="text-sm text-gray-500 text-center sm:text-left">
                         Showing {((paymentHistoryData.page - 1) * 20) + 1} to {Math.min(paymentHistoryData.page * 20, paymentHistoryData.total)} of {paymentHistoryData.total} entries
                       </p>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-center gap-2 w-full sm:w-auto">
                         <button
                           onClick={() => fetchPaymentHistory(paymentHistoryData.page - 1)}
                           disabled={paymentHistoryData.page === 1}
@@ -1175,7 +1180,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
                   ) : historyModal.data?.history?.length > 0 ? (
                     <>
                       <div className="mb-4 p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl">
-                        <div className="grid grid-cols-3 gap-4 text-center">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-center">
                           <div>
                             <p className=" text-gray-500 uppercase">{t('finance.varisankhya.totalDue')}</p>
                             <p className="text-lg font-bold text-gray-900 dark:text-white">₹{historyModal.data.summary?.total_due?.toLocaleString() || 0}</p>
@@ -1190,30 +1195,32 @@ console.log(paymentHistoryData,'paymentHistoryData')
                           </div>
                         </div>
                       </div>
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b border-gray-100 dark:border-gray-800">
-                            <th className="text-left py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
-                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
-                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
-                            <th className="text-center py-2 px-4  font-semibold text-gray-500 uppercase">{t('common.status')}</th>
-                            <th className="text-left py-2 px-4  font-semibold text-gray-500 uppercase">{t('common.date')}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {historyModal.data.history.map((h) => (
-                            <tr key={h._id} className="border-b border-gray-50 dark:border-gray-800/50">
-                              <td className="py-2 px-4 ">{months.find(m => m.value === h.month)?.label} {h.year}</td>
-                              <td className="py-2 px-4 text-right ">₹{h.amount_due}</td>
-                              <td className="py-2 px-4 text-right  font-medium text-green-600">₹{h.amount_paid}</td>
-                              <td className="py-2 px-4 text-center"><StatusBadge status={h.status} /></td>
-                              <td className="py-2 px-4  text-gray-500">
-                                {h.paid_date ? new Date(h.paid_date).toLocaleDateString() : '-'}
-                              </td>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b border-gray-100 dark:border-gray-800">
+                              <th className="text-left py-2 px-4 font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                              <th className="text-right py-2 px-4 font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                              <th className="text-right py-2 px-4 font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                              <th className="text-center py-2 px-4 font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                              <th className="text-left py-2 px-4 font-semibold text-gray-500 uppercase">{t('common.date')}</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {historyModal.data.history.map((h) => (
+                              <tr key={h._id} className="border-b border-gray-50 dark:border-gray-800/50">
+                                <td className="py-2 px-4 whitespace-nowrap">{months.find(m => m.value === h.month)?.label} {h.year}</td>
+                                <td className="py-2 px-4 text-right whitespace-nowrap">₹{h.amount_due}</td>
+                                <td className="py-2 px-4 text-right font-medium text-green-600 whitespace-nowrap">₹{h.amount_paid}</td>
+                                <td className="py-2 px-4 text-center whitespace-nowrap"><StatusBadge status={h.status} /></td>
+                                <td className="py-2 px-4 text-gray-500 whitespace-nowrap">
+                                  {h.paid_date ? new Date(h.paid_date).toLocaleDateString() : '-'}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </>
                   ) : (
                     <p className="text-center text-gray-500 py-8">No payment history found for this house.</p>
@@ -1292,36 +1299,38 @@ console.log(paymentHistoryData,'paymentHistoryData')
                           </div>
                         </div>
                       </div>
-                      <table className="w-full">
-                        <thead>
-                          <tr className="border-b border-gray-100 dark:border-gray-800">
-                            <th className="text-left py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
-                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
-                            <th className="text-right py-2 px-4  font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
-                            <th className="text-center py-2 px-4  font-semibold text-gray-500 uppercase">{t('common.status')}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {defaulterHistoryData.history.map((record, index) => (
-                            <tr key={index} className="border-b border-gray-50 dark:border-gray-800/50">
-                              <td className="py-2 px-4 ">{new Date(record.year, record.month - 1).toLocaleDateString('en-US', { month: 'long' })} {record.year}</td>
-                              <td className="py-2 px-4 text-right ">₹{record.amount_due?.toLocaleString() || 0}</td>
-                              <td className="py-2 px-4 text-right ">₹{record.amount_paid?.toLocaleString() || 0}</td>
-                              <td className="py-2 px-4 text-center">
-                                <span className={`inline-flex px-2 py-1  font-medium rounded-full ${
-                                  record.status === 'paid' 
-                                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                                    : record.status === 'partial'
-                                    ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
-                                    : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                                }`}>
-                                  {record.status}
-                                </span>
-                              </td>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b border-gray-100 dark:border-gray-800">
+                              <th className="text-left py-2 px-4 font-semibold text-gray-500 uppercase">{t('finance.varisankhya.monthYear')}</th>
+                              <th className="text-right py-2 px-4 font-semibold text-gray-500 uppercase">{t('finance.varisankhya.due')}</th>
+                              <th className="text-right py-2 px-4 font-semibold text-gray-500 uppercase">{t('finance.varisankhya.paid')}</th>
+                              <th className="text-center py-2 px-4 font-semibold text-gray-500 uppercase">{t('common.status')}</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {defaulterHistoryData.history.map((record, index) => (
+                              <tr key={index} className="border-b border-gray-50 dark:border-gray-800/50">
+                                <td className="py-2 px-4 whitespace-nowrap">{new Date(record.year, record.month - 1).toLocaleDateString('en-US', { month: 'long' })} {record.year}</td>
+                                <td className="py-2 px-4 text-right whitespace-nowrap">₹{record.amount_due?.toLocaleString() || 0}</td>
+                                <td className="py-2 px-4 text-right whitespace-nowrap">₹{record.amount_paid?.toLocaleString() || 0}</td>
+                                <td className="py-2 px-4 text-center whitespace-nowrap">
+                                  <span className={`inline-flex px-2 py-1 font-medium rounded-full ${
+                                    record.status === 'paid' 
+                                      ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                      : record.status === 'partial'
+                                      ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200'
+                                      : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                                  }`}>
+                                    {record.status}
+                                  </span>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </>
                   ) : (
                     <div className="text-center py-8">

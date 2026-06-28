@@ -717,44 +717,47 @@ export const Income = () => {
 
       {/* Tabs */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-        <div className="flex border-b border-gray-100 dark:border-gray-800 overflow-x-auto">
+        <div className="flex border-b border-gray-100 dark:border-gray-800">
           <button
             onClick={() => setActiveTab('due')}
-            className={`flex-1 px-6 py-4  font-medium transition-colors ${
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
               activeTab === 'due'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Calendar size={18} />
-              {t('finance.income.dueBasedIncome')}
+            <div className="flex items-center justify-center gap-1.5">
+              <Calendar size={16} className="shrink-0" />
+              <span className="hidden sm:inline">{t('finance.income.dueBasedIncome')}</span>
+              <span className="sm:hidden">Due Based</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('direct')}
-            className={`flex-1 px-6 py-4  font-medium transition-colors ${
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
               activeTab === 'direct'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Wallet size={18} />
-              {t('finance.income.directIncome')}
+            <div className="flex items-center justify-center gap-1.5">
+              <Wallet size={16} className="shrink-0" />
+              <span className="hidden sm:inline">{t('finance.income.directIncome')}</span>
+              <span className="sm:hidden">Direct</span>
             </div>
           </button>
           <button
             onClick={() => setActiveTab('hadiya')}
-            className={`flex-1 px-6 py-4  font-medium transition-colors ${
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
               activeTab === 'hadiya'
                 ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
                 : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
             }`}
           >
-            <div className="flex items-center justify-center gap-2">
-              <Heart size={18} />
-              {t('finance.income.quickHadiya')}
+            <div className="flex items-center justify-center gap-1.5">
+              <Heart size={16} className="shrink-0" />
+              <span className="hidden sm:inline">{t('finance.income.quickHadiya')}</span>
+              <span className="sm:hidden">Hadiya</span>
             </div>
           </button>
         </div>
@@ -762,123 +765,119 @@ export const Income = () => {
         {/* Search & Filter Bar - Hide for hadiya tab */}
         {activeTab !== 'hadiya' && (
           <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center justify-between">
-            <div className='flex items-center gap-3 col-span-2'>
-              <div className="relative flex-1 max-w-md">
-                <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder={activeTab === 'due' ? t('finance.income.searchDue') : t('finance.income.searchDirect')}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+            <div className="flex flex-col gap-3">
+              {/* Filters row */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder={activeTab === 'due' ? t('finance.income.searchDue') : t('finance.income.searchDirect')}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  />
+                </div>
+
+                <Select
+                  value={categoryFilter ? { value: categoryFilter, label: activeTab === 'due' ? dueCategories.find(c => c.name === categoryFilter)?.name : incomeCategories.find(c => c.name === categoryFilter)?.name } : null}
+                  onChange={(selected) => setCategoryFilter(selected ? selected.value : '')}
+                  options={activeTab === 'due' ? dueCategories.map(c => ({ value: c.name, label: c.name })) : incomeCategories.map(c => ({ value: c.name, label: c.name }))}
+                  placeholder={t('finance.income.allCategories')}
+                  className="w-full sm:w-44"
+                  styles={selectStyles}
                 />
+
+                {activeTab === 'due' && (
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="w-full sm:w-auto px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  >
+                    <option value="">{t('finance.income.allStatus')}</option>
+                    <option value="paid">{t('common.paid')}</option>
+                    <option value="unpaid">{t('common.unpaid')}</option>
+                    <option value="overdue">{t('finance.income.overdue')}</option>
+                  </select>
+                )}
+
+                {activeTab === 'direct' && (
+                  <select
+                    value={paymentMethodFilter}
+                    onChange={(e) => setPaymentMethodFilter(e.target.value)}
+                    className="w-full sm:w-auto px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  >
+                    <option value="">{t('finance.income.allMethods')}</option>
+                    <option value="cash">Cash</option>
+                    <option value="upi">UPI</option>
+                    <option value="bank">Bank</option>
+                  </select>
+                )}
               </div>
 
-              <Select
-                value={categoryFilter ? { value: categoryFilter, label: activeTab === 'due' ? dueCategories.find(c => c.name === categoryFilter)?.name : incomeCategories.find(c => c.name === categoryFilter)?.name } : null}
-                onChange={(selected) => setCategoryFilter(selected ? selected.value : '')}
-                options={activeTab === 'due' ? dueCategories.map(c => ({ value: c.name, label: c.name })) : incomeCategories.map(c => ({ value: c.name, label: c.name }))}
-                placeholder={t('finance.income.allCategories')}
-                className="w-48"
-                styles={selectStyles}
-              />
-
-              {activeTab === 'due' && (
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                >
-                  <option value="">{t('finance.income.allStatus')}</option>
-                  <option value="paid">{t('common.paid')}</option>
-                  <option value="unpaid">{t('common.unpaid')}</option>
-                  <option value="overdue">{t('finance.income.overdue')}</option>
-                </select>
-              )}
-
-              {activeTab === 'direct' && (
-                <select
-                  value={paymentMethodFilter}
-                  onChange={(e) => setPaymentMethodFilter(e.target.value)}
-                  className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                >
-                  <option value="">{t('finance.income.allMethods')}</option>
-                  <option value="cash">Cash</option>
-                  <option value="upi">UPI</option>
-                  <option value="bank">Bank</option>
-                </select>
-              )}
-
-              {(categoryFilter || statusFilter || paymentMethodFilter) && (
+              {/* Actions row */}
+              <div className="flex items-center gap-3">
+                {(categoryFilter || statusFilter || paymentMethodFilter) && (
+                  <button
+                    onClick={() => { setCategoryFilter(''); setStatusFilter(''); setPaymentMethodFilter(''); }}
+                    className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all hover:shadow-md active:scale-95 text-sm"
+                  >
+                    <X size={16} />
+                    {t('common.clearFilters')}
+                  </button>
+                )}
                 <button
-                  onClick={() => { setCategoryFilter(''); setStatusFilter(''); setPaymentMethodFilter(''); }}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all hover:shadow-md active:scale-95"
+                  onClick={() => activeTab === 'due' ? openAddDue() : openAddDirect()}
+                  className="ml-auto flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors text-sm"
                 >
-                  <X size={16} />
-                  {t('common.clearFilters')}
+                  <Plus size={18} />
+                  {activeTab === 'due' ? t('finance.income.addDue') : t('finance.income.addDirect')}
                 </button>
-              )}
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                onClick={() => activeTab === 'due' ? openAddDue() : openAddDirect()}
-                className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
-              >
-                <Plus size={18} />
-                {activeTab === 'due' ? t('finance.income.addDue') : t('finance.income.addDirect')}
-              </button>
+              </div>
             </div>
           </div>
-        </div>
         )}
 
         {/* Due Based Income Table */}
         {activeTab === 'due' && (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.category')}</th>
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.monthYear')}</th>
-                    <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.due')}</th>
-                    <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.paid')}</th>
-                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.status')}</th>
-                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.monthYear')}</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.due')}</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.paid')}</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-500 uppercase">Balance</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-500 uppercase">{t('common.status')}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* FIX: Empty state row */}
                   {dueData.incomes.length === 0 ? (
                     <tr>
                       <td colSpan={9} className="py-12 text-center text-gray-400 dark:text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                           <IndianRupee size={32} className="opacity-30" />
-                          <p className="">{t('common.noData')}</p>
+                          <p>{t('common.noData')}</p>
                         </div>
                       </td>
                     </tr>
                   ) : (
                     dueData.incomes.map((income) => (
                       <tr key={income._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
-                        <td className="py-3 px-4  font-medium text-gray-900 dark:text-white">{income.income_code}</td>
-                        <td className="py-3 px-4 ">
-                          <div className="flex items-center gap-2">
-                            {/* {getCategoryIcon(income.category)} */}
-                            {/* FIX: Use formatCategory helper with replaceAll */}
-                            <span className="capitalize">{formatCategory(income.category)}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{income.source_name}</td>
-                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{months[income.month - 1]?.label} {income.year}</td>
-                        <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">₹{income.amount_due?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right  font-medium text-green-600">₹{income.amount_paid?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right  font-medium text-orange-600">₹{income.balance?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-center"><span className={`inline-flex px-2 py-1  font-medium rounded-full ${getStatusBadge(income.status)}`}>{income.status}</span></td>
+                        <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{income.income_code}</td>
+                        <td className="py-3 px-4"><span className="capitalize">{formatCategory(income.category)}</span></td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{income.source_name}</td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{months[income.month - 1]?.label} {income.year}</td>
+                        <td className="py-3 px-4 text-right font-medium text-gray-900 dark:text-white">₹{income.amount_due?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right font-medium text-green-600">₹{income.amount_paid?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right font-medium text-orange-600">₹{income.balance?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-center"><span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(income.status)}`}>{income.status}</span></td>
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
                             {income.status !== 'paid' && (
@@ -896,9 +895,56 @@ export const Income = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden p-4 space-y-3">
+              {dueData.incomes.length === 0 ? (
+                <div className="py-12 text-center text-gray-400 dark:text-gray-500">
+                  <IndianRupee size={32} className="opacity-30 mx-auto mb-2" />
+                  <p>{t('common.noData')}</p>
+                </div>
+              ) : (
+                dueData.incomes.map((income) => (
+                  <div key={income._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold text-gray-900 dark:text-white">{income.income_code}</p>
+                        <p className="text-xs text-gray-500 capitalize">{formatCategory(income.category)} · {income.source_name}</p>
+                        <p className="text-xs text-gray-400">{months[income.month - 1]?.label} {income.year}</p>
+                      </div>
+                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full shrink-0 ${getStatusBadge(income.status)}`}>{income.status}</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-xs">
+                      <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
+                        <p className="text-gray-500">{t('finance.income.due')}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white">₹{income.amount_due?.toLocaleString()}</p>
+                      </div>
+                      <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
+                        <p className="text-gray-500">{t('finance.income.paid')}</p>
+                        <p className="font-semibold text-green-600">₹{income.amount_paid?.toLocaleString()}</p>
+                      </div>
+                      <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
+                        <p className="text-gray-500">Balance</p>
+                        <p className="font-semibold text-orange-600">₹{income.balance?.toLocaleString()}</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                      {income.status !== 'paid' && (
+                        <button onClick={() => openPaymentModal(income)} className="flex-1 py-1.5 text-xs bg-green-600 text-white rounded-lg font-medium">{t('finance.income.markPayment')}</button>
+                      )}
+                      <button onClick={() => viewHistory(income)} className="flex-1 py-1.5 text-xs bg-blue-600 text-white rounded-lg font-medium">History</button>
+                      <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'due' })} className="flex-1 py-1.5 text-xs bg-purple-600 text-white rounded-lg font-medium">Receipt</button>
+                      <button onClick={() => openEditDue(income)} className="p-1.5 text-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg"><Edit2 size={15} /></button>
+                      <button onClick={() => handleDeleteDue(income._id)} className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"><Trash2 size={15} /></button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
             {dueData.pages > 1 && (
-              <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
-                <p className=" text-gray-500">{t('finance.income.pageOf', { page: dueData.page, pages: dueData.pages })}</p>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border-t border-gray-200 dark:border-gray-800">
+                <p className="text-sm text-gray-500">{t('finance.income.pageOf', { page: dueData.page, pages: dueData.pages })}</p>
                 <div className="flex gap-2">
                   <button onClick={() => fetchDue(dueData.page - 1)} disabled={dueData.page === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronLeft size={18} /></button>
                   <button onClick={() => fetchDue(dueData.page + 1)} disabled={dueData.page === dueData.pages} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronRight size={18} /></button>
@@ -911,57 +957,50 @@ export const Income = () => {
         {/* Direct Income Table */}
         {activeTab === 'direct' && (
           <>
-            <div className="overflow-x-auto">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-gray-100 dark:border-gray-800">
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.date')}</th>
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.category')}</th>
-                    <th className="text-left py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
-                    <th className="text-right py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
-                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.method')}</th>
-                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('finance.income.receipt')}</th>
-                    <th className="text-center py-3 px-4  font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.code')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('common.date')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('common.category')}</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.source')}</th>
+                    <th className="text-right py-3 px-4 font-semibold text-gray-500 uppercase">{t('common.amount')}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.method')}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-500 uppercase">{t('finance.income.receipt')}</th>
+                    <th className="text-center py-3 px-4 font-semibold text-gray-500 uppercase">{t('common.actions')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {/* FIX: Empty state row */}
                   {directData.incomes.length === 0 ? (
                     <tr>
                       <td colSpan={8} className="py-12 text-center text-gray-400 dark:text-gray-500">
                         <div className="flex flex-col items-center gap-2">
                           <Wallet size={32} className="opacity-30" />
-                          <p className="">{t('common.noData')}</p>
+                          <p>{t('common.noData')}</p>
                         </div>
                       </td>
                     </tr>
                   ) : (
                     directData.incomes.map((income) => (
                       <tr key={income._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
-                        <td className="py-3 px-4  font-medium text-gray-900 dark:text-white">{income.income_code}</td>
-                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{new Date(income.date).toLocaleDateString()}</td>
-                        <td className="py-3 px-4 ">
-                          <div className="flex items-center gap-2">
-                            {/* {getCategoryIcon(income.category)} */}
-                            {/* FIX: Use formatCategory helper with replaceAll */}
-                            <span className="capitalize">{formatCategory(income.category)}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4  text-gray-700 dark:text-gray-300">{income.source_name}</td>
-                        <td className="py-3 px-4 text-right  font-medium text-gray-900 dark:text-white">₹{income.amount?.toLocaleString()}</td>
+                        <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{income.income_code}</td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{new Date(income.date).toLocaleDateString()}</td>
+                        <td className="py-3 px-4"><span className="capitalize">{formatCategory(income.category)}</span></td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{income.source_name}</td>
+                        <td className="py-3 px-4 text-right font-medium text-gray-900 dark:text-white">₹{income.amount?.toLocaleString()}</td>
                         <td className="py-3 px-4 text-center">
                           <div className="flex items-center justify-center gap-2">
                             {income.payment_method === 'cash' && <Banknote size={18} className="text-green-600" />}
                             {income.payment_method === 'upi' && <Smartphone size={18} className="text-blue-600" />}
                             {income.payment_method === 'bank' && <CreditCard size={18} className="text-purple-600" />}
-                            <span className="capitalize ">{income.payment_method}</span>
+                            <span className="capitalize">{income.payment_method}</span>
                           </div>
                         </td>
-                        <td className="py-3 px-4 text-center  text-gray-700 dark:text-gray-300">{income.receipt_no || '-'}</td>
+                        <td className="py-3 px-4 text-center text-gray-700 dark:text-gray-300">{income.receipt_no || '-'}</td>
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
-                            {/* FIX: Eye was used but not imported — now imported at top */}
                             <button onClick={() => setViewModal({ isOpen: true, income })} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title={t('common.view')}><Eye size={18} /></button>
                             <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'direct' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title={t('finance.income.receipt')}><Printer size={18} /></button>
                             <button onClick={() => openEditDirect(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title={t('common.edit')}><Edit2 size={18} /></button>
@@ -974,9 +1013,48 @@ export const Income = () => {
                 </tbody>
               </table>
             </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden p-4 space-y-3">
+              {directData.incomes.length === 0 ? (
+                <div className="py-12 text-center text-gray-400 dark:text-gray-500">
+                  <Wallet size={32} className="opacity-30 mx-auto mb-2" />
+                  <p>{t('common.noData')}</p>
+                </div>
+              ) : (
+                directData.incomes.map((income) => (
+                  <div key={income._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <p className="font-semibold text-gray-900 dark:text-white">{income.income_code}</p>
+                        <p className="text-xs text-gray-500 capitalize">{formatCategory(income.category)} · {income.source_name}</p>
+                        <p className="text-xs text-gray-400">{new Date(income.date).toLocaleDateString()}</p>
+                      </div>
+                      <p className="font-bold text-gray-900 dark:text-white shrink-0">₹{income.amount?.toLocaleString()}</p>
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-gray-500">
+                      <div className="flex items-center gap-1">
+                        {income.payment_method === 'cash' && <Banknote size={14} className="text-green-600" />}
+                        {income.payment_method === 'upi' && <Smartphone size={14} className="text-blue-600" />}
+                        {income.payment_method === 'bank' && <CreditCard size={14} className="text-purple-600" />}
+                        <span className="capitalize">{income.payment_method}</span>
+                      </div>
+                      <span>{income.receipt_no || '-'}</span>
+                    </div>
+                    <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                      <button onClick={() => setViewModal({ isOpen: true, income })} className="flex-1 py-1.5 text-xs bg-blue-600 text-white rounded-lg font-medium">{t('common.view')}</button>
+                      <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'direct' })} className="flex-1 py-1.5 text-xs bg-purple-600 text-white rounded-lg font-medium">Receipt</button>
+                      <button onClick={() => openEditDirect(income)} className="p-1.5 text-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg"><Edit2 size={15} /></button>
+                      <button onClick={() => handleDeleteDirect(income._id)} className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"><Trash2 size={15} /></button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
             {directData.pages > 1 && (
-              <div className="flex items-center justify-between p-4 border-t border-gray-200 dark:border-gray-800">
-                <p className=" text-gray-500">{t('finance.income.pageOf', { page: directData.page, pages: directData.pages })}</p>
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 border-t border-gray-200 dark:border-gray-800">
+                <p className="text-sm text-gray-500">{t('finance.income.pageOf', { page: directData.page, pages: directData.pages })}</p>
                 <div className="flex gap-2">
                   <button onClick={() => fetchDirect(directData.page - 1)} disabled={directData.page === 1} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronLeft size={18} /></button>
                   <button onClick={() => fetchDirect(directData.page + 1)} disabled={directData.page === directData.pages} className="p-2 rounded-lg border border-gray-200 dark:border-gray-700 disabled:opacity-50"><ChevronRight size={18} /></button>

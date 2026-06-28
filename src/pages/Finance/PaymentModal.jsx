@@ -136,18 +136,18 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                   {/* Body */}
                   <div className="p-6 space-y-4 overflow-y-auto">
                     {/* Amount Info */}
-                    <div className="grid grid-cols-3 gap-3 p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
+                    <div className="grid grid-cols-3 gap-2 p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
                       <div>
-                        <p className=" text-gray-500 uppercase">Amount Due</p>
-                        <p className="text-base font-bold text-gray-900 dark:text-white">₹{record.amount_due}</p>
+                        <p className="text-xs text-gray-500 uppercase">Amount Due</p>
+                        <p className="text-sm font-bold text-gray-900 dark:text-white">₹{record.amount_due}</p>
                       </div>
                       <div>
-                        <p className=" text-gray-500 uppercase">Already Paid</p>
-                        <p className="text-base font-bold text-green-600">₹{record.amount_paid}</p>
+                        <p className="text-xs text-gray-500 uppercase">Already Paid</p>
+                        <p className="text-sm font-bold text-green-600">₹{record.amount_paid}</p>
                       </div>
                       <div>
-                        <p className=" text-gray-500 uppercase">Remaining</p>
-                        <p className="text-base font-bold text-orange-600">₹{remainingAmount}</p>
+                        <p className="text-xs text-gray-500 uppercase">Remaining</p>
+                        <p className="text-sm font-bold text-orange-600">₹{remainingAmount}</p>
                       </div>
                     </div>
 
@@ -276,17 +276,17 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-end gap-2 p-4 border-t border-gray-100 dark:border-gray-800">
+                  <div className="flex flex-wrap items-center justify-end gap-2 p-4 border-t border-gray-100 dark:border-gray-800">
                     <button
                       onClick={onClose}
-                      className="px-3 py-2  text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+                      className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => handleSubmit(false)}
                       disabled={loading || !amountPaid}
-                      className="flex items-center gap-1.5 px-3 py-2  bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-2 text-sm bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50"
                       title="Save payment and close"
                     >
                       <CheckCircle size={16} />
@@ -295,11 +295,11 @@ const PaymentModal = ({ isOpen, onClose, record, onSuccess }) => {
                     <button
                       onClick={() => handleSubmit(true)}
                       disabled={loading || !amountPaid}
-                      className="flex items-center gap-1.5 px-3 py-2  bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 px-3 py-2 text-sm bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors disabled:opacity-50"
                       title="Save payment and show receipt for printing"
                     >
                       <Printer size={16} />
-                      {loading ? 'Saving...' : 'Save & Print Receipt'}
+                      {loading ? 'Saving...' : 'Save & Print'}
                     </button>
                   </div>
                 </>

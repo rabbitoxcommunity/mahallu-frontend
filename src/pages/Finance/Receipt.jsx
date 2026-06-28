@@ -230,31 +230,31 @@ Thank you for your payment!
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800 shrink-0">
+          <div className="flex flex-wrap items-center justify-end gap-2 p-4 sm:p-6 border-t border-gray-100 dark:border-gray-800 shrink-0">
             <button
               onClick={handleShare}
-              className="flex items-center gap-2 px-4 py-2 text-purple-600 hover:bg-purple-50 rounded-xl transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm text-purple-600 hover:bg-purple-50 rounded-xl transition-colors"
             >
-              <Share2 size={18} />
+              <Share2 size={16} />
               Share
             </button>
             <button
               onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 text-green-600 hover:bg-green-50 rounded-xl transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm text-green-600 hover:bg-green-50 rounded-xl transition-colors"
             >
-              <Download size={18} />
+              <Download size={16} />
               Download
             </button>
             <button
               onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 text-sm bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
             >
-              <Printer size={18} />
+              <Printer size={16} />
               Print
             </button>
             <button
               onClick={onClose}
-              className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+              className="px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
             >
               Close
             </button>

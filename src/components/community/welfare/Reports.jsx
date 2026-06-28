@@ -170,7 +170,7 @@ const Reports = () => {
     <div className="space-y-5">
       {/* Filters Panel */}
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-5 border border-gray-100 dark:border-gray-800">
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Filters</h3>
           <div className="flex items-center gap-2">
             <button onClick={handlePrint}

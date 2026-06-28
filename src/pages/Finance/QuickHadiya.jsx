@@ -299,23 +299,24 @@ const QuickHadiya = ({ onRefresh }) => {
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
         {/* Filter Section */}
         <div className="p-4 border-b border-gray-100 dark:border-gray-800">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-4 gap-3">
-              <div className="relative">
+          <div className="flex flex-col gap-3">
+            {/* Filters grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div className="relative sm:col-span-2 lg:col-span-1">
                 <Search size={20} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   placeholder="Search collections..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                 />
               </div>
 
               <select
                 value={contributorTypeFilter}
                 onChange={(e) => setContributorTypeFilter(e.target.value)}
-                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="w-full px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               >
                 <option value="">All Types</option>
                 <option value="house">House</option>
@@ -325,7 +326,7 @@ const QuickHadiya = ({ onRefresh }) => {
               <select
                 value={paymentMethodFilter}
                 onChange={(e) => setPaymentMethodFilter(e.target.value)}
-                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="w-full px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               >
                 <option value="">All Methods</option>
                 <option value="cash">Cash</option>
@@ -337,10 +338,11 @@ const QuickHadiya = ({ onRefresh }) => {
                 type="month"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                className="w-full px-3 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
               />
             </div>
 
+            {/* Actions row */}
             <div className="flex items-center gap-2">
               {(contributorTypeFilter || paymentMethodFilter || dateFilter) && (
                 <button
@@ -349,7 +351,7 @@ const QuickHadiya = ({ onRefresh }) => {
                     setPaymentMethodFilter('');
                     setDateFilter('');
                   }}
-                  className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all"
+                  className="flex items-center gap-2 px-4 py-2 text-sm bg-red-500 text-white rounded-xl hover:bg-red-600 transition-all"
                 >
                   <X size={16} />
                   Clear
@@ -358,7 +360,7 @@ const QuickHadiya = ({ onRefresh }) => {
 
               <button
                 onClick={() => setAddModal({ isOpen: true })}
-                className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
+                className="ml-auto flex items-center gap-2 px-4 py-2 text-sm bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
               >
                 <Plus size={18} />
                 New Collection

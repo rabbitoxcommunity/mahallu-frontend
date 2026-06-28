@@ -155,7 +155,8 @@ const SettingsTab = ({ config }) => {
                 </button>
             </div>
 
-            <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+            {/* Desktop Table */}
+            <div className="hidden md:block bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
                 <table className="w-full">
                     <thead><tr className="border-b border-gray-100 dark:border-gray-800">
                         <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">{t('results.settings.code')}</th>
@@ -193,8 +194,49 @@ const SettingsTab = ({ config }) => {
                 </table>
             </div>
 
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-3">
+                {loading ? Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="bg-white dark:bg-[#1e1f25] rounded-2xl p-4 border border-gray-100 dark:border-gray-800 animate-pulse">
+                        <div className="h-3 w-20 bg-gray-200 dark:bg-gray-700 rounded mb-2" />
+                        <div className="h-4 w-36 bg-gray-200 dark:bg-gray-700 rounded" />
+                    </div>
+                )) : items.length === 0 ? (
+                    <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-8 border border-gray-100 dark:border-gray-800 text-center text-sm text-gray-400 dark:text-gray-600">{t('common.noData')}</div>
+                ) : items.map(item => (
+                    <div key={item._id} className="bg-white dark:bg-[#1e1f25] rounded-2xl p-4 border border-gray-100 dark:border-gray-800">
+                        <div className="flex items-start justify-between gap-2 mb-2">
+                            <div>
+                                <p className="font-mono text-xs text-blue-600 dark:text-blue-400">{item.code}</p>
+                                <p className="font-semibold text-gray-900 dark:text-white text-sm mt-0.5">{item.name}</p>
+                            </div>
+                            {statusBadge(item.status)}
+                        </div>
+                        {config.extraCols && config.extraCols.length > 0 && (
+                            <div className="flex flex-wrap gap-x-4 gap-y-1 mb-3">
+                                {config.extraCols.map(col => (
+                                    <p key={col.label} className="text-xs text-gray-500 dark:text-gray-400">
+                                        {t(col.label)}: <span className="font-medium text-gray-700 dark:text-gray-300">{col.render(item)}</span>
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+                        <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                            <button onClick={() => setModal({ open: true, data: item })}
+                                className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl transition-colors">
+                                <Pencil size={12} /> {t('common.edit')}
+                            </button>
+                            <button onClick={() => handleDelete(item._id)}
+                                className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs font-medium text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl transition-colors">
+                                <Trash2 size={12} /> {t('common.delete')}
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             {total > 0 && (
-                <div className="flex items-center justify-between px-4 py-2 bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800">
                     <p className="text-sm text-gray-500 dark:text-gray-400">{((page - 1) * LIMIT) + 1}–{Math.min(page * LIMIT, total)} / {total}</p>
                     <div className="flex items-center gap-1">
                         <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="p-1.5 rounded-lg bg-gray-100 dark:bg-gray-800 disabled:opacity-40"><ChevronLeft size={14} /></button>
@@ -311,7 +353,7 @@ const SettingsModal = ({ isOpen, onClose, onSubmit, initialData, config, madrasa
                             </div>
 
                             {config.hasDateRange && (
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
                                         <label className={lc}>{t('results.settings.startDate')}</label>
                                         <input type="date" {...register('start_date')} className={ic(false)} />
@@ -354,7 +396,7 @@ const SettingsModal = ({ isOpen, onClose, onSubmit, initialData, config, madrasa
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-end gap-3 pt-1">
+                            <div className="flex flex-wrap items-center justify-end gap-3 pt-1">
                                 <button type="button" onClick={onClose} className="px-5 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">{t('common.cancel')}</button>
                                 <button type="submit" disabled={isSubmitting} className="px-6 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 disabled:opacity-60 transition-colors flex items-center gap-2">
                                     {isSubmitting ? <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />{t('common.loading')}</> : initialData ? t('common.update') : t('common.save')}
@@ -411,10 +453,12 @@ const ResultSettings = () => {
 
     return (
         <div className="space-y-5">
-            <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-1.5 flex gap-1 overflow-x-auto">
-                {TABS.map(tab => (
+            <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-1.5 grid grid-cols-2 sm:grid-cols-5 gap-1">
+                {TABS.map((tab, index) => (
                     <button key={tab} onClick={() => setActive(tab)}
-                        className={`px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all flex-shrink-0 ${active === tab ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
+                        className={`px-3 py-2 rounded-xl text-sm font-medium transition-all text-center
+                        ${index === TABS.length - 1 ? 'col-span-2 sm:col-span-1' : ''}
+                        ${active === tab ? 'bg-blue-600 text-white' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
                         {t(CONFIGS[tab].labelKey)}
                     </button>
                 ))}
