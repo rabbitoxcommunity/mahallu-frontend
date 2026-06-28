@@ -444,7 +444,8 @@
       "address": "Address",
       "notes": "Notes",
       "membersTitle": "Family Members",
-      "membersSubtitle": "View all members registered under"
+      "membersSubtitle": "View all members registered under",
+      "membershipCard": "Membership Card"
     }
   },
   "finance": {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Home, MapPin, Phone, Users, User, Droplets, Briefcase } from 'lucide-react';
+import { ArrowLeft, Home, MapPin, Phone, Users, User, Droplets, Briefcase, CreditCard } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import DataTable from '../../components/ui/DataTable';
+import HouseMembershipCard from '../../components/family/HouseMembershipCard';
 
 export default function HouseDetailedView() {
     const { id } = useParams();
@@ -14,6 +15,7 @@ export default function HouseDetailedView() {
     const [house, setHouse] = useState(null);
     const [members, setMembers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [cardOpen, setCardOpen] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -123,6 +125,7 @@ export default function HouseDetailedView() {
     ];
 
     return (
+        <>
         <div className="w-full space-y-6">
             {/* Header */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -133,13 +136,22 @@ export default function HouseDetailedView() {
                     </h1>
                     <p className="text-gray-500 dark:text-gray-400 mt-1">{t('family.houseDetail.pageDescription')}</p>
                 </div>
-                <button
-                    onClick={() => navigate('/family/house/register')}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
-                >
-                    <ArrowLeft size={16} />
-                    {t('family.houseDetail.back')}
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setCardOpen(true)}
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                    >
+                        <CreditCard size={16} />
+                        {t('family.houseDetail.membershipCard')}
+                    </button>
+                    <button
+                        onClick={() => navigate('/family/house/register')}
+                        className="flex items-center justify-center gap-2 px-4 py-2.5 font-medium text-gray-700 bg-white border border-gray-300 rounded-xl hover:bg-gray-50 dark:bg-[#1e1f25] dark:text-gray-300 dark:border-gray-800 dark:hover:bg-gray-800 transition-colors"
+                    >
+                        <ArrowLeft size={16} />
+                        {t('family.houseDetail.back')}
+                    </button>
+                </div>
             </div>
 
             <div className="flex flex-col gap-6">
@@ -239,5 +251,8 @@ export default function HouseDetailedView() {
                 </motion.div>
             </div>
         </div>
+
+        <HouseMembershipCard isOpen={cardOpen} onClose={() => setCardOpen(false)} house={house} />
+        </>
     );
 }
