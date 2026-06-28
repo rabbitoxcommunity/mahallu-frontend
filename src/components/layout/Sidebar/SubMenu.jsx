@@ -71,7 +71,7 @@ const SubMenu = ({ item }) => {
                             transition={{ duration: 0.2 }}
                             className="flex-1 overflow-hidden"
                         >
-                            <span className={` ${lang === 'en' ? '' : ''} font-medium whitespace-nowrap ml-1 flex items-center justify-between `}>
+                            <span className={`text-base font-medium whitespace-nowrap ml-1 flex items-center justify-between`}>
                                 {t(item.label)}
                                 <ChevronDown
                                     size={14}
@@ -84,7 +84,7 @@ const SubMenu = ({ item }) => {
 
                 {/* Tooltip for collapsed state */}
                 {isCollapsed && (
-                    <div className="absolute left-[calc(100%+12px)] px-3 py-2 bg-gray-900 text-white text-[11px] font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all invisible group-hover:visible shadow-xl z-[9999] whitespace-nowrap">
+                    <div className="absolute left-[calc(100%+12px)] px-3 py-2 bg-gray-900 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all invisible group-hover:visible shadow-xl z-[9999] whitespace-nowrap">
                         {t(item.label)}
                         <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-gray-900 rotate-45" />
                     </div>
@@ -108,7 +108,7 @@ const SubMenu = ({ item }) => {
                                     end
                                     onClick={closeMobile}
                                     className={({ isActive }) => `
-                                        ${lang === 'en' ? 'text-sm' : 'text-[13px]'} py-2 rounded-lg transition-colors
+                                        text-base py-2 rounded-lg transition-colors
                                         ${isActive
                                             ? "text-[#0B65F6] font-bold"
                                             : "text-gray-500 hover:text-gray-900 dark:hover:text-gray-200"

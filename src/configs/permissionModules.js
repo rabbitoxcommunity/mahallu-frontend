@@ -19,8 +19,7 @@ export const permissionModules = [
     description: 'Manage dashboard and analytics',
     subItems: [
       { label: "sidebar.services", path: "/dashboard", roles: ["admin", "superAdmin"] },
-      { label: "sidebar.permissions", path: "/super-admin", roles: ["superAdmin"] },
-      { label: "sidebar.analytics", path: "/analytics", roles: ["superAdmin"] }
+      { label: "sidebar.permissions", path: "/super-admin", roles: ["superAdmin"] }
     ]
   },
   {

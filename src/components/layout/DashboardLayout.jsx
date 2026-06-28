@@ -1,5 +1,6 @@
 import Sidebar from "./Sidebar";
 import { useSidebar } from "../../context/SidebarContext";
+import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 import { Menu, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -7,6 +8,7 @@ import { useEffect } from "react";
 
 const DashboardLayout = ({ children }) => {
     const { isCollapsed, toggleMobile } = useSidebar();
+    const { user } = useAuth();
     const { t, i18n } = useTranslation();
 
     useEffect(() => {
@@ -38,7 +40,7 @@ const DashboardLayout = ({ children }) => {
                         >
                             <Menu size={20} className="text-gray-600 dark:text-gray-400" />
                         </button>
-                        <span className="ml-4 font-bold text-gray-900 dark:text-gray-100">Mahallu CRM</span>
+                        <span className="ml-4 font-bold text-gray-900 dark:text-gray-100">{user?.tenant_name || 'Mahallu'} CRM</span>
                     </div>
                     <select
                         value={i18n.language}

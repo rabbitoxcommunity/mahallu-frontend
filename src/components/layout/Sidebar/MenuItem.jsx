@@ -33,7 +33,7 @@ const MenuItem = ({ item }) => {
                         transition={{ duration: 0.2 }}
                         className="flex-1 overflow-hidden"
                     >
-                        <span className=" font-medium whitespace-nowrap ml-1">
+                        <span className="text-base font-medium whitespace-nowrap ml-1">
                             {t(item.label)}
                         </span>
                     </motion.div>
@@ -49,7 +49,7 @@ const MenuItem = ({ item }) => {
 
             {/* Tooltip for collapsed state */}
             {isCollapsed && (
-                <div className="absolute  left-[calc(100%+12px)] px-3 py-2 bg-gray-900 text-white text-[11px] font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all invisible group-hover:visible shadow-xl z-[9999] whitespace-nowrap">
+                <div className="absolute left-[calc(100%+12px)] px-3 py-2 bg-gray-900 text-white text-xs font-medium rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-all invisible group-hover:visible shadow-xl z-[9999] whitespace-nowrap">
                     {t(item.label)}
                     {/* Tooltip Arrow */}
                     <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 bg-gray-900 rotate-45" />
