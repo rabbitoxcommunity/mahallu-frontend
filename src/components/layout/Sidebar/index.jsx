@@ -151,13 +151,14 @@ const Sidebar = () => {
                     ))}
                 </div>
 
-                {/* User Section & Logout */}
-                <div className="p-4 border-t border-gray-100 dark:border-gray-800">
+                {/* Footer Actions & User Section */}
+                <div className="p-4 border-t border-gray-100 dark:border-gray-800 space-y-4">
+                    {/* User Profile */}
                     <div className={`
-                        flex items-center gap-3 p-2 bg-gray-50 dark:bg-gray-800/50 rounded-2xl
-                        ${isCollapsed ? 'justify-center border-none bg-transparent' : ''}
+                        flex items-center gap-3 p-2
+                        ${isCollapsed ? 'justify-center' : 'bg-gray-50 dark:bg-gray-800/50 rounded-2xl'}
                     `}>
-                        <div className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-700 overflow-hidden flex-shrink-0 bg-gray-200 cursor-pointer">
+                        <div className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-700 overflow-hidden flex-shrink-0 bg-gray-200 cursor-pointer shadow-sm">
                             <img
                                 src={user?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name || 'User'}`}
                                 alt="Avatar"
@@ -170,22 +171,57 @@ const Sidebar = () => {
                                 <p className="text-xs text-gray-500 truncate">{user?.email || 'user@example.com'}</p>
                             </div>
                         )}
-                        {!isCollapsed && (
-                            <div className="flex items-center gap-1">
+                    </div>
+
+                    {/* Language Switch & Logout - Only show if not collapsed, otherwise just an icon */}
+                    {!isCollapsed ? (
+                        <div className="space-y-2">
+                            {/* Language Selector */}
+                            <div className="relative group">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <Globe size={16} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
+                                </div>
                                 <select
                                     value={i18n.language}
                                     onChange={(e) => i18n.changeLanguage(e.target.value)}
-                                    className="px-2 py-1 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                                    className="w-full pl-9 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0B65F6] appearance-none cursor-pointer transition-all shadow-sm hover:border-blue-300 dark:hover:border-gray-600"
                                 >
-                                    <option value="en">EN</option>
-                                    <option value="ml">ML</option>
+                                    <option value="en">English</option>
+                                    <option value="ml">മലയാളം</option>
                                 </select>
-                                <button onClick={handleLogout} className="p-2 hover:bg-red-50 hover:text-red-500 rounded-lg transition-colors group">
-                                    <LogOut size={18} />
-                                </button>
+                                {/* Custom arrow to replace native select arrow */}
+                                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                    <ChevronRight size={14} className="text-gray-400 rotate-90" />
+                                </div>
                             </div>
-                        )}
-                    </div>
+
+                            {/* Logout Button */}
+                            <button 
+                                onClick={handleLogout} 
+                                className="w-full flex items-center justify-center gap-2 py-2.5 text-sm font-bold text-red-600 hover:text-white bg-red-50 hover:bg-red-500 dark:bg-red-500/10 dark:hover:bg-red-500 rounded-xl transition-colors shadow-sm"
+                            >
+                                <LogOut size={16} />
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-3 items-center pt-2">
+                            <button
+                                onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ml' : 'en')}
+                                className="w-10 h-10 rounded-xl bg-gray-50 dark:bg-gray-800/50 hover:bg-blue-50 hover:text-blue-600 flex items-center justify-center transition-colors text-xs font-bold text-gray-500"
+                                title="Switch Language"
+                            >
+                                {i18n.language === 'en' ? 'EN' : 'ML'}
+                            </button>
+                            <button 
+                                onClick={handleLogout} 
+                                className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-500/10 hover:bg-red-500 hover:text-white text-red-500 flex items-center justify-center transition-colors"
+                                title="Logout"
+                            >
+                                <LogOut size={18} />
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 {/* Desktop Collapse Toggle */}
