@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Login from "./pages/Login";
@@ -39,7 +39,6 @@ import PublicHome from "./pages/public/Home";
 import PublicSearch from "./pages/public/Search";
 import PublicFamilyView from "./pages/public/FamilyView";
 import MarriageCertificate from "./pages/Public/MarriageCertificate";
-import Landing from "./pages/Landing";
 
 function App() {
     return (
@@ -52,8 +51,8 @@ function App() {
                         theme="colored"
                     />
                     <Routes>
-                        {/* SaaS Landing Page */}
-                        <Route path="/" element={<Landing />} />
+                        {/* Redirect Root to Login */}
+                        <Route path="/" element={<Navigate to="/login" replace />} />
 
                         {/* Public Portal Routes */}
                         <Route path="/public" element={<PublicHome />} />
