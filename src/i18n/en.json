@@ -426,6 +426,25 @@
       "contactDetails": "Contact Details",
       "educationCareer": "Education & Career",
       "healthSkills": "Health & Skills"
+    },
+    "houseDetail": {
+      "pageTitle": "House Details",
+      "pageDescription": "Detailed view of house and its members.",
+      "notFound": "House Not Found",
+      "backToList": "Go back to list",
+      "back": "Back",
+      "colName": "Name",
+      "colDob": "DOB / Age",
+      "colDetails": "Details",
+      "colStatus": "Status",
+      "yearsOld": "Years Old",
+      "memberFallback": "Member",
+      "zakatEligible": "Zakat Eligible",
+      "contact": "Contact",
+      "address": "Address",
+      "notes": "Notes",
+      "membersTitle": "Family Members",
+      "membersSubtitle": "View all members registered under"
     }
   },
   "finance": {

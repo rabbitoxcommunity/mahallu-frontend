@@ -426,6 +426,25 @@
       "educationCareer": "വിദ്യാഭ്യാസവും ജോലിയും",
       "contactDetails": "സമ്പർക്ക വിവരങ്ങൾ",
       "healthSkills": "ആരോഗ്യവും കഴിവുകളും"
+    },
+    "houseDetail": {
+      "pageTitle": "വീടിന്റെ വിവരങ്ങൾ",
+      "pageDescription": "വീടിന്റെയും അംഗങ്ങളുടെയും വിശദ വിവരങ്ങൾ.",
+      "notFound": "വീട് കണ്ടെത്താനായില്ല",
+      "backToList": "പട്ടികയിലേക്ക് മടങ്ങുക",
+      "back": "തിരികെ",
+      "colName": "പേര്",
+      "colDob": "ജനനത്തീയതി / വയസ്സ്",
+      "colDetails": "വിവരങ്ങൾ",
+      "colStatus": "സ്റ്റാറ്റസ്",
+      "yearsOld": "വയസ്സ്",
+      "memberFallback": "അംഗം",
+      "zakatEligible": "സകാത്തിന് അർഹത",
+      "contact": "കോൺടാക്റ്റ്",
+      "address": "മേൽവിലാസം",
+      "notes": "കുറിപ്പുകൾ",
+      "membersTitle": "കുടുംബ അംഗങ്ങൾ",
+      "membersSubtitle": "ഈ വീടിൽ രജിസ്റ്റർ ചെയ്ത എല്ലാ അംഗങ്ങളും"
     }
   },
   "finance": {
