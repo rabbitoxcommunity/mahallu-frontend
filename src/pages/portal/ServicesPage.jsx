@@ -19,7 +19,7 @@ const ServicesPage = () => {
 
   const services = [
     { key: 'marriage_certificate', icon: FileText,      title: t('portal.services.marriageCert'),  desc: t('portal.services.marriageCertDesc'),  to: `/portal/services/marriage-certificate${q}`, color: 'blue' },
-    { key: 'death_certificate',    icon: FileX,         title: t('portal.services.deathCert'),     desc: t('portal.services.deathCertDesc'),      to: `/portal/services/death-certificate${q}`,    color: 'purple', disabled: true },
+    { key: 'death_certificate',    icon: FileX,         title: t('portal.services.deathCert'),     desc: t('portal.services.deathCertDesc'),      to: `/portal/services/death-certificate${q}`,    color: 'purple' },
     { key: 'results',              icon: GraduationCap, title: t('portal.services.results'),       desc: t('portal.services.resultsDesc'),         to: `/portal/services/results${q}`,              color: 'purple' },
     { key: 'blood_donor',          icon: Droplets,      title: t('portal.services.bloodDonor'),    desc: t('portal.services.bloodDonorDesc'),      to: `/portal/services/blood-donor${q}`,          color: 'red' },
     { key: 'announcements',        icon: Megaphone,     title: t('portal.services.announcements'), desc: t('portal.services.announcementsDesc'),   to: `/portal/announcements${q}`,                 color: 'green' },

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import { toast } from 'react-toastify';
 import SearchableSelect from '../../components/ui/SearchableSelect';
+import Toggle from '../../components/ui/Toggle';
 
 export default function MemberForm({ initialData, onSuccess, onCancel, defaultHouseId }) {
     const { t } = useTranslation();
@@ -344,26 +345,17 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                 {/* Status Toggles */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 ">
                     <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
-                        <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" {...register("is_family_head")} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
-                        </label>
+                        <Toggle checked={!!watch('is_family_head')} onChange={v => setValue('is_family_head', v)} />
                         <span className="font-medium text-gray-900 dark:text-white">{t('family.form.isFamilyHead')}</span>
                     </div>
 
                     <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
-                        <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" {...register("yateem_status")} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
-                        </label>
+                        <Toggle checked={!!watch('yateem_status')} onChange={v => setValue('yateem_status', v)} />
                         <span className="font-medium text-gray-900 dark:text-white">{t('family.form.yateemStatus')}</span>
                     </div>
 
                     <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
-                        <label className="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" className="sr-only peer" {...register("is_active")} />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#0B65F6]"></div>
-                        </label>
+                        <Toggle checked={!!watch('is_active')} onChange={v => setValue('is_active', v)} />
                         <span className="font-medium text-gray-900 dark:text-white">{t('family.form.active')}</span>
                     </div>
                 </div>

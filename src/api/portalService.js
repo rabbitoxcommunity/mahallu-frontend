@@ -19,6 +19,8 @@ export const fetchPublicResults        = ()              => axios.get('/portal/r
 export const searchBloodDonors         = (blood_group)   => axios.get('/portal/blood-donors', q({ blood_group }));
 export const searchMarriageCertificates = (query)        => axios.get('/portal/marriage-certificates/search', q({ q: query }));
 export const fetchMarriageCertificate  = (cert_no)       => axios.get(`/portal/marriage-certificate/${cert_no}`, { ...q(), responseType: 'blob' });
+export const searchDeathCertificates   = (query)         => axios.get('/portal/death-certificates/search', q({ q: query }));
+export const fetchDeathCertificate     = (cert_id)       => axios.get(`/portal/death-certificate/${cert_id}`, { ...q(), responseType: 'blob' });
 
 // ── Admin APIs ────────────────────────────────────────────────────────────────
 export const fetchPortalSettings  = ()       => axios.get('/portal/admin/settings');

@@ -46,6 +46,7 @@ import PortalAnnouncementsPage from "./pages/portal/AnnouncementsPage";
 import PortalAboutPage from "./pages/portal/AboutPage";
 import PortalContactPage from "./pages/portal/ContactPage";
 import PortalMarriageCertPage from "./pages/portal/services/MarriageCertificatePage";
+import PortalDeathCertPage from "./pages/portal/services/DeathCertificatePage";
 import PortalResultsPage from "./pages/portal/services/ResultsPage";
 import PortalBloodDonorPage from "./pages/portal/services/BloodDonorPage";
 import PublicPortalSettings from "./pages/Settings/PublicPortalSettings";
@@ -79,6 +80,7 @@ function App() {
                           <Route path="/portal/about" element={<PortalAboutPage />} />
                           <Route path="/portal/contact" element={<PortalContactPage />} />
                           <Route path="/portal/services/marriage-certificate" element={<PortalMarriageCertPage />} />
+                          <Route path="/portal/services/death-certificate" element={<PortalDeathCertPage />} />
                           <Route path="/portal/services/results" element={<PortalResultsPage />} />
                           <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
                         </Route>

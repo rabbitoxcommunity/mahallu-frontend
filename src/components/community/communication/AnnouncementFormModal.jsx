@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Send, Save } from 'lucide-react';
+import { X, Copy, Send, Save, Globe } from 'lucide-react';
+import Toggle from '../../ui/Toggle';
 
 const WhatsAppIcon = ({ size = 16 }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -32,10 +33,13 @@ const buildMessage = ({ body, announcementDate, signature, organizationName, t }
     return msg.trim();
 };
 
+
 const AnnouncementFormModal = ({ editRecord, onClose, onSuccess }) => {
     const { t } = useTranslation();
     const [settings, setSettings] = useState({});
     const isEdit = !!editRecord;
+
+    const [showOnPortal, setShowOnPortal] = useState(true);
 
     const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm({
         defaultValues: { title: '', body: '', announcement_date: '' },
@@ -58,6 +62,9 @@ const AnnouncementFormModal = ({ editRecord, onClose, onSuccess }) => {
                     ? new Date(editRecord.announcement_date).toISOString().split('T')[0]
                     : '',
             });
+            setShowOnPortal(editRecord.visibility === 'public');
+        } else {
+            setShowOnPortal(true);
         }
     }, [editRecord, reset]);
 
@@ -88,7 +95,7 @@ const AnnouncementFormModal = ({ editRecord, onClose, onSuccess }) => {
         const payload = {
             title: values.title,
             body: values.body,
-            visibility: 'members_only',
+            visibility: showOnPortal ? 'public' : 'members_only',
             publish_immediately: publishNow,
             announcement_date: values.announcement_date || null,
         };
@@ -183,6 +190,18 @@ const AnnouncementFormModal = ({ editRecord, onClose, onSuccess }) => {
                                     {...register('announcement_date')}
                                     className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#252731] text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 />
+                            </div>
+
+                            {/* Show on portal toggle */}
+                            <div className="flex items-center justify-between gap-4 p-3.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#252731]">
+                                <div className="flex items-center gap-2.5">
+                                    <Globe size={16} className={showOnPortal ? 'text-blue-500' : 'text-gray-400'} />
+                                    <div>
+                                        <p className="text-sm font-medium text-gray-800 dark:text-gray-200">Show on public portal</p>
+                                        <p className="text-xs text-gray-400">Visible to everyone on the portal</p>
+                                    </div>
+                                </div>
+                                <Toggle checked={showOnPortal} onChange={setShowOnPortal} />
                             </div>
 
                         </div>

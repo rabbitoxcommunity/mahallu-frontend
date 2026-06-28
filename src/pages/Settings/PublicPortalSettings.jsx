@@ -3,17 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { Globe, Save, FileText, GraduationCap, Droplets, Megaphone, FileX, Info, Phone, Mail, MapPin, Clock, Copy, Check, ExternalLink } from 'lucide-react';
 import { fetchPortalSettings, updatePortalSettings } from '../../api/portalService';
 import { toast } from 'react-toastify';
+import Toggle from '../../components/ui/Toggle';
 
-const Toggle = ({ label, desc, value, onChange }) => (
+const ToggleRow = ({ label, desc, value, onChange }) => (
   <div className="flex items-center justify-between gap-4 py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
     <div>
       <p className="text-sm font-medium text-gray-900 dark:text-white">{label}</p>
       {desc && <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{desc}</p>}
     </div>
-    <button onClick={() => onChange(!value)}
-      className={`relative w-10 h-5 rounded-full transition-colors flex-shrink-0 ${value ? 'bg-blue-600' : 'bg-gray-200 dark:bg-gray-700'}`}>
-      <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${value ? 'translate-x-5' : 'translate-x-0.5'}`} />
-    </button>
+    <Toggle checked={!!value} onChange={onChange} />
   </div>
 );
 
@@ -110,14 +108,14 @@ const PublicPortalSettings = () => {
         {/* Services */}
         <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
           <h2 className="text-sm font-bold text-gray-900 dark:text-white mb-4">{t('settings.portalServices')}</h2>
-          <Toggle label={t('portal.services.marriageCert')}  desc={t('settings.allowPublicDownload')} value={form.marriage_certificate}  onChange={set('marriage_certificate')} />
-          <Toggle label={t('portal.services.deathCert')}     desc={t('settings.allowPublicDownload')} value={form.death_certificate}     onChange={set('death_certificate')} />
-          <Toggle label={t('portal.services.results')}       desc={t('settings.publishPublic')}       value={form.results}               onChange={set('results')} />
-          <Toggle label={t('portal.services.bloodDonor')}    desc={t('settings.publicSearchEnabled')} value={form.blood_donor}           onChange={set('blood_donor')} />
-          <Toggle label={t('portal.services.announcements')} desc={t('settings.showOnPortal')}        value={form.announcements}         onChange={set('announcements')} />
-          <Toggle label={t('portal.nav.about')}              desc=""                                  value={form.about_page}            onChange={set('about_page')} />
-          <Toggle label={t('portal.nav.contact')}            desc=""                                  value={form.contact_page}          onChange={set('contact_page')} />
-          <Toggle label={t('settings.bloodDonorShowContact')} desc={t('settings.bloodDonorShowContactDesc')} value={form.blood_donor_show_contact} onChange={set('blood_donor_show_contact')} />
+          <ToggleRow label={t('portal.services.marriageCert')}  desc={t('settings.allowPublicDownload')} value={form.marriage_certificate}  onChange={set('marriage_certificate')} />
+          <ToggleRow label={t('portal.services.deathCert')}     desc={t('settings.allowPublicDownload')} value={form.death_certificate}     onChange={set('death_certificate')} />
+          <ToggleRow label={t('portal.services.results')}       desc={t('settings.publishPublic')}       value={form.results}               onChange={set('results')} />
+          <ToggleRow label={t('portal.services.bloodDonor')}    desc={t('settings.publicSearchEnabled')} value={form.blood_donor}           onChange={set('blood_donor')} />
+          <ToggleRow label={t('portal.services.announcements')} desc={t('settings.showOnPortal')}        value={form.announcements}         onChange={set('announcements')} />
+          <ToggleRow label={t('portal.nav.about')}              desc=""                                  value={form.about_page}            onChange={set('about_page')} />
+          <ToggleRow label={t('portal.nav.contact')}            desc=""                                  value={form.contact_page}          onChange={set('contact_page')} />
+          <ToggleRow label={t('settings.bloodDonorShowContact')} desc={t('settings.bloodDonorShowContactDesc')} value={form.blood_donor_show_contact} onChange={set('blood_donor_show_contact')} />
         </div>
 
         {/* About / Contact Info */}

@@ -4,12 +4,13 @@ import { Save, Users, FileText } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import axios from '../../api/axios';
 import { toast } from 'react-toastify';
+import Toggle from '../../components/ui/Toggle';
 
 export default function FamilyForm({ initialData, onSuccess, onCancel }) {
     const { t } = useTranslation();
     const isEdit = !!initialData?._id;
 
-    const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
+    const { register, handleSubmit, formState: { errors, isSubmitting }, reset, watch, setValue } = useForm({
         defaultValues: {
             family_name: '',
             notes: '',
@@ -87,14 +88,7 @@ export default function FamilyForm({ initialData, onSuccess, onCancel }) {
 
             {/* Is Active Status (Checkbox) */}
             <div className="flex items-center gap-3 bg-gray-50 dark:bg-[#16171d] p-4 rounded-xl border border-gray-200 dark:border-gray-800">
-                <label className="relative inline-flex items-center cursor-pointer">
-                    <input 
-                        type="checkbox" 
-                        className="sr-only peer" 
-                        {...register("is_active")}
-                    />
-                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#0B65F6] dark:peer-focus:ring-[#0B65F6] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#0B65F6]"></div>
-                </label>
+                <Toggle checked={!!watch('is_active')} onChange={v => setValue('is_active', v)} />
                 <div>
                     <p className=" font-medium text-gray-900 dark:text-white flex items-center gap-1.5">
                         {t('family.form.activeStatus')}
