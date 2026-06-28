@@ -5,7 +5,8 @@ import {
   Settings,
   HandHeart,
   BookOpen,
-  MessageSquare
+  MessageSquare,
+  GraduationCap,
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -65,7 +66,20 @@ export const permissionModules = [
       { label: 'sidebar.communication', path: '/community/communication', roles: ['admin', 'superAdmin'] }
     ]
   },
-    {
+  {
+    key: 'results',
+    label: 'sidebar.results',
+    icon: GraduationCap,
+    path: '/results',
+    permission: 'results',
+    description: 'Manage madrasa exam results',
+    roles: ['admin', 'superAdmin'],
+    subItems: [
+      { label: 'sidebar.resultsList', path: '/results', roles: ['admin', 'superAdmin'] },
+      { label: 'sidebar.resultSettings', path: '/results/settings', roles: ['admin', 'superAdmin'] },
+    ],
+  },
+  {
     key: 'settings',
     label: "sidebar.settings",
     icon: Settings,

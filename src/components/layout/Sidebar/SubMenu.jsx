@@ -105,6 +105,7 @@ const SubMenu = ({ item }) => {
                                 <NavLink
                                     key={idx}
                                     to={sub.path}
+                                    end
                                     onClick={closeMobile}
                                     className={({ isActive }) => `
                                         ${lang === 'en' ? 'text-sm' : 'text-[13px]'} py-2 rounded-lg transition-colors
