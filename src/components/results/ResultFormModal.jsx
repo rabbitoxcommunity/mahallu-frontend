@@ -133,13 +133,29 @@ const ResultFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
     const updateMark = (idx, field, value) => {
         setSubjectMarks(prev => {
             const next = [...prev];
-            next[idx] = { ...next[idx], [field]: value };
-            if (field === 'obtained_marks' || field === 'max_marks') {
-                const obt = Number(field === 'obtained_marks' ? value : next[idx].obtained_marks) || 0;
-                const mx = Number(field === 'max_marks' ? value : next[idx].max_marks) || 100;
-                const pct = mx > 0 ? (obt / mx) * 100 : 0;
-                next[idx].grade = getGrade(pct);
+            let num = value === '' ? '' : Number(value);
+
+            if (field === 'max_marks') {
+                // max_marks must be ≥ 1
+                if (num !== '' && num < 1) num = 1;
+                next[idx] = { ...next[idx], max_marks: num };
+                // re-clamp obtained if it now exceeds the new max
+                const mx = Number(num) || 100;
+                const obt = Number(next[idx].obtained_marks) || 0;
+                if (obt > mx) next[idx].obtained_marks = mx;
+            } else if (field === 'obtained_marks') {
+                const mx = Number(next[idx].max_marks) || 100;
+                if (num !== '' && num < 0) num = 0;
+                if (num !== '' && num > mx) num = mx;
+                next[idx] = { ...next[idx], obtained_marks: num };
+            } else {
+                next[idx] = { ...next[idx], [field]: value };
             }
+
+            // recalculate grade
+            const obt = Number(next[idx].obtained_marks) || 0;
+            const mx  = Number(next[idx].max_marks) || 100;
+            next[idx].grade = getGrade(mx > 0 ? (obt / mx) * 100 : 0);
             return next;
         });
     };
@@ -303,15 +319,29 @@ const ResultFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                                                     </thead>
                                                     <tbody className="divide-y divide-gray-50 dark:divide-gray-800">
                                                         {subjectMarks.map((sm, idx) => (
-                                                            <tr key={sm.subject_id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30">
+                                                            <tr key={sm.subject_id} className="hover:bg-gray-50 dark:hover:bg-gray-800/30 [&>td]:pb-5">
                                                                 <td className="py-2 px-3 font-medium text-gray-900 dark:text-white">{sm.subject_name}</td>
                                                                 <td className="py-2 px-2">
-                                                                    <input type="number" min="0" value={sm.max_marks} onChange={e => updateMark(idx, 'max_marks', e.target.value)}
-                                                                        className="w-full text-center px-2 py-1.5 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white" />
+                                                                    <input
+                                                                        type="number" min="1" value={sm.max_marks}
+                                                                        onChange={e => updateMark(idx, 'max_marks', e.target.value)}
+                                                                        onKeyDown={e => ['-', '+', 'e', 'E'].includes(e.key) && e.preventDefault()}
+                                                                        className="w-full text-center px-2 py-1.5 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white"
+                                                                    />
                                                                 </td>
                                                                 <td className="py-2 px-2">
-                                                                    <input type="number" min="0" max={sm.max_marks} value={sm.obtained_marks} onChange={e => updateMark(idx, 'obtained_marks', e.target.value)}
-                                                                        className="w-full text-center px-2 py-1.5 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white" />
+                                                                    <div className="relative">
+                                                                        <input
+                                                                            type="number" min="0" max={sm.max_marks}
+                                                                            value={sm.obtained_marks}
+                                                                            onChange={e => updateMark(idx, 'obtained_marks', e.target.value)}
+                                                                            onKeyDown={e => ['-', '+', 'e', 'E'].includes(e.key) && e.preventDefault()}
+                                                                            className="w-full text-center px-2 py-1.5 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 dark:text-white"
+                                                                        />
+                                                                        <span className="absolute -bottom-4 left-0 right-0 text-center text-[10px] text-gray-400">
+                                                                            max {sm.max_marks}
+                                                                        </span>
+                                                                    </div>
                                                                 </td>
                                                                 <td className="py-2 px-2 text-center">
                                                                     <span className={`px-2 py-0.5 rounded-full text-xs font-bold ${sm.grade === 'F' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'}`}>

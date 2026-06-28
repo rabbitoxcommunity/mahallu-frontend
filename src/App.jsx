@@ -39,6 +39,17 @@ import PublicHome from "./pages/public/Home";
 import PublicSearch from "./pages/public/Search";
 import PublicFamilyView from "./pages/public/FamilyView";
 import MarriageCertificate from "./pages/Public/MarriageCertificate";
+// Public Portal
+import PortalHomePage from "./pages/portal/HomePage";
+import PortalServicesPage from "./pages/portal/ServicesPage";
+import PortalAnnouncementsPage from "./pages/portal/AnnouncementsPage";
+import PortalAboutPage from "./pages/portal/AboutPage";
+import PortalContactPage from "./pages/portal/ContactPage";
+import PortalMarriageCertPage from "./pages/portal/services/MarriageCertificatePage";
+import PortalResultsPage from "./pages/portal/services/ResultsPage";
+import PortalBloodDonorPage from "./pages/portal/services/BloodDonorPage";
+import PublicPortalSettings from "./pages/Settings/PublicPortalSettings";
+import { PortalProvider } from "./context/PortalContext";
 
 function App() {
     return (
@@ -54,11 +65,23 @@ function App() {
                         {/* Redirect Root to Login */}
                         <Route path="/" element={<Navigate to="/login" replace />} />
 
-                        {/* Public Portal Routes */}
+                        {/* Legacy public routes */}
                         <Route path="/public" element={<PublicHome />} />
                         <Route path="/public/search" element={<PublicSearch />} />
                         <Route path="/public/family/:id" element={<PublicFamilyView />} />
                         <Route path="/certificate/marriage" element={<MarriageCertificate />} />
+
+                        {/* Public Portal — all wrapped in PortalProvider so usePortal() works everywhere */}
+                        <Route element={<PortalProvider />}>
+                          <Route path="/portal" element={<PortalHomePage />} />
+                          <Route path="/portal/services" element={<PortalServicesPage />} />
+                          <Route path="/portal/announcements" element={<PortalAnnouncementsPage />} />
+                          <Route path="/portal/about" element={<PortalAboutPage />} />
+                          <Route path="/portal/contact" element={<PortalContactPage />} />
+                          <Route path="/portal/services/marriage-certificate" element={<PortalMarriageCertPage />} />
+                          <Route path="/portal/services/results" element={<PortalResultsPage />} />
+                          <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
+                        </Route>
 
                         {/* Login Route */}
                         <Route path="/login" element={<Login />} />
@@ -103,6 +126,7 @@ function App() {
                             {/* Settings Routes */}
                             <Route path="/settings/general" element={<GeneralSettings />} />
                             <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
+                            <Route path="/settings/public-portal" element={<PublicPortalSettings />} />
                             
                             {/* Community Routes */}
                             <Route path="/community/welfare" element={<Welfare />} />

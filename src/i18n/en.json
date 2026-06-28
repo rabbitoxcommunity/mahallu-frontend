@@ -1462,5 +1462,88 @@
     },
     "settingsTitle": "Result Settings",
     "settingsDescription": "Manage madrasas, classes, subjects and result types"
+  },
+  "portal": {
+    "mahallu": "Mahallu",
+    "poweredBy": "Powered by",
+    "viewAll": "View All",
+    "readMore": "Read More",
+    "all": "All",
+    "page": "Page",
+    "comingSoon": "Coming Soon",
+    "openService": "Open Service",
+    "latestAnnouncements": "Latest Announcements",
+    "workingHours": "Working Hours",
+    "searchPlaceholder": "Search...",
+    "nav": {
+      "home": "Home",
+      "services": "Services",
+      "announcements": "Announcements",
+      "about": "About",
+      "contact": "Contact"
+    },
+    "hero": {
+      "welcome": "Welcome to",
+      "subtitle": "Access official services, announcements and information from your Mahallu."
+    },
+    "services": {
+      "subtitle": "All available public services from your Mahallu.",
+      "marriageCert": "Marriage Certificate",
+      "marriageCertDesc": "Download your official marriage certificate by certificate number.",
+      "deathCert": "Death Certificate",
+      "deathCertDesc": "Download official death certificates.",
+      "results": "Exam Results",
+      "resultsDesc": "View published madrasa and exam results.",
+      "bloodDonor": "Blood Donor Search",
+      "bloodDonorDesc": "Find blood donors by blood group in your community.",
+      "announcements": "Announcements",
+      "announcementsDesc": "Read the latest official announcements from your Mahallu."
+    },
+    "announcements": {
+      "subtitle": "Official announcements published by your Mahallu.",
+      "empty": "No announcements available at this time."
+    },
+    "contact": {
+      "title": "Contact",
+      "subtitle": "Reach out to your Mahallu office.",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "mapPlaceholder": "Map integration coming soon."
+    },
+    "marriageCert": {
+      "subtitle": "Enter your certificate number to download your official marriage certificate.",
+      "certNoLabel": "Certificate Number",
+      "download": "Download Certificate",
+      "notFound": "Certificate not found. Please check the number and try again.",
+      "downloadSuccess": "Certificate downloaded successfully.",
+      "hint": "The certificate number is printed on your marriage registration receipt."
+    },
+    "results": {
+      "subtitle": "Published exam results from your Mahallu.",
+      "empty": "No results published yet."
+    },
+    "bloodDonor": {
+      "subtitle": "Search for blood donors in your community by blood group.",
+      "selectGroup": "Select Blood Group",
+      "search": "Search Donors",
+      "notFound": "No donors found for {{group}}.",
+      "found": "donors found"
+    }
+  },
+  "settings": {
+    "portalSettings": "Public Portal Settings",
+    "portalSettingsDesc": "Control which services are available on the public portal.",
+    "portalUrlLabel": "Your Public Portal URL",
+    "portalServices": "Public Services",
+    "allowPublicDownload": "Allow Public Download",
+    "publishPublic": "Publish to Public Portal",
+    "publicSearchEnabled": "Public Search Enabled",
+    "showOnPortal": "Show on Public Portal",
+    "bloodDonorShowContact": "Show Donor Contact",
+    "bloodDonorShowContactDesc": "Show mobile number of blood donors on search results.",
+    "portalContactInfo": "Contact Information",
+    "aboutDescription": "About Description",
+    "themeColor": "Theme Color"
   }
 }
