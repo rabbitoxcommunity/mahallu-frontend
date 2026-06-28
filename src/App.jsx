@@ -74,15 +74,15 @@ function App() {
 
                         {/* Public Portal — all wrapped in PortalProvider so usePortal() works everywhere */}
                         <Route element={<PortalProvider />}>
-                          <Route path="/portal" element={<PortalHomePage />} />
-                          <Route path="/portal/services" element={<PortalServicesPage />} />
-                          <Route path="/portal/announcements" element={<PortalAnnouncementsPage />} />
-                          <Route path="/portal/about" element={<PortalAboutPage />} />
-                          <Route path="/portal/contact" element={<PortalContactPage />} />
-                          <Route path="/portal/services/marriage-certificate" element={<PortalMarriageCertPage />} />
-                          <Route path="/portal/services/death-certificate" element={<PortalDeathCertPage />} />
-                          <Route path="/portal/services/results" element={<PortalResultsPage />} />
-                          <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
+                            <Route path="/portal" element={<PortalHomePage />} />
+                            <Route path="/portal/services" element={<PortalServicesPage />} />
+                            <Route path="/portal/announcements" element={<PortalAnnouncementsPage />} />
+                            <Route path="/portal/about" element={<PortalAboutPage />} />
+                            <Route path="/portal/contact" element={<PortalContactPage />} />
+                            <Route path="/portal/services/marriage-certificate" element={<PortalMarriageCertPage />} />
+                            <Route path="/portal/services/death-certificate" element={<PortalDeathCertPage />} />
+                            <Route path="/portal/services/results" element={<PortalResultsPage />} />
+                            <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
                         </Route>
 
                         {/* Login Route */}
@@ -99,37 +99,37 @@ function App() {
                         <Route element={<PrivateRoute />}>
                             <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/analytics" element={<Analytics />} />
-                            
+
                             {/* SuperAdmin Routes */}
                             <Route path="/super-admin" element={<SuperAdminDashboard />} />
                             <Route path="/super-admin/staff" element={<StaffList />} />
                             <Route path="/super-admin/staff/create" element={<CreateStaff />} />
                             <Route path="/super-admin/staff/:id/permissions" element={<EditStaffPermissions />} />
-                            
+
                             {/* Family Routes */}
                             <Route path="/family/register" element={<FamilyRegistration />} />
                             <Route path="/family/register/create" element={<AddFamily />} />
-                            
+
                             <Route path="/family/house/register" element={<HouseRegistration />} />
                             <Route path="/family/house/add" element={<AddHouse />} />
                             <Route path="/family/house/:id" element={<HouseDetailedView />} />
-                            
+
                             {/* Member Routes */}
                             <Route path="/family/member/register" element={<MemberRegistration />} />
                             <Route path="/family/member/add" element={<AddMember />} />
                             <Route path="/family/member/:id" element={<MemberDetailedView />} />
-                            
+
                             {/* Finance Routes */}
                             <Route path="/finance/varisankhya" element={<Varisankhya />} />
                             <Route path="/finance/income" element={<Income />} />
                             <Route path="/finance/expense" element={<Expense />} />
                             <Route path="/finance/reports" element={<Reports />} />
-                            
+
                             {/* Settings Routes */}
                             <Route path="/settings/general" element={<GeneralSettings />} />
                             <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
                             <Route path="/settings/public-portal" element={<PublicPortalSettings />} />
-                            
+
                             {/* Community Routes */}
                             <Route path="/community/welfare" element={<Welfare />} />
                             <Route path="/community/death-registry" element={<DeathRegistry />} />
@@ -141,7 +141,7 @@ function App() {
 
                             {/* Admin Routes */}
                             <Route path="/admin/marriages" element={<Marriages />} />
-                            
+
                             {/* Add other protected pages here */}
                         </Route>
                     </Routes>

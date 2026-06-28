@@ -851,7 +851,9 @@
       "deathRegistry": "Death records and certificates",
       "marriages": "Marriage records and certificates",
       "generalSettings": "Manage income categories",
-      "varisankhyaConfig": "Configure varisankhya settings"
+      "varisankhyaConfig": "Configure varisankhya settings",
+      "resultsList": "View and manage madrasa exam results",
+      "resultSettings": "Configure result types and academic years"
     },
     "items": {
       "mahallaSurvey": "Mahallu Survey",
