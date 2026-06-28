@@ -25,11 +25,10 @@ const ResultGroup = ({ group, highlight, defaultOpen }) => {
 
   // Find topper index (highest percentage among passing students, fallback to all)
   const topperIdx = useMemo(() => {
-    const passing = group.students.map((s, i) => ({ i, pct: s.percentage ?? 0, pass: s.is_pass }));
-    const passOnly = passing.filter(s => s.pass);
-    const pool = passOnly.length > 0 ? passOnly : passing;
-    if (pool.length === 0) return -1;
-    return pool.reduce((best, s) => s.pct > pool[best === -1 ? 0 : best].pct ? s : best, pool[0]).i;
+    const mapped = group.students.map((s, i) => ({ i, pct: s.percentage ?? 0, pass: s.is_pass }));
+    const pool = mapped.filter(s => s.pass).length > 0 ? mapped.filter(s => s.pass) : mapped;
+    if (!pool.length) return -1;
+    return pool.reduce((best, cur) => cur.pct > best.pct ? cur : best, pool[0]).i;
   }, [group.students]);
 
   // Unique subjects in order
@@ -68,6 +67,17 @@ const ResultGroup = ({ group, highlight, defaultOpen }) => {
             {group.students.length} student{group.students.length !== 1 ? 's' : ''}
             {subjects.length ? ` · ${subjects.length} subjects` : ''}
           </p>
+          {topperIdx !== -1 && (
+            <div className="flex items-center gap-1 mt-1.5">
+              <Trophy size={11} className="text-amber-500" />
+              <span className="text-xs font-semibold text-amber-600 dark:text-amber-400">
+                {group.students[topperIdx]?.name}
+              </span>
+              <span className="text-xs text-gray-400">
+                · {Number(group.students[topperIdx]?.percentage ?? 0).toFixed(1)}%
+              </span>
+            </div>
+          )}
         </div>
         {open
           ? <ChevronUp size={16} className="text-gray-400 flex-shrink-0" />
@@ -114,22 +124,31 @@ const ResultGroup = ({ group, highlight, defaultOpen }) => {
               {group.students.map((s, i) => {
                 const smap = {};
                 (s.subjects || []).forEach(sub => { if (sub.subject_name) smap[sub.subject_name] = sub; });
+                const isTopper = i === topperIdx;
+                const rowBg    = isTopper ? 'bg-amber-50 dark:bg-amber-900/10' : !s.is_pass ? 'bg-red-50/20 dark:bg-red-900/5' : '';
+                const stickyBg = isTopper ? 'bg-amber-50 dark:bg-amber-900/10' : !s.is_pass ? 'bg-red-50 dark:bg-[#2a1a1a]' : 'bg-white dark:bg-[#1e1f25]';
 
                 return (
-                  <tr
-                    key={i}
-                    className={`border-t border-gray-50 dark:border-gray-800/50 ${
-                      !s.is_pass ? 'bg-red-50/20 dark:bg-red-900/5' : ''
-                    }`}
-                  >
+                  <tr key={i} className={`border-t border-gray-50 dark:border-gray-800/50 ${rowBg}`}>
                     {/* Rank — sticky */}
-                    <td className={`sticky left-0 z-10 px-4 py-3 text-gray-400 font-medium text-center ${!s.is_pass ? 'bg-red-50 dark:bg-[#2a1a1a]' : 'bg-white dark:bg-[#1e1f25]'}`}>
-                      {i + 1}
+                    <td className={`sticky left-0 z-10 px-4 py-3 font-medium text-center ${stickyBg}`}>
+                      {isTopper
+                        ? <Trophy size={14} className="text-amber-500 mx-auto" />
+                        : <span className="text-gray-400">{i + 1}</span>}
                     </td>
 
                     {/* Name — sticky */}
-                    <td className={`sticky left-[44px] z-10 px-4 py-3 font-semibold text-gray-800 dark:text-gray-100 whitespace-nowrap border-r border-gray-100 dark:border-gray-800 ${!s.is_pass ? 'bg-red-50 dark:bg-[#2a1a1a]' : 'bg-white dark:bg-[#1e1f25]'}`}>
-                      {hl(s.name, highlight)}
+                    <td className={`sticky left-[44px] z-10 px-4 py-3 whitespace-nowrap border-r border-gray-100 dark:border-gray-800 ${stickyBg}`}>
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-gray-800 dark:text-gray-100">
+                          {hl(s.name, highlight)}
+                        </span>
+                        {isTopper && (
+                          <span className="text-[10px] font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full whitespace-nowrap">
+                            Topper
+                          </span>
+                        )}
+                      </div>
                     </td>
 
                     {/* Subject marks */}
