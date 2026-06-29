@@ -51,12 +51,14 @@ import PortalResultsPage from "./pages/portal/services/ResultsPage";
 import PortalBloodDonorPage from "./pages/portal/services/BloodDonorPage";
 import PublicPortalSettings from "./pages/Settings/PublicPortalSettings";
 import { PortalProvider } from "./context/PortalContext";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
     return (
         <AuthProvider>
             <SidebarProvider>
                 <BrowserRouter>
+                    <ScrollToTop />
                     <ToastContainer
                         position="top-right"
                         autoClose={3000}

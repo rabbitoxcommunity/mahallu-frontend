@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { FileText, Search, Download, AlertCircle, User, Calendar } from 'lucide-react';
 import PortalLayout from '../../../components/portal/PortalLayout';
 import { searchMarriageCertificates, fetchMarriageCertificate } from '../../../api/portalService';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const fmtDate = (d) =>
   d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
@@ -55,109 +56,140 @@ const MarriageCertificatePage = () => {
 
   return (
     <PortalLayout>
-      <div className="max-w-2xl mx-auto px-4 py-14">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 pt-32 pb-24 relative">
+        {/* Background decorative blob */}
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-100/40 dark:bg-blue-900/10 rounded-full blur-3xl pointer-events-none"></div>
 
         {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mx-auto mb-4">
-            <FileText size={26} className="text-blue-600 dark:text-blue-400" />
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-10 relative z-10"
+        >
+          <div className="w-20 h-20 rounded-[1.5rem] bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 flex items-center justify-center mx-auto mb-6 transform -rotate-6">
+            <FileText size={36} className="text-white" />
           </div>
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-            {t('portal.services.marriageCert')}
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3">
+            {t('portal.services.marriageCert', {defaultValue: 'Marriage Certificate'})}
           </h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Enter a certificate number, name, or registration number to find and download.
+          <p className="text-base font-medium text-gray-600 dark:text-gray-400">
+            {t('portal.marriageCert.subtitle', {defaultValue: 'Enter a certificate number, name, or registration number to find and download.'})}
           </p>
-        </div>
+        </motion.div>
 
         {/* Search box */}
-        <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-5 mb-4">
-          <label className="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-2">
-            Search
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          className="bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/40 dark:border-white/10 p-8 sm:p-10 mb-8 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] shadow-[0_30px_60px_rgba(0,0,0,0.05)] relative z-10"
+        >
+          <label className="block text-sm font-extrabold text-gray-900 dark:text-white uppercase tracking-widest mb-6 text-center">
+            {t('portal.search', {defaultValue: 'Search Records'})}
           </label>
           <div className="relative">
-            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text"
               value={query}
               onChange={e => doSearch(e.target.value)}
               placeholder="e.g. 003, Ahmed, CERT-003, MRG-003"
               autoFocus
-              className="w-full pl-9 pr-3 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-[#252731] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-14 pr-12 py-4 text-base font-bold border border-white/40 dark:border-white/10 rounded-2xl bg-white/50 dark:bg-black/20 backdrop-blur-md text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all shadow-inner placeholder-gray-500"
             />
             {searching && (
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-blue-400/30 border-t-blue-500 rounded-full animate-spin" />
+              <span className="absolute right-5 top-1/2 -translate-y-1/2 w-5 h-5 border-2 border-blue-400/30 border-t-blue-500 rounded-full animate-spin" />
             )}
           </div>
-        </div>
+        </motion.div>
 
         {/* Error */}
-        {error && (
-          <div className="flex items-center gap-2 text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl px-4 py-3 mb-4">
-            <AlertCircle size={14} />{error}
-          </div>
-        )}
+        <AnimatePresence>
+          {error && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+              className="overflow-hidden"
+            >
+              <div className="flex items-center gap-3 text-sm font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-2xl px-6 py-4 mb-6">
+                <AlertCircle size={18} />{error}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Results */}
-        {results !== null && (
-          results.length === 0 ? (
-            <div className="text-center py-10 text-sm text-gray-400">
-              No certificates found for &quot;{query}&quot;.
-            </div>
-          ) : (
-            <div className="space-y-3">
-              <p className="text-xs text-gray-400 px-1">{results.length} result{results.length !== 1 ? 's' : ''} found</p>
-              {results.map(m => (
-                <div key={m._id}
-                  className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 px-5 py-4 flex items-center justify-between gap-4">
-
-                  <div className="min-w-0">
-                    {/* Cert / marriage ID badges */}
-                    <div className="flex items-center gap-2 mb-2 flex-wrap">
-                      {m.certificate_no && (
-                        <span className="text-[10px] font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full">
-                          {m.certificate_no}
-                        </span>
-                      )}
-                      {m.marriage_id && (
-                        <span className="text-[10px] font-bold bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full">
-                          {m.marriage_id}
-                        </span>
-                      )}
-                      {m.date && (
-                        <span className="flex items-center gap-1 text-[10px] text-gray-400">
-                          <Calendar size={10} />{fmtDate(m.date)}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Names */}
-                    <div className="flex items-center gap-1.5 text-sm text-gray-900 dark:text-white font-medium truncate">
-                      <User size={13} className="text-gray-400 flex-shrink-0" />
-                      <span className="truncate">
-                        {m.groom_name || '—'}
-                        <span className="text-gray-400 font-normal mx-1.5">&amp;</span>
-                        {m.bride_name || '—'}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Download button */}
-                  <button
-                    onClick={() => handleDownload(m.certificate_no, m.marriage_id)}
-                    disabled={downloading === (m.certificate_no || m.marriage_id)}
-                    className="flex-shrink-0 flex items-center gap-1.5 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-xs font-medium transition-colors"
-                  >
-                    {downloading === (m.certificate_no || m.marriage_id)
-                      ? <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      : <Download size={13} />}
-                    Download
-                  </button>
+        <AnimatePresence>
+          {results !== null && (
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}
+              className="relative z-10"
+            >
+              {results.length === 0 ? (
+                <div className="text-center py-12 text-base font-medium text-gray-400 bg-white/50 dark:bg-[#1a1b20]/50 rounded-[2rem] border border-gray-200/50 dark:border-gray-800/50">
+                  No certificates found for &quot;<span className="text-gray-900 dark:text-white">{query}</span>&quot;.
                 </div>
-              ))}
-            </div>
-          )
-        )}
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between px-2 mb-2">
+                    <h3 className="font-bold text-gray-900 dark:text-white text-lg">Results Found</h3>
+                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold">
+                      {results.length} result{results.length !== 1 ? 's' : ''}
+                    </span>
+                  </div>
+                  {results.map((m, i) => (
+                    <motion.div 
+                      key={m._id}
+                      initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                      className="bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-xl rounded-[1.5rem] border border-white/40 dark:border-white/10 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-white/60 dark:hover:bg-[#111]/60 transition-all group"
+                    >
+                      <div className="min-w-0 flex-1">
+                        {/* Cert / marriage ID badges */}
+                        <div className="flex items-center gap-2 mb-3 flex-wrap">
+                          {m.certificate_no && (
+                            <span className="text-[10px] uppercase tracking-wider font-bold bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full">
+                              CERT: {m.certificate_no}
+                            </span>
+                          )}
+                          {m.marriage_id && (
+                            <span className="text-[10px] uppercase tracking-wider font-bold bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-3 py-1 rounded-full">
+                              ID: {m.marriage_id}
+                            </span>
+                          )}
+                          {m.date && (
+                            <span className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 px-2 py-1">
+                              <Calendar size={12} />{fmtDate(m.date)}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Names */}
+                        <div className="flex items-center gap-3 text-base text-gray-900 dark:text-white font-extrabold truncate">
+                          <div className="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0">
+                            <User size={14} className="text-gray-500" />
+                          </div>
+                          <span className="truncate flex items-center flex-wrap gap-2">
+                            <span>{m.groom_name || '—'}</span>
+                            <span className="text-blue-500/50 font-normal px-1">&amp;</span>
+                            <span>{m.bride_name || '—'}</span>
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Download button */}
+                      <button
+                        onClick={() => handleDownload(m.certificate_no, m.marriage_id)}
+                        disabled={downloading === (m.certificate_no || m.marriage_id)}
+                        className="w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 text-white rounded-2xl text-sm font-extrabold tracking-wide uppercase transition-all shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 group-hover:scale-105"
+                      >
+                        {downloading === (m.certificate_no || m.marriage_id)
+                          ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          : <Download size={16} />}
+                        Download
+                      </button>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </PortalLayout>

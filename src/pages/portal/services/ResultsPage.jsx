@@ -6,6 +6,7 @@ import EmptyState from '../../../components/portal/EmptyState';
 import LoadingSkeleton from '../../../components/portal/LoadingSkeleton';
 import { fetchPublicResults } from '../../../api/portalService';
 import { usePortal } from '../../../context/PortalContext';
+import { motion } from 'framer-motion';
 
 const hl = (text, q) => {
   if (!q || !text) return text;
@@ -44,12 +45,12 @@ const ResultGroup = ({ group, highlight, defaultOpen }) => {
   }, [group]);
 
   return (
-    <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+    <div className="bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-xl rounded-[1.5rem] border border-white/40 dark:border-white/10 overflow-hidden shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
 
       {/* Group header toggle */}
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between gap-3 px-5 py-4 text-left transition-colors"
+        className="w-full flex items-center justify-between gap-3 px-6 py-5 text-left hover:bg-white/60 dark:hover:bg-[#111]/60 transition-colors"
       >
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -261,17 +262,25 @@ const ResultsPage = () => {
 
   return (
     <PortalLayout>
-      <div className="max-w-full px-4 py-10">
-        <div className="max-w-5xl mx-auto">
+      <div className="max-w-full px-4 sm:px-6 pt-32 pb-24 relative">
+        <div className="absolute top-10 left-1/2 -translate-x-1/2 w-96 h-96 bg-purple-100/40 dark:bg-purple-900/10 rounded-full blur-3xl pointer-events-none"></div>
 
+        <div className="max-w-5xl mx-auto relative z-10">
           {/* Header */}
-          <div className="mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center mb-4">
-              <GraduationCap size={22} className="text-purple-600 dark:text-purple-400" />
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            className="mb-10 text-center relative z-10"
+          >
+            <div className="w-20 h-20 rounded-[1.5rem] bg-gradient-to-br from-purple-500 to-indigo-600 shadow-lg shadow-purple-500/20 flex items-center justify-center mx-auto mb-6 transform -rotate-6">
+              <GraduationCap size={36} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">{t('portal.services.results')}</h1>
-            <p className="text-sm text-gray-500 dark:text-gray-400">{t('portal.results.subtitle')}</p>
-          </div>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-3">
+              {t('portal.services.results', {defaultValue: 'Madrasa Results'})}
+            </h1>
+            <p className="text-base font-medium text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+              {t('portal.results.subtitle', {defaultValue: 'View and download student examination results.'})}
+            </p>
+          </motion.div>
 
           {loading ? (
             <div className="space-y-4"><LoadingSkeleton count={3} type="card" /></div>
@@ -280,43 +289,43 @@ const ResultsPage = () => {
           ) : (
             <>
               {/* Madrasa tabs */}
-              <div className="overflow-x-auto pb-1 mb-5 -mx-1 px-1">
-                <div className="flex gap-2 min-w-max">
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="overflow-x-auto pb-1 mb-8 -mx-1 px-1">
+                <div className="flex gap-3 min-w-max justify-center">
                   {[{ label: 'All Madrasas', value: 'all', count: data.length }, ...madrasas.map(m => ({ label: m, value: m, count: data.filter(g => g.madrasa === m).length }))].map(tab => (
                     <button
                       key={tab.value}
                       onClick={() => setActiveTab(tab.value)}
-                      className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors border ${
+                      className={`px-5 py-3 rounded-2xl text-sm font-bold whitespace-nowrap transition-all shadow-sm ${
                         activeTab === tab.value
-                          ? 'bg-purple-600 text-white border-purple-600'
-                          : 'bg-white dark:bg-[#1e1f25] text-gray-600 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-purple-400 hover:text-purple-600'
+                          ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-purple-600/20 scale-105'
+                          : 'bg-white/40 dark:bg-black/20 backdrop-blur-md text-gray-600 dark:text-gray-300 border border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10 hover:text-purple-600'
                       }`}
                     >
                       {tab.label}
-                      <span className={`ml-1.5 text-[11px] px-1.5 py-0.5 rounded-full font-bold ${
-                        activeTab === tab.value ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-gray-800 text-gray-400'
+                      <span className={`ml-2 text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wider ${
+                        activeTab === tab.value ? 'bg-white/20 text-white' : 'bg-white/40 dark:bg-black/40 text-gray-500'
                       }`}>{tab.count}</span>
                     </button>
                   ))}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Search */}
-              <div className="relative mb-5">
-                <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="relative mb-8 max-w-2xl mx-auto z-10">
+                <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                   placeholder="Search by student name, class, exam type…"
-                  className="w-full pl-10 pr-10 py-2.5 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1e1f25] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full pl-14 pr-12 py-4 text-base font-bold border border-white/40 dark:border-white/10 rounded-[2rem] bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] placeholder-gray-500 transition-all"
                 />
                 {search && (
-                  <button onClick={() => setSearch('')} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                  <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 transition-colors">
                     <X size={14} />
                   </button>
                 )}
-              </div>
+              </motion.div>
 
               {q && (
                 <p className="text-xs text-gray-400 mb-3">

@@ -5,6 +5,7 @@ import PortalLayout from '../../components/portal/PortalLayout';
 import ServiceCard from '../../components/portal/ServiceCard';
 import { usePortal } from '../../context/PortalContext';
 import LoadingSkeleton from '../../components/portal/LoadingSkeleton';
+import { motion } from 'framer-motion';
 
 const qs = () => {
   const slug = localStorage.getItem('portal_tenant') || new URLSearchParams(window.location.search).get('t') || '';
@@ -18,31 +19,51 @@ const ServicesPage = () => {
   const q   = qs();
 
   const services = [
-    { key: 'marriage_certificate', icon: FileText,      title: t('portal.services.marriageCert'),  desc: t('portal.services.marriageCertDesc'),  to: `/portal/services/marriage-certificate${q}`, color: 'blue' },
-    { key: 'death_certificate',    icon: FileX,         title: t('portal.services.deathCert'),     desc: t('portal.services.deathCertDesc'),      to: `/portal/services/death-certificate${q}`,    color: 'purple' },
-    { key: 'results',              icon: GraduationCap, title: t('portal.services.results'),       desc: t('portal.services.resultsDesc'),         to: `/portal/services/results${q}`,              color: 'purple' },
-    { key: 'blood_donor',          icon: Droplets,      title: t('portal.services.bloodDonor'),    desc: t('portal.services.bloodDonorDesc'),      to: `/portal/services/blood-donor${q}`,          color: 'red' },
-    { key: 'announcements',        icon: Megaphone,     title: t('portal.services.announcements'), desc: t('portal.services.announcementsDesc'),   to: `/portal/announcements${q}`,                 color: 'green' },
+    { key: 'marriage_certificate', icon: FileText,      title: t('portal.services.marriageCert', {defaultValue: 'Marriage Certificate'}),  desc: t('portal.services.marriageCertDesc', {defaultValue: 'Apply online'}),  to: `/portal/services/marriage-certificate${q}`, color: 'blue' },
+    { key: 'death_certificate',    icon: FileX,         title: t('portal.services.deathCert', {defaultValue: 'Death Certificate'}),     desc: t('portal.services.deathCertDesc', {defaultValue: 'Apply online'}),      to: `/portal/services/death-certificate${q}`,    color: 'purple' },
+    { key: 'results',              icon: GraduationCap, title: t('portal.services.results', {defaultValue: 'Exam Results'}),       desc: t('portal.services.resultsDesc', {defaultValue: 'Madrasa results'}),         to: `/portal/services/results${q}`,              color: 'purple' },
+    { key: 'blood_donor',          icon: Droplets,      title: t('portal.services.bloodDonor', {defaultValue: 'Blood Donors'}),    desc: t('portal.services.bloodDonorDesc', {defaultValue: 'Find a donor'}),      to: `/portal/services/blood-donor${q}`,          color: 'red' },
+    { key: 'announcements',        icon: Megaphone,     title: t('portal.services.announcements', {defaultValue: 'Announcements'}), desc: t('portal.services.announcementsDesc', {defaultValue: 'News & updates'}),   to: `/portal/announcements${q}`,                 color: 'green' },
   ];
 
   return (
     <PortalLayout>
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('portal.nav.services')}</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('portal.services.subtitle')}</p>
-        </div>
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-24">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-12 text-center sm:text-left"
+        >
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">
+            {t('portal.nav.services', {defaultValue: 'Our Services'})}
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl font-medium">
+            {t('portal.services.subtitle', {defaultValue: 'Access all essential community services from one central dashboard.'})}
+          </p>
+        </motion.div>
 
         {loading ? (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <LoadingSkeleton count={6} type="card" />
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {services.map(s => (
-              <ServiceCard key={s.key} {...s} disabled={s.disabled || svc[s.key] === false} />
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ staggerChildren: 0.1 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {services.map((s, i) => (
+              <motion.div
+                key={s.key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+              >
+                <ServiceCard {...s} disabled={s.disabled || svc[s.key] === false} />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         )}
       </div>
     </PortalLayout>

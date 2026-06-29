@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { Search, Megaphone, ChevronLeft, ChevronRight, X, Calendar, Tag, Paperclip } from 'lucide-react';
 import PortalLayout from '../../components/portal/PortalLayout';
@@ -7,6 +8,7 @@ import EmptyState from '../../components/portal/EmptyState';
 import LoadingSkeleton from '../../components/portal/LoadingSkeleton';
 import { fetchAnnouncements, fetchAnnouncementCategories } from '../../api/portalService';
 import { usePortal } from '../../context/PortalContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const fmtDate = (d) =>
   d ? new Date(d).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
@@ -14,56 +16,58 @@ const fmtDate = (d) =>
 const AnnouncementModal = ({ announcement, onClose }) => {
   if (!announcement) return null;
   const { title, category, body, published_at, attachment_url } = announcement;
+  return createPortal(
+    <AnimatePresence>
+      <div className="fixed inset-0 z-[999] flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose}>
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="absolute inset-0 bg-gray-900/40 dark:bg-black/60 backdrop-blur-sm" 
+        />
+        <motion.div 
+          initial={{ opacity: 0, y: 100, scale: 0.95 }} 
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 100, scale: 0.95 }}
+          className="relative bg-white/40 dark:bg-black/40 backdrop-blur-3xl w-full sm:max-w-xl rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] max-h-[90vh] flex flex-col overflow-hidden border border-white/40 dark:border-white/10"
+          onClick={e => e.stopPropagation()}
+        >
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-      onClick={onClose}>
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-      <div
-        className="relative bg-white dark:bg-[#1e1f25] w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl shadow-2xl max-h-[90vh] flex flex-col"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="flex items-start justify-between gap-3 p-5 pb-4 border-b border-gray-100 dark:border-gray-800">
-          <div className="flex-1 min-w-0">
-            {category && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-medium px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 mb-2">
-                <Tag size={9} />{category}
-              </span>
-            )}
-            <h2 className="text-base font-bold text-gray-900 dark:text-white leading-snug">{title}</h2>
-            {published_at && (
-              <div className="flex items-center gap-1 text-xs text-gray-400 mt-1">
-                <Calendar size={11} />{fmtDate(published_at)}
-              </div>
+          <div className="relative flex items-start justify-between gap-4 p-8 pb-4">
+            <div className="flex-1 min-w-0">
+              {category && (
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider px-3 py-1.5 rounded-full bg-blue-100 dark:bg-blue-500/20 text-blue-700 dark:text-blue-400 mb-4">
+                  <Tag size={10} />{category}
+                </span>
+              )}
+              <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">{title}</h2>
+              {published_at && (
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-gray-400 mt-3">
+                  <Calendar size={12} />{fmtDate(published_at)}
+                </div>
+              )}
+            </div>
+            <button onClick={onClose} className="flex-shrink-0 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+              <X size={20} className="text-gray-500 dark:text-gray-400" />
+            </button>
+          </div>
+          <div className="overflow-y-auto p-8 pt-4 flex-1 relative">
+            {body ? (
+              <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap font-medium">{body}</p>
+            ) : (
+              <p className="text-sm text-gray-400 italic">No content available.</p>
             )}
           </div>
-          <button onClick={onClose}
-            className="flex-shrink-0 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
-            <X size={18} className="text-gray-400" />
-          </button>
-        </div>
-
-        {/* Body */}
-        <div className="overflow-y-auto p-5 flex-1">
-          {body ? (
-            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{body}</p>
-          ) : (
-            <p className="text-sm text-gray-400 italic">No content available.</p>
+          {attachment_url && (
+            <div className="p-8 pt-4 border-t border-gray-100 dark:border-gray-800/50 bg-gray-50/50 dark:bg-gray-900/50">
+              <a href={attachment_url} target="_blank" rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 text-sm font-semibold bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-white rounded-lg transition-colors">
+                <Paperclip size={16} />View Attachment
+              </a>
+            </div>
           )}
-        </div>
-
-        {/* Attachment */}
-        {attachment_url && (
-          <div className="px-5 pb-5 pt-2 border-t border-gray-100 dark:border-gray-800">
-            <a href={attachment_url} target="_blank" rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 text-sm bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
-              <Paperclip size={14} />View Attachment
-            </a>
-          </div>
-        )}
+        </motion.div>
       </div>
-    </div>
+    </AnimatePresence>,
+    document.body
   );
 };
 
@@ -110,61 +114,86 @@ const AnnouncementsPage = () => {
 
   return (
     <PortalLayout>
-      <AnnouncementModal announcement={selected} onClose={() => setSelected(null)} />
-      <div className="max-w-6xl mx-auto px-4 py-10">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('portal.nav.announcements')}</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{t('portal.announcements.subtitle')}</p>
-        </div>
+      {selected && <AnnouncementModal announcement={selected} onClose={() => setSelected(null)} />}
+      
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-32 pb-24">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+          className="mb-12 text-center sm:text-left"
+        >
+          <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight mb-4">{t('portal.nav.announcements', {defaultValue: 'Announcements'})}</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl font-medium">{t('portal.announcements.subtitle', {defaultValue: 'Stay up to date with the latest news and notices from the committee.'})}</p>
+        </motion.div>
 
-        {/* Search + Filter */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+        {/* Search + Filter - Modern SaaS Style */}
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+          className="flex flex-col md:flex-row items-center gap-4 mb-10"
+        >
+          <div className="relative w-full md:w-96">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               type="text" value={search} onChange={e => setSearch(e.target.value)}
-              placeholder={t('portal.searchPlaceholder')}
-              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-[#1e1f25] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder={t('portal.searchPlaceholder', {defaultValue: 'Search announcements...'})}
+              className="w-full pl-12 pr-4 py-3 text-sm font-medium border border-white/40 dark:border-white/10 rounded-xl bg-white/40 dark:bg-black/20 backdrop-blur-xl text-gray-900 dark:text-white shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] focus:ring-2 focus:ring-blue-500/50 focus:outline-none transition-all placeholder-gray-500 dark:placeholder-gray-400"
             />
           </div>
-          <div className="flex gap-2 flex-wrap">
+          
+          <div className="flex gap-2 flex-wrap w-full md:w-auto">
             <button onClick={() => handleCategory('')}
-              className={`px-3 py-1.5 text-xs rounded-xl border transition-colors ${!category ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 bg-white dark:bg-[#1e1f25]'}`}>
-              {t('portal.all')}
+              className={`px-5 py-2.5 text-sm font-bold rounded-xl transition-all border ${
+                !category 
+                  ? 'bg-blue-600/10 text-blue-700 dark:text-blue-400 border-blue-600/20 shadow-sm' 
+                  : 'bg-white/40 dark:bg-black/20 text-gray-600 dark:text-gray-300 border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10 backdrop-blur-xl'
+              }`}>
+              {t('portal.all', {defaultValue: 'All'})}
             </button>
             {categories.map(c => (
               <button key={c} onClick={() => handleCategory(c)}
-                className={`px-3 py-1.5 text-xs rounded-xl border transition-colors ${category === c ? 'bg-blue-600 text-white border-blue-600' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 bg-white dark:bg-[#1e1f25]'}`}>
+                className={`px-5 py-2.5 text-sm font-bold rounded-xl transition-all border ${
+                  category === c 
+                  ? 'bg-blue-600/10 text-blue-700 dark:text-blue-400 border-blue-600/20 shadow-sm' 
+                  : 'bg-white/40 dark:bg-black/20 text-gray-600 dark:text-gray-300 border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10 backdrop-blur-xl'
+                }`}>
                 {c}
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* List */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <LoadingSkeleton count={6} type="announcement" />
           </div>
         ) : filtered.length === 0 ? (
-          <EmptyState icon={Megaphone} message={t('portal.announcements.empty')} />
+          <EmptyState icon={Megaphone} message={t('portal.announcements.empty', {defaultValue: 'No announcements found.'})} />
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map(a => <AnnouncementCard key={a._id} announcement={a} onClick={() => setSelected(a)} />)}
-          </div>
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ staggerChildren: 0.1 }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            {filtered.map((a, i) => (
+              <motion.div key={a._id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
+                <AnnouncementCard announcement={a} onClick={() => setSelected(a)} />
+              </motion.div>
+            ))}
+          </motion.div>
         )}
 
         {/* Pagination */}
         {totalPages > 1 && !search && (
-          <div className="flex items-center justify-center gap-3 mt-8">
+          <div className="flex items-center justify-center gap-4 mt-12">
             <button onClick={() => load(page - 1)} disabled={page <= 1}
-              className="p-2 rounded-xl border border-gray-200 dark:border-gray-700 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              <ChevronLeft size={16} />
+              className="p-3 rounded-2xl bg-white dark:bg-[#1a1b20] text-gray-600 dark:text-gray-300 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm">
+              <ChevronLeft size={20} />
             </button>
-            <span className="text-sm text-gray-500">{t('portal.page')} {page} / {totalPages}</span>
+            <span className="text-sm font-bold text-gray-500 dark:text-gray-400">
+              {t('portal.page', {defaultValue: 'Page'})} {page} / {totalPages}
+            </span>
             <button onClick={() => load(page + 1)} disabled={page >= totalPages}
-              className="p-2 rounded-xl border border-gray-200 dark:border-gray-700 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-              <ChevronRight size={16} />
+              className="p-3 rounded-2xl bg-white dark:bg-[#1a1b20] text-gray-600 dark:text-gray-300 disabled:opacity-40 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors shadow-sm">
+              <ChevronRight size={20} />
             </button>
           </div>
         )}
