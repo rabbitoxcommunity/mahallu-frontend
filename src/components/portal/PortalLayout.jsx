@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PortalNavbar from './PortalNavbar';
 import PortalFooter from './PortalFooter';
+import { usePortal } from '../../context/PortalContext';
 import { motion } from 'framer-motion';
 
-const PortalLayout = ({ children }) => (
+const PortalLayout = ({ children }) => {
+  const { tenant } = usePortal();
+
+  useEffect(() => {
+    const color = tenant?.theme_color || '#2563eb';
+    document.documentElement.style.setProperty('--portal-theme', color);
+  }, [tenant?.theme_color]);
+
+  return (
   <div className="min-h-screen flex flex-col bg-[#fafafc] dark:bg-[#050505] text-slate-900 dark:text-gray-100 font-sans relative overflow-x-hidden transition-colors duration-500">
     
     {/* 2026 Aurora Mesh Gradient Background */}
@@ -43,6 +52,7 @@ const PortalLayout = ({ children }) => (
     
     <PortalFooter />
   </div>
-);
+  );
+};
 
 export default PortalLayout;

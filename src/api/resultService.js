@@ -23,6 +23,7 @@ export const getAcademicYearsForSelect = () => api.get('/results/settings/academ
 export const createAcademicYear = (data) => api.post('/results/settings/academic-years', data).then(r => r.data);
 export const updateAcademicYear = (id, data) => api.put(`/results/settings/academic-years/${id}`, data).then(r => r.data);
 export const deleteAcademicYear = (id) => api.delete(`/results/settings/academic-years/${id}`).then(r => r.data);
+export const lockAcademicYear = (id) => api.patch(`/results/settings/academic-years/${id}/lock`).then(r => r.data);
 
 export const getResultTypes = (params) => api.get('/results/settings/result-types', { params }).then(r => r.data);
 export const createResultType = (data) => api.post('/results/settings/result-types', data).then(r => r.data);

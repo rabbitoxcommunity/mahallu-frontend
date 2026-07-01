@@ -5,12 +5,13 @@ import PortalLayout from '../../components/portal/PortalLayout';
 import { usePortal } from '../../context/PortalContext';
 import { motion } from 'framer-motion';
 
-const InfoRow = ({ icon: Icon, label, value }) => {
+const InfoRow = ({ icon: Icon, label, value, themeColor }) => {
   if (!value) return null;
   return (
     <div className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border border-transparent hover:border-gray-100 dark:hover:border-gray-800">
-      <div className="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center flex-shrink-0">
-        <Icon size={16} className="text-blue-600 dark:text-blue-400" />
+      <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+        style={{ backgroundColor: `${themeColor}18`, color: themeColor }}>
+        <Icon size={16} />
       </div>
       <div>
         <p className="text-[11px] text-gray-400 uppercase tracking-wider font-bold mb-1">{label}</p>
@@ -23,6 +24,7 @@ const InfoRow = ({ icon: Icon, label, value }) => {
 const AboutPage = () => {
   const { t }               = useTranslation();
   const { tenant, loading } = usePortal();
+  const themeColor = tenant?.theme_color || '#2563eb';
 
   return (
     <PortalLayout>
@@ -46,12 +48,13 @@ const AboutPage = () => {
 
             {/* Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8 pb-8 border-b border-gray-200/50 dark:border-gray-800/50 relative z-10">
-              <div className="w-20 h-20 rounded-[1.5rem] bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/20 flex items-center justify-center flex-shrink-0">
+              <div className="w-20 h-20 rounded-[1.5rem] flex items-center justify-center shrink-0 shadow-lg"
+                style={{ background: `linear-gradient(135deg, ${themeColor}, ${themeColor}bb)`, boxShadow: `0 8px 24px ${themeColor}40` }}>
                 <Building2 size={32} className="text-white" />
               </div>
               <div>
                 <h2 className="text-3xl font-extrabold text-gray-900 dark:text-white tracking-tight">{tenant?.name}</h2>
-                <p className="text-sm font-bold text-blue-600 dark:text-blue-400 mt-1 uppercase tracking-widest">{t('portal.mahallu', {defaultValue: 'Mahallu'})}</p>
+                <p className="text-sm font-bold mt-1 uppercase tracking-widest" style={{ color: themeColor }}>{t('portal.mahallu', {defaultValue: 'Mahallu'})}</p>
               </div>
             </div>
 
@@ -69,10 +72,10 @@ const AboutPage = () => {
             <div className="relative z-10">
               <h3 className="text-sm font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-6">Contact Information</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <InfoRow icon={Phone}  label={t('portal.contact.phone')}   value={tenant?.contact?.phone} />
-                <InfoRow icon={Mail}   label={t('portal.contact.email')}   value={tenant?.contact?.email} />
-                <InfoRow icon={MapPin} label={t('portal.contact.address')} value={tenant?.contact?.address} />
-                <InfoRow icon={Clock}  label={t('portal.workingHours')}    value={tenant?.contact?.working_hours} />
+                <InfoRow icon={Phone}  label={t('portal.contact.phone')}   value={tenant?.contact?.phone}         themeColor={themeColor} />
+                <InfoRow icon={Mail}   label={t('portal.contact.email')}   value={tenant?.contact?.email}         themeColor={themeColor} />
+                <InfoRow icon={MapPin} label={t('portal.contact.address')} value={tenant?.contact?.address}       themeColor={themeColor} />
+                <InfoRow icon={Clock}  label={t('portal.workingHours')}    value={tenant?.contact?.working_hours} themeColor={themeColor} />
               </div>
             </div>
           </motion.div>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Search, Pencil, Trash2, X, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, Search, Pencil, Trash2, X, RefreshCw, ChevronLeft, ChevronRight, Lock, LockOpen } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 import {
@@ -11,7 +11,7 @@ import {
     getClasses, createClass, updateClass, deleteClass,
     getSubjects, createSubject, updateSubject, deleteSubject,
     getResultTypes, createResultType, updateResultType, deleteResultType,
-    getAcademicYears, createAcademicYear, updateAcademicYear, deleteAcademicYear,
+    getAcademicYears, createAcademicYear, updateAcademicYear, deleteAcademicYear, lockAcademicYear,
 } from '../../api/resultService';
 
 const LIMIT = 20;
@@ -110,6 +110,14 @@ const SettingsTab = ({ config }) => {
         }
     };
 
+    const handleLock = async (item) => {
+        try {
+            await config.lockFn(item._id);
+            toast.success(item.is_portal_locked ? 'Academic year unlocked' : 'Academic year locked for portal');
+            fetch(page, search, madrasaFilter, classFilter);
+        } catch { }
+    };
+
     const getPageNumbers = () => {
         if (pages <= 7) return Array.from({ length: pages }, (_, i) => i + 1);
         if (page <= 4) return [1, 2, 3, 4, 5, '...', pages];
@@ -177,13 +185,30 @@ const SettingsTab = ({ config }) => {
                         ) : items.map(item => (
                             <tr key={item._id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
                                 <td className="px-5 py-3 text-xs font-mono text-blue-600 dark:text-blue-400">{item.code}</td>
-                                <td className="px-5 py-3 text-sm font-medium text-gray-900 dark:text-white">{item.name}</td>
+                                <td className="px-5 py-3 text-sm font-medium text-gray-900 dark:text-white">
+                                    <div className="flex items-center gap-2">
+                                        {item.name}
+                                        {config.lockFn && item.is_portal_locked && (
+                                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                                <Lock size={10} /> Portal
+                                            </span>
+                                        )}
+                                    </div>
+                                </td>
                                 {config.extraCols && config.extraCols.map(col => (
                                     <td key={col.label} className="px-5 py-3 text-sm text-gray-600 dark:text-gray-400">{col.render(item)}</td>
                                 ))}
                                 <td className="px-5 py-3">{statusBadge(item.status)}</td>
                                 <td className="px-5 py-3">
                                     <div className="flex items-center justify-center gap-1">
+                                        {config.lockFn && (
+                                            <button
+                                                onClick={() => handleLock(item)}
+                                                title={item.is_portal_locked ? 'Unlock from portal' : 'Lock for portal'}
+                                                className={`p-1.5 rounded-lg transition-colors ${item.is_portal_locked ? 'text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20' : 'text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'}`}>
+                                                {item.is_portal_locked ? <Lock size={13} /> : <LockOpen size={13} />}
+                                            </button>
+                                        )}
                                         <button onClick={() => setModal({ open: true, data: item })} className="p-1.5 hover:bg-blue-50 dark:hover:bg-blue-900/20 text-blue-600 rounded-lg transition-colors"><Pencil size={13} /></button>
                                         <button onClick={() => handleDelete(item._id)} className="p-1.5 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500 rounded-lg transition-colors"><Trash2 size={13} /></button>
                                     </div>
@@ -208,7 +233,14 @@ const SettingsTab = ({ config }) => {
                         <div className="flex items-start justify-between gap-2 mb-2">
                             <div>
                                 <p className="font-mono text-xs text-blue-600 dark:text-blue-400">{item.code}</p>
-                                <p className="font-semibold text-gray-900 dark:text-white text-sm mt-0.5">{item.name}</p>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                    <p className="font-semibold text-gray-900 dark:text-white text-sm">{item.name}</p>
+                                    {config.lockFn && item.is_portal_locked && (
+                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                            <Lock size={9} /> Portal
+                                        </span>
+                                    )}
+                                </div>
                             </div>
                             {statusBadge(item.status)}
                         </div>
@@ -222,6 +254,13 @@ const SettingsTab = ({ config }) => {
                             </div>
                         )}
                         <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-gray-800">
+                            {config.lockFn && (
+                                <button onClick={() => handleLock(item)}
+                                    className={`flex items-center justify-center gap-1 px-3 py-1.5 text-xs font-medium rounded-xl transition-colors ${item.is_portal_locked ? 'text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20' : 'text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800'}`}>
+                                    {item.is_portal_locked ? <Lock size={11} /> : <LockOpen size={11} />}
+                                    {item.is_portal_locked ? 'Unlock' : 'Lock'}
+                                </button>
+                            )}
                             <button onClick={() => setModal({ open: true, data: item })}
                                 className="flex-1 flex items-center justify-center gap-1 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl transition-colors">
                                 <Pencil size={12} /> {t('common.edit')}
@@ -446,6 +485,7 @@ const ResultSettings = () => {
         academicYears: {
             labelKey: 'results.settings.tabs.academicYears', addLabelKey: 'results.settings.addAcademicYear', editLabelKey: 'results.settings.editAcademicYear',
             listKey: 'academicYears', fetchFn: getAcademicYears, createFn: createAcademicYear, updateFn: updateAcademicYear, deleteFn: deleteAcademicYear,
+            lockFn: lockAcademicYear,
             hasMadrasaFilter: false, hasClassFilter: false, hasType: false, hasShortName: false, hasDateRange: false,
             namePlaceholder: 'e.g. 2025-2026',
         },

@@ -6,10 +6,10 @@ import { toast } from 'react-toastify';
 import Toggle from '../../components/ui/Toggle';
 
 const ToggleRow = ({ label, desc, value, onChange }) => (
-  <div className="flex items-center justify-between gap-4 py-3 border-b border-gray-100 dark:border-gray-800 last:border-0">
+  <div className="flex items-center justify-between gap-4 py-3 border-b border-gray-100 dark:border-gray-800">
     <div>
-      <p className="text-sm font-medium text-gray-900 dark:text-white">{label}</p>
-      {desc && <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{desc}</p>}
+      <p className="font-medium text-gray-700 dark:text-gray-300">{label}</p>
+      {desc && <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{desc}</p>}
     </div>
     <Toggle checked={!!value} onChange={onChange} />
   </div>
@@ -17,13 +17,13 @@ const ToggleRow = ({ label, desc, value, onChange }) => (
 
 const Field = ({ label, value, onChange, type = 'text', placeholder = '', textarea = false }) => (
   <div>
-    <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide mb-1.5">{label}</label>
+    <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">{label}</label>
     {textarea ? (
       <textarea value={value} onChange={e => onChange(e.target.value)} rows={3} placeholder={placeholder}
-        className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-[#252731] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
+        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white resize-none" />
     ) : (
       <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-gray-50 dark:bg-[#252731] text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white" />
     )}
   </div>
 );
@@ -74,15 +74,17 @@ const PublicPortalSettings = () => {
   if (!form) return null;
 
   return (
-    <div className="p-6 max-w-3xl">
+    <div className="p-6">
       {/* Header */}
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
-          <Globe size={20} className="text-blue-600 dark:text-blue-400" />
-        </div>
-        <div>
-          <h1 className="text-lg font-bold text-gray-900 dark:text-white">{t('settings.portalSettings')}</h1>
-          <p className="text-xs text-gray-500">{t('settings.portalSettingsDesc')}</p>
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-2">
+          <div className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl">
+            <Globe size={24} className="text-blue-600 dark:text-blue-400" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('settings.portalSettings')}</h1>
+            <p className="text-gray-500 dark:text-gray-400">{t('settings.portalSettingsDesc')}</p>
+          </div>
         </div>
       </div>
 
@@ -106,37 +108,48 @@ const PublicPortalSettings = () => {
 
       <div className="space-y-6">
         {/* Services */}
-        <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
-          <h2 className="text-sm font-bold text-gray-900 dark:text-white mb-4">{t('settings.portalServices')}</h2>
-          <ToggleRow label={t('portal.services.marriageCert')}  desc={t('settings.allowPublicDownload')} value={form.marriage_certificate}  onChange={set('marriage_certificate')} />
-          <ToggleRow label={t('portal.services.deathCert')}     desc={t('settings.allowPublicDownload')} value={form.death_certificate}     onChange={set('death_certificate')} />
-          <ToggleRow label={t('portal.services.results')}       desc={t('settings.publishPublic')}       value={form.results}               onChange={set('results')} />
-          <ToggleRow label={t('portal.services.bloodDonor')}    desc={t('settings.publicSearchEnabled')} value={form.blood_donor}           onChange={set('blood_donor')} />
-          <ToggleRow label={t('portal.services.announcements')} desc={t('settings.showOnPortal')}        value={form.announcements}         onChange={set('announcements')} />
-          <ToggleRow label={t('portal.nav.about')}              desc=""                                  value={form.about_page}            onChange={set('about_page')} />
-          <ToggleRow label={t('portal.nav.contact')}            desc=""                                  value={form.contact_page}          onChange={set('contact_page')} />
-          <ToggleRow label={t('settings.bloodDonorShowContact')} desc={t('settings.bloodDonorShowContactDesc')} value={form.blood_donor_show_contact} onChange={set('blood_donor_show_contact')} />
+        <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{t('settings.portalServices')}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8">
+            <ToggleRow label={t('portal.services.marriageCert')}  desc={t('settings.allowPublicDownload')} value={form.marriage_certificate}  onChange={set('marriage_certificate')} />
+            <ToggleRow label={t('portal.services.deathCert')}     desc={t('settings.allowPublicDownload')} value={form.death_certificate}     onChange={set('death_certificate')} />
+            <ToggleRow label={t('portal.services.results')}       desc={t('settings.publishPublic')}       value={form.results}               onChange={set('results')} />
+            <ToggleRow label={t('portal.services.bloodDonor')}    desc={t('settings.publicSearchEnabled')} value={form.blood_donor}           onChange={set('blood_donor')} />
+            <ToggleRow label={t('portal.services.announcements')} desc={t('settings.showOnPortal')}        value={form.announcements}         onChange={set('announcements')} />
+            <ToggleRow label={t('portal.nav.about')}              desc=""                                  value={form.about_page}            onChange={set('about_page')} />
+            <ToggleRow label={t('portal.nav.contact')}            desc=""                                  value={form.contact_page}          onChange={set('contact_page')} />
+            <ToggleRow label={t('settings.bloodDonorShowContact')} desc={t('settings.bloodDonorShowContactDesc')} value={form.blood_donor_show_contact} onChange={set('blood_donor_show_contact')} />
+          </div>
         </div>
 
         {/* About / Contact Info */}
-        <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-5">
-          <h2 className="text-sm font-bold text-gray-900 dark:text-white mb-4">{t('settings.portalContactInfo')}</h2>
-          <div className="space-y-4">
+        <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">{t('settings.portalContactInfo')}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label={t('portal.contact.phone')}   value={form.contact_phone}    onChange={set('contact_phone')}    placeholder="+91 9876543210" />
             <Field label={t('portal.contact.email')}   value={form.contact_email}    onChange={set('contact_email')}    placeholder="mahallu@example.com" />
-            <Field label={t('portal.contact.address')} value={form.contact_address}  onChange={set('contact_address')}  textarea placeholder="Full address..." />
-            <Field label={t('portal.workingHours')}    value={form.working_hours}    onChange={set('working_hours')}    textarea placeholder="Saturday - Thursday: 9am - 5pm" />
-            <Field label={t('settings.aboutDescription')} value={form.about_description} onChange={set('about_description')} textarea placeholder="Brief description about the Mahallu..." />
-            <Field label={t('settings.themeColor')}   value={form.theme_color}      onChange={set('theme_color')}      type="color" />
+            <div className="md:col-span-2">
+              <Field label={t('portal.contact.address')} value={form.contact_address} onChange={set('contact_address')} textarea placeholder="Full address..." />
+            </div>
+            <div>
+              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">{t('settings.themeColor')}</label>
+              <label className="flex items-center gap-3 cursor-pointer w-fit px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl hover:border-gray-400 dark:hover:border-gray-500 transition-colors">
+                <span className="w-7 h-7 rounded-lg border border-white/30 shadow-sm shrink-0" style={{ backgroundColor: form.theme_color || '#2563eb' }} />
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wide">{form.theme_color || '#2563eb'}</span>
+                <input type="color" value={form.theme_color || '#2563eb'} onChange={e => set('theme_color')(e.target.value)} className="sr-only" />
+              </label>
+            </div>
           </div>
         </div>
 
         {/* Save */}
-        <button onClick={handleSave} disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-sm font-medium transition-colors">
-          {saving ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save size={15} />}
-          {t('common.save')}
-        </button>
+        <div className="flex justify-end">
+          <button onClick={handleSave} disabled={saving}
+            className="px-6 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            {saving ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Save size={18} />}
+            {t('common.save')}
+          </button>
+        </div>
       </div>
     </div>
   );

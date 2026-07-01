@@ -127,18 +127,18 @@ const MarriageCertificatePage = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between px-2 mb-2">
-                    <h3 className="font-bold text-gray-900 dark:text-white text-lg">Results Found</h3>
-                    <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-xs font-bold">
+                  <div className="flex items-center justify-between px-2 mb-4 border-b border-gray-100 dark:border-gray-800 pb-3">
+                    <h3 className="font-semibold text-gray-500 dark:text-gray-400 text-sm tracking-wide uppercase">Results Found</h3>
+                    <span className="text-gray-900 dark:text-white text-sm font-medium">
                       {results.length} result{results.length !== 1 ? 's' : ''}
                     </span>
                   </div>
                   {results.map((m, i) => (
-                    <motion.div 
-                      key={m._id}
-                      initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
-                      className="bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-xl rounded-[1.5rem] border border-white/40 dark:border-white/10 p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-white/60 dark:hover:bg-[#111]/60 transition-all group"
-                    >
+                      <motion.div 
+                        key={m._id}
+                        initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                        className="bg-white dark:bg-[#121212] rounded-xl border border-gray-200 dark:border-gray-800 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
+                      >
                       <div className="min-w-0 flex-1">
                         {/* Cert / marriage ID badges */}
                         <div className="flex items-center gap-2 mb-3 flex-wrap">
@@ -176,10 +176,10 @@ const MarriageCertificatePage = () => {
                       <button
                         onClick={() => handleDownload(m.certificate_no, m.marriage_id)}
                         disabled={downloading === (m.certificate_no || m.marriage_id)}
-                        className="w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 disabled:opacity-50 text-white rounded-2xl text-sm font-extrabold tracking-wide uppercase transition-all shadow-lg shadow-blue-500/20 hover:shadow-xl hover:shadow-blue-500/30 group-hover:scale-105"
+                        className="w-full sm:w-auto flex-shrink-0 flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-900 hover:bg-gray-800 dark:bg-white dark:hover:bg-gray-100 dark:text-gray-900 disabled:opacity-50 text-white rounded-lg text-sm font-medium transition-colors"
                       >
                         {downloading === (m.certificate_no || m.marriage_id)
-                          ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          ? <span className="w-4 h-4 border-2 border-white/30 border-t-white dark:border-gray-900/30 dark:border-t-gray-900 rounded-full animate-spin" />
                           : <Download size={16} />}
                         Download
                       </button>

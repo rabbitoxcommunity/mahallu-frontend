@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GraduationCap, ChevronDown, ChevronUp, CheckCircle, XCircle, Search, X, Trophy } from 'lucide-react';
+import { GraduationCap, ChevronDown, ChevronUp, CheckCircle, XCircle, Search, X, Trophy, Lock } from 'lucide-react';
 import PortalLayout from '../../../components/portal/PortalLayout';
 import EmptyState from '../../../components/portal/EmptyState';
 import LoadingSkeleton from '../../../components/portal/LoadingSkeleton';
@@ -217,19 +217,23 @@ const ResultGroup = ({ group, highlight, defaultOpen }) => {
 
 const ResultsPage = () => {
   const { t }       = useTranslation();
-  const { slug }    = usePortal();
-  const [data,      setData]      = useState([]);
-  const [loading,   setLoading]   = useState(true);
-  const [search,    setSearch]    = useState('');
-  const [activeTab, setActiveTab] = useState('all');
+  const { slug, tenant } = usePortal();
+  const [data,              setData]              = useState([]);
+  const [lockedYear,        setLockedYear]        = useState(null);
+  const [loading,           setLoading]           = useState(true);
+  const [search,            setSearch]            = useState('');
+  const [activeTab,         setActiveTab]         = useState('all');
 
   useEffect(() => {
-    if (!slug) return;
+    if (!tenant || tenant.services?.results === false) {
+      setLoading(false);
+      return;
+    }
     fetchPublicResults()
-      .then(r => setData(r.data.data || []))
+      .then(r => { setData(r.data.data || []); setLockedYear(r.data.locked_academic_year || null); })
       .catch(() => setData([]))
       .finally(() => setLoading(false));
-  }, [slug]);
+  }, [tenant]);
 
   const madrasas = useMemo(() => {
     const seen = new Set();
@@ -245,7 +249,7 @@ const ResultsPage = () => {
   const q = search.trim().toLowerCase();
 
   const filtered = useMemo(() => {
-    let groups = activeTab === 'all' ? data : data.filter(g => g.madrasa === activeTab);
+    const groups = activeTab === 'all' ? data : data.filter(g => g.madrasa === activeTab);
     if (!q) return groups;
     return groups.map(group => {
       const groupMatch =
@@ -280,12 +284,18 @@ const ResultsPage = () => {
             <p className="text-base font-medium text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
               {t('portal.results.subtitle', {defaultValue: 'View and download student examination results.'})}
             </p>
+            {lockedYear && (
+              <div className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-full">
+                <Lock size={13} className="text-amber-600 dark:text-amber-400" />
+                <span className="text-sm font-semibold text-amber-700 dark:text-amber-400">{lockedYear}</span>
+              </div>
+            )}
           </motion.div>
 
           {loading ? (
             <div className="space-y-4"><LoadingSkeleton count={3} type="card" /></div>
           ) : data.length === 0 ? (
-            <EmptyState icon={GraduationCap} message={t('portal.results.empty')} />
+            <EmptyState icon={GraduationCap} message={lockedYear === null ? 'Results are not yet published.' : t('portal.results.empty')} />
           ) : (
             <>
               {/* Madrasa tabs */}
@@ -295,15 +305,15 @@ const ResultsPage = () => {
                     <button
                       key={tab.value}
                       onClick={() => setActiveTab(tab.value)}
-                      className={`px-5 py-3 rounded-2xl text-sm font-bold whitespace-nowrap transition-all shadow-sm ${
+                      className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
                         activeTab === tab.value
-                          ? 'bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-purple-600/20 scale-105'
-                          : 'bg-white/40 dark:bg-black/20 backdrop-blur-md text-gray-600 dark:text-gray-300 border border-white/40 dark:border-white/10 hover:bg-white/60 dark:hover:bg-white/10 hover:text-purple-600'
+                          ? 'bg-gray-900 text-white dark:bg-white dark:text-gray-900'
+                          : 'bg-transparent text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
                       }`}
                     >
                       {tab.label}
-                      <span className={`ml-2 text-[10px] px-2 py-0.5 rounded-full font-extrabold uppercase tracking-wider ${
-                        activeTab === tab.value ? 'bg-white/20 text-white' : 'bg-white/40 dark:bg-black/40 text-gray-500'
+                      <span className={`ml-2 text-xs px-2 py-0.5 rounded-md ${
+                        activeTab === tab.value ? 'bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-900' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
                       }`}>{tab.count}</span>
                     </button>
                   ))}
@@ -311,20 +321,22 @@ const ResultsPage = () => {
               </motion.div>
 
               {/* Search */}
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="relative mb-8 max-w-2xl mx-auto z-10">
-                <Search size={20} className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  value={search}
-                  onChange={e => setSearch(e.target.value)}
-                  placeholder="Search by student name, class, exam type…"
-                  className="w-full pl-14 pr-12 py-4 text-base font-bold border border-white/40 dark:border-white/10 rounded-[2rem] bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-3xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] placeholder-gray-500 transition-all"
-                />
-                {search && (
-                  <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 transition-colors">
-                    <X size={14} />
-                  </button>
-                )}
+              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex mb-8 max-w-2xl mx-auto z-10">
+                <div className="relative flex-1">
+                  <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    placeholder="Search by student name, class, exam type…"
+                    className="w-full pl-12 pr-12 py-3 text-base border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-[#121212] text-gray-900 dark:text-white focus:outline-none focus:border-gray-400 dark:focus:border-gray-600 transition-colors placeholder-gray-400"
+                  />
+                  {search && (
+                    <button onClick={() => setSearch('')} className="absolute right-4 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 hover:bg-gray-200 transition-colors">
+                      <X size={14} />
+                    </button>
+                  )}
+                </div>
               </motion.div>
 
               {q && (

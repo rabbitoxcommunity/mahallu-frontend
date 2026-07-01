@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Droplets, Search, User } from 'lucide-react';
+import { Droplets, Search, User, MapPin, Phone } from 'lucide-react';
 import PortalLayout from '../../../components/portal/PortalLayout';
 import EmptyState from '../../../components/portal/EmptyState';
 import { searchBloodDonors } from '../../../api/portalService';
@@ -84,9 +84,9 @@ const BloodDonorPage = () => {
                 <EmptyState icon={Droplets} message={t('portal.bloodDonor.notFound', { group, defaultValue: `No donors found for group ${group}` })} />
               ) : (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between mb-2 px-2">
-                    <h3 className="font-bold text-gray-900 dark:text-white text-lg">Results Found</h3>
-                    <span className="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-full text-xs font-bold">
+                  <div className="flex items-center justify-between px-2 mb-4 border-b border-gray-100 dark:border-gray-800 pb-3">
+                    <h3 className="font-semibold text-gray-500 dark:text-gray-400 text-sm tracking-wide uppercase">Results Found</h3>
+                    <span className="text-gray-900 dark:text-white text-sm font-medium">
                       {donors.length} {t('portal.bloodDonor.found', {defaultValue: 'Donors'})}
                     </span>
                   </div>
@@ -95,7 +95,7 @@ const BloodDonorPage = () => {
                     <motion.div 
                       key={i} 
                       initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
-                      className="bg-white/40 dark:bg-[#0a0a0a]/40 backdrop-blur-xl rounded-[1.5rem] border border-white/40 dark:border-white/10 p-5 flex items-center justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] hover:bg-white/60 dark:hover:bg-[#111]/60 transition-colors"
+                      className="bg-white dark:bg-[#121212] rounded-xl border border-gray-200 dark:border-gray-800 p-5 flex items-center justify-between hover:border-gray-300 dark:hover:border-gray-700 transition-colors"
                     >
                       <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-500/10 to-rose-500/10 flex items-center justify-center shadow-inner">
@@ -103,7 +103,16 @@ const BloodDonorPage = () => {
                         </div>
                         <div>
                           <span className="text-base font-bold text-gray-900 dark:text-white block">{d.name}</span>
-                          {d.phone && <span className="text-xs font-medium text-gray-500">{d.phone}</span>}
+                          {d.phone && (
+                            <span className="flex items-center gap-1 text-xs font-medium text-gray-500 mt-0.5">
+                              <Phone size={11} />{d.phone}
+                            </span>
+                          )}
+                          {d.address && (
+                            <span className="flex items-center gap-1 text-xs font-medium text-gray-400 mt-0.5">
+                              <MapPin size={11} />{d.address}
+                            </span>
+                          )}
                         </div>
                       </div>
                       <span className="text-base font-bold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 px-3 py-1 rounded-lg">{d.blood_group}</span>

@@ -27,7 +27,7 @@ const AnnouncementModal = ({ announcement, onClose }) => {
           initial={{ opacity: 0, y: 100, scale: 0.95 }} 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 100, scale: 0.95 }}
-          className="relative bg-white/40 dark:bg-black/40 backdrop-blur-3xl w-full sm:max-w-xl rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] max-h-[90vh] flex flex-col overflow-hidden border border-white/40 dark:border-white/10"
+          className="relative bg-white dark:bg-[#0a0a0a] w-full sm:max-w-xl rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 dark:border-white/10"
           onClick={e => e.stopPropagation()}
         >
 
@@ -73,7 +73,7 @@ const AnnouncementModal = ({ announcement, onClose }) => {
 
 const AnnouncementsPage = () => {
   const { t }    = useTranslation();
-  const { slug } = usePortal();
+  const { slug, tenant } = usePortal();
   const [data,       setData]       = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading,    setLoading]    = useState(true);
@@ -98,10 +98,10 @@ const AnnouncementsPage = () => {
   };
 
   useEffect(() => {
-    if (!slug) return;
+    if (!tenant || tenant.services?.announcements === false) return;
     load(1);
     fetchAnnouncementCategories().then(r => setCategories(r.data.data || [])).catch(() => {});
-  }, [slug]);
+  }, [tenant]);
 
   const handleCategory = (cat) => {
     setCategory(cat);

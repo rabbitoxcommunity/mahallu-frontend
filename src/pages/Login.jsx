@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthContext";
+import { getFirstAccessiblePath } from "../utils/permissions";
 
 export default function Login() {
     const { login } = useAuth();
@@ -21,18 +22,9 @@ export default function Login() {
         const token = localStorage.getItem("token");
         if (token) {
             try {
-                const base64Url = token.split('.')[1];
-                if (base64Url) {
-                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
-                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                    }).join(''));
-
-                    const payload = JSON.parse(jsonPayload);
-                    if (payload) {
-                        navigate("/dashboard", { replace: true });
-                    }
-                }
+                const storedUser = localStorage.getItem("user");
+                const user = storedUser ? JSON.parse(storedUser) : null;
+                navigate(getFirstAccessiblePath(user), { replace: true });
             } catch (err) {
                 console.error("Invalid token found during redirect check", err);
             }
@@ -48,7 +40,7 @@ export default function Login() {
                 // Use the centralized login function to update state immediately
                 login(res.data.user, res.data.token);
                 toast.success("Login successful!");
-                navigate("/dashboard", { replace: true });
+                navigate(getFirstAccessiblePath(res.data.user), { replace: true });
             }
         } catch (err) {
             // Error is handled globally by axios interceptor

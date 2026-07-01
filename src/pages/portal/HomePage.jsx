@@ -27,7 +27,7 @@ const AnnouncementModal = ({ announcement, onClose }) => {
           initial={{ opacity: 0, y: 100, scale: 0.95 }} 
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 100, scale: 0.95 }}
-          className="relative bg-white/40 dark:bg-black/40 backdrop-blur-3xl w-full sm:max-w-xl rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] max-h-[90vh] flex flex-col overflow-hidden border border-white/40 dark:border-white/10"
+          className="relative bg-white dark:bg-[#0a0a0a] w-full sm:max-w-xl rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-[0_30px_60px_rgba(0,0,0,0.12)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] max-h-[90vh] flex flex-col overflow-hidden border border-gray-100 dark:border-white/10"
           onClick={e => e.stopPropagation()}
         >
 
@@ -79,15 +79,16 @@ const qs = () => {
 const HomePage = () => {
   const { t }      = useTranslation();
   const { tenant, slug, loading } = usePortal();
+  const themeColor = tenant?.theme_color || '#2563eb';
   const [announcements, setAnnouncements] = useState([]);
   const [selected,      setSelected]      = useState(null);
 
   useEffect(() => {
-    if (!slug) return;
+    if (!tenant || tenant.services?.announcements === false) return;
     fetchAnnouncements({ limit: 3 })
       .then(r => setAnnouncements(r.data.data || []))
       .catch(() => {});
-  }, [slug]);
+  }, [tenant]);
 
   const svc = tenant?.services || {};
   const q   = qs();
@@ -123,7 +124,8 @@ const HomePage = () => {
               className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tighter leading-[1.1]"
             >
               {t('portal.hero.welcome', {defaultValue: 'Welcome to'})} <br className="hidden sm:block" />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400 drop-shadow-sm">
+              <span className="bg-clip-text text-transparent drop-shadow-sm"
+                style={{ backgroundImage: `linear-gradient(to right, ${themeColor}, ${themeColor}99)` }}>
                 {tenant?.name}
               </span>
             </motion.h1>
