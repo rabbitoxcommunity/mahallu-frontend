@@ -11,9 +11,9 @@ import {
   History, Edit2, Trash2, Download, X, CheckCircle, Calendar,
   CreditCard, Banknote, Smartphone, Receipt, AlertCircle, TrendingUp,
   Wallet, Building2, ShoppingBag, Palmtree, Home, MoreHorizontal,
-  DollarSign, PartyPopper, Heart, Box, Eye, Printer
+  DollarSign, PartyPopper, Heart, Box, Eye, Printer, MessageCircle, Phone
 } from 'lucide-react';
-import { getDueIncome, getDirectIncome, createDueIncome, updateDueIncome, deleteDueIncome, createDirectIncome, updateDirectIncome, deleteDirectIncome, getIncomeSummary, markDuePayment, getDuePaymentHistory as getIncomePaymentHistory } from '../../api/incomeService';
+import { getDueIncome, getDirectIncome, createDueIncome, updateDueIncome, deleteDueIncome, createDirectIncome, updateDirectIncome, deleteDirectIncome, getIncomeSummary, markDuePayment, getDuePaymentHistory, getTemplateEntries } from '../../api/incomeService';
 import { getHadiyaSummary } from '../../api/hadiyaService';
 import { getIncomeCategories } from '../../api/incomeCategoryService';
 import IncomeReceipt from './IncomeReceipt';
@@ -61,10 +61,11 @@ export const Income = () => {
   // Modals
   const [dueModal, setDueModal] = useState({ isOpen: false, income: null, isEdit: false });
   const [directModal, setDirectModal] = useState({ isOpen: false, income: null, isEdit: false });
-  const [paymentModal, setPaymentModal] = useState({ isOpen: false, income: null });
-  const [historyModal, setHistoryModal] = useState({ isOpen: false, history: [] });
+  const [paymentModal, setPaymentModal] = useState({ isOpen: false, income: null, entry: null });
+  const [historyModal, setHistoryModal] = useState({ isOpen: false, history: [], templateName: '' });
   const [receiptModal, setReceiptModal] = useState({ isOpen: false, income: null, type: '' });
   const [viewModal, setViewModal] = useState({ isOpen: false, income: null });
+  const [reminderModal, setReminderModal] = useState({ isOpen: false, income: null, phone: '', message: '' });
 
   // Forms with react-hook-form
   const {
@@ -76,11 +77,13 @@ export const Income = () => {
     formState: { errors: dueErrors }
   } = useForm({
     defaultValues: {
-      date: new Date().toISOString().split('T')[0],
+      start_month: new Date().getMonth() + 1,
+      start_year: new Date().getFullYear(),
       category: '',
       source_name: '',
+      whatsapp: '',
       amount_due: '',
-      payment_method: 'cash'
+      notes: '',
     }
   });
 
@@ -256,12 +259,13 @@ export const Income = () => {
   const handleCreateDue = async (data) => {
     try {
       const payload = {
-        ...data,
         category: selectedDueCategory?.value || data.category,
+        source_name: data.source_name,
+        whatsapp: data.whatsapp || '',
         amount_due: Number(data.amount_due),
-        month: new Date(data.date).getMonth() + 1,
-        year: new Date(data.date).getFullYear(),
-        due_date: data.date
+        start_month: Number(data.start_month),
+        start_year: Number(data.start_year),
+        notes: data.notes || '',
       };
       await createDueIncome(payload);
       toast.success(t('finance.income.dueIncomeCreated'));
@@ -277,12 +281,11 @@ export const Income = () => {
   const handleUpdateDue = async (data) => {
     try {
       const payload = {
-        ...data,
         category: selectedDueCategory?.value || data.category,
+        source_name: data.source_name,
+        whatsapp: data.whatsapp || '',
         amount_due: Number(data.amount_due),
-        month: new Date(data.date).getMonth() + 1,
-        year: new Date(data.date).getFullYear(),
-        due_date: data.date
+        notes: data.notes || '',
       };
       await updateDueIncome(dueModal.income._id, payload);
       toast.success(t('finance.income.dueIncomeUpdated'));
@@ -310,9 +313,9 @@ export const Income = () => {
 
   const handleMarkPayment = async () => {
     try {
-      await markDuePayment(paymentModal.income._id, paymentForm);
+      await markDuePayment(paymentModal.entry._id, paymentForm);
       toast.success(t('finance.income.paymentRecorded'));
-      setPaymentModal({ isOpen: false, income: null });
+      setPaymentModal({ isOpen: false, income: null, entry: null });
       setPaymentForm({ payment_amount: '', payment_method: 'cash', reference_no: '', notes: '' });
       fetchDue(); fetchSummary();
     } catch (error) {
@@ -375,30 +378,29 @@ export const Income = () => {
 
   const viewHistory = async (income) => {
     try {
-      const data = await getIncomePaymentHistory(income._id);
-      setHistoryModal({ isOpen: true, history: data.payments });
+      const data = await getTemplateEntries(income._id);
+      setHistoryModal({ isOpen: true, history: data.entries, templateName: income.source_name });
     } catch {
       toast.error(t('finance.income.fetchPaymentHistoryFailed'));
     }
   };
 
   const openPaymentModal = (income) => {
-    setPaymentModal({ isOpen: true, income });
-    setPaymentForm({ payment_amount: income.balance.toString(), payment_method: 'cash', reference_no: '', notes: '' });
+    const entry = income.entry;
+    setPaymentModal({ isOpen: true, income, entry });
+    setPaymentForm({ payment_amount: entry.balance.toString(), payment_method: 'cash', reference_no: '', notes: '' });
   };
 
   const openEditDue = (income) => {
-    setDueModal({
-      isOpen: true,
-      income,
-      isEdit: true
-    });
+    setDueModal({ isOpen: true, income, isEdit: true });
     resetDue({
-      date: new Date(income.created_at).toISOString().split('T')[0],
+      start_month: income.start_month,
+      start_year: income.start_year,
       category: income.category,
       source_name: income.source_name,
+      whatsapp: income.whatsapp || '',
       amount_due: income.amount_due.toString(),
-      payment_method: income.payment_method || 'cash'
+      notes: income.notes || '',
     });
     setSelectedDueCategory({ value: income.category, label: income.category });
   };
@@ -445,12 +447,40 @@ export const Income = () => {
     setSelectedDirectCategory(null);
   };
 
+  const isEntryCurrentOrPast = (entryMonth, entryYear) => {
+    const now = new Date();
+    const cm = now.getMonth() + 1;
+    const cy = now.getFullYear();
+    return entryYear < cy || (entryYear === cy && entryMonth <= cm);
+  };
+
+  const openReminderModal = (income) => {
+    const entry = income.entry;
+    const monthName = months.find(m => m.value === entry.month)?.label || '';
+    const message =
+      `Assalamu Alaikum, Dear *${income.source_name}*,\n\n` +
+      `This is a gentle reminder that your payment of *₹${entry.balance?.toLocaleString()}* ` +
+      `for *${monthName} ${entry.year}* (${income.category?.replaceAll('_', ' ')}) is still pending.\n\n` +
+      `Kindly make the payment at your earliest convenience.\n\n` +
+      `Thank you 🙏`;
+    setReminderModal({ isOpen: true, income, phone: income.whatsapp || '', message });
+  };
+
+  const sendWhatsAppReminder = () => {
+    const { phone, message } = reminderModal;
+    const cleaned = phone.replace(/\D/g, '');
+    const number = cleaned.startsWith('91') ? cleaned : `91${cleaned}`;
+    const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+    window.open(url, '_blank');
+  };
+
   const getStatusBadge = (status) => {
     const styles = {
-      paid: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-      partial: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-      unpaid: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-      overdue: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+      paid:     'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+      partial:  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+      unpaid:   'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+      overdue:  'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200',
+      upcoming: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
     };
     return styles[status] || styles.unpaid;
   };
@@ -868,29 +898,38 @@ export const Income = () => {
                       </td>
                     </tr>
                   ) : (
-                    dueData.incomes.map((income) => (
+                    dueData.incomes.map((income) => {
+                      const entry = income.entry;
+                      const entryStatus = entry?.status || 'upcoming';
+                      const showActions = !!entry && entryStatus !== 'paid';
+                      return (
                       <tr key={income._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
                         <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{income.income_code}</td>
                         <td className="py-3 px-4"><span className="capitalize">{formatCategory(income.category)}</span></td>
                         <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{income.source_name}</td>
-                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{months[income.month - 1]?.label} {income.year}</td>
-                        <td className="py-3 px-4 text-right font-medium text-gray-900 dark:text-white">₹{income.amount_due?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right font-medium text-green-600">₹{income.amount_paid?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right font-medium text-orange-600">₹{income.balance?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-center"><span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getStatusBadge(income.status)}`}>{income.status}</span></td>
+                        <td className="py-3 px-4 text-gray-700 dark:text-gray-300">
+                          {entry ? `${months[entry.month - 1]?.label} ${entry.year}` : <span className="text-gray-400 text-xs">From {months[income.start_month - 1]?.label} {income.start_year}</span>}
+                        </td>
+                        <td className="py-3 px-4 text-right font-medium text-gray-900 dark:text-white">₹{(entry?.amount_due ?? income.amount_due)?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right font-medium text-green-600">₹{(entry?.amount_paid ?? 0)?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right font-medium text-orange-600">₹{(entry?.balance ?? income.amount_due)?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-center"><span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entryStatus)}`}>{entryStatus}</span></td>
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
-                            {income.status !== 'paid' && (
+                            {showActions && (
                               <button onClick={() => openPaymentModal(income)} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title={t('finance.income.markPayment')}><IndianRupee size={18} /></button>
                             )}
+                            {showActions && isEntryCurrentOrPast(entry.month, entry.year) && (
+                              <button onClick={() => openReminderModal(income)} className="p-2 text-[#25D366] hover:bg-green-50 rounded-lg transition-colors" title="Send WhatsApp Reminder"><MessageCircle size={18} /></button>
+                            )}
                             <button onClick={() => viewHistory(income)} className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title={t('finance.income.viewHistory')}><History size={18} /></button>
-                            <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'due' })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title={t('finance.income.receipt')}><Printer size={18} /></button>
                             <button onClick={() => openEditDue(income)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title={t('common.edit')}><Edit2 size={18} /></button>
                             <button onClick={() => handleDeleteDue(income._id)} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title={t('common.delete')}><Trash2 size={18} /></button>
                           </div>
                         </td>
                       </tr>
-                    ))
+                      );
+                    })
                   )}
                 </tbody>
               </table>
@@ -904,41 +943,50 @@ export const Income = () => {
                   <p>{t('common.noData')}</p>
                 </div>
               ) : (
-                dueData.incomes.map((income) => (
+                dueData.incomes.map((income) => {
+                  const entry = income.entry;
+                  const entryStatus = entry?.status || 'upcoming';
+                  const showActions = !!entry && entryStatus !== 'paid';
+                  return (
                   <div key={income._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="font-semibold text-gray-900 dark:text-white">{income.income_code}</p>
                         <p className="text-xs text-gray-500 capitalize">{formatCategory(income.category)} · {income.source_name}</p>
-                        <p className="text-xs text-gray-400">{months[income.month - 1]?.label} {income.year}</p>
+                        <p className="text-xs text-gray-400">
+                          {entry ? `${months[entry.month - 1]?.label} ${entry.year}` : `From ${months[income.start_month - 1]?.label} ${income.start_year}`}
+                        </p>
                       </div>
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full shrink-0 ${getStatusBadge(income.status)}`}>{income.status}</span>
+                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full shrink-0 capitalize ${getStatusBadge(entryStatus)}`}>{entryStatus}</span>
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-xs">
                       <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
                         <p className="text-gray-500">{t('finance.income.due')}</p>
-                        <p className="font-semibold text-gray-900 dark:text-white">₹{income.amount_due?.toLocaleString()}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white">₹{(entry?.amount_due ?? income.amount_due)?.toLocaleString()}</p>
                       </div>
                       <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
                         <p className="text-gray-500">{t('finance.income.paid')}</p>
-                        <p className="font-semibold text-green-600">₹{income.amount_paid?.toLocaleString()}</p>
+                        <p className="font-semibold text-green-600">₹{(entry?.amount_paid ?? 0)?.toLocaleString()}</p>
                       </div>
                       <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
                         <p className="text-gray-500">Balance</p>
-                        <p className="font-semibold text-orange-600">₹{income.balance?.toLocaleString()}</p>
+                        <p className="font-semibold text-orange-600">₹{(entry?.balance ?? income.amount_due)?.toLocaleString()}</p>
                       </div>
                     </div>
                     <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                      {income.status !== 'paid' && (
+                      {showActions && (
                         <button onClick={() => openPaymentModal(income)} className="flex-1 py-1.5 text-xs bg-green-600 text-white rounded-lg font-medium">{t('finance.income.markPayment')}</button>
                       )}
+                      {showActions && isEntryCurrentOrPast(entry.month, entry.year) && (
+                        <button onClick={() => openReminderModal(income)} className="flex items-center gap-1 px-2.5 py-1.5 text-xs bg-[#25D366] text-white rounded-lg font-medium"><MessageCircle size={12} />Remind</button>
+                      )}
                       <button onClick={() => viewHistory(income)} className="flex-1 py-1.5 text-xs bg-blue-600 text-white rounded-lg font-medium">History</button>
-                      <button onClick={() => setReceiptModal({ isOpen: true, income, type: 'due' })} className="flex-1 py-1.5 text-xs bg-purple-600 text-white rounded-lg font-medium">Receipt</button>
                       <button onClick={() => openEditDue(income)} className="p-1.5 text-gray-600 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg"><Edit2 size={15} /></button>
                       <button onClick={() => handleDeleteDue(income._id)} className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg"><Trash2 size={15} /></button>
                     </div>
                   </div>
-                ))
+                  );
+                })
               )}
             </div>
 
@@ -1089,11 +1137,26 @@ export const Income = () => {
                   <button onClick={() => setDueModal({ isOpen: false, income: null, isEdit: false })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6 space-y-4">
-                  <div>
-                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.date')} *</label>
-                    <input type="date" {...registerDue('date', { required: t('finance.income.dateRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" />
-                    {dueErrors.date && <p className="text-red-500  mt-1">{dueErrors.date.message}</p>}
-                  </div>
+                  {/* Start month/year — shown only when creating */}
+                  {!dueModal.isEdit && (
+                    <div>
+                      <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1">Start Month / Year *</label>
+                      <div className="grid grid-cols-2 gap-3">
+                        <select {...registerDue('start_month', { required: true })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
+                          {months.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+                        </select>
+                        <select {...registerDue('start_year', { required: true })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
+                          {years.map(y => <option key={y} value={y}>{y}</option>)}
+                        </select>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">Monthly entries auto-generate from this month onwards.</p>
+                    </div>
+                  )}
+                  {dueModal.isEdit && (
+                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg text-xs text-blue-700 dark:text-blue-300">
+                      Subscription started {months.find(m => m.value === dueModal.income?.start_month)?.label} {dueModal.income?.start_year}. Start date cannot be changed.
+                    </div>
+                  )}
                   <div>
                     <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.category')} *</label>
                     <input type="hidden" {...registerDue('category', { required: t('finance.income.categoryRequired') })} />
@@ -1122,18 +1185,20 @@ export const Income = () => {
                     {dueErrors.source_name && <p className="text-red-500  mt-1">{dueErrors.source_name.message}</p>}
                   </div>
                   <div>
-                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
-                    <input type="number" {...registerDue('amount_due', { required: t('finance.income.amountRequired'), min: { value: 0, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterAmount')} />
-                    {dueErrors.amount_due && <p className="text-red-500  mt-1">{dueErrors.amount_due.message}</p>}
+                    <label className="block font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1.5">
+                      <MessageCircle size={14} className="text-[#25D366]" /> WhatsApp Number
+                    </label>
+                    <input type="tel" {...registerDue('whatsapp')} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="e.g. 9876543210 (for reminders)" />
                   </div>
                   <div>
-                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.paymentMethod')} *</label>
-                    <select {...registerDue('payment_method', { required: t('finance.income.paymentMethodRequired') })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]">
-                      <option value="cash">{t('finance.income.cash')}</option>
-                      <option value="upi">{t('finance.income.upi')}</option>
-                      <option value="bank">{t('finance.income.bankTransfer')}</option>
-                    </select>
-                    {dueErrors.payment_method && <p className="text-red-500  mt-1">{dueErrors.payment_method.message}</p>}
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">Monthly Amount *</label>
+                    <input type="number" {...registerDue('amount_due', { required: t('finance.income.amountRequired'), min: { value: 1, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder="e.g. 2000" />
+                    {dueErrors.amount_due && <p className="text-red-500  mt-1">{dueErrors.amount_due.message}</p>}
+                    {dueModal.isEdit && <p className="text-xs text-amber-500 mt-1">Changing this updates all current/future unpaid entries.</p>}
+                  </div>
+                  <div>
+                    <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">Notes</label>
+                    <textarea {...registerDue('notes')} rows={2} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] resize-none" placeholder="Optional notes..." />
                   </div>
                 </div>
                 <div className="shrink-0 flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
@@ -1200,7 +1265,7 @@ export const Income = () => {
                   </div>
                   <div>
                     <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-1">{t('common.amount')} *</label>
-                    <input type="number" {...registerDirect('amount', { required: t('finance.income.amountRequired'), min: { value: 0, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterAmount')} />
+                    <input type="number" {...registerDirect('amount', { required: t('finance.income.amountRequired'), min: { value: 1, message: t('finance.income.amountPositive') } })} className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25]" placeholder={t('finance.income.enterAmount')} />
                     {directErrors.amount && <p className="text-red-500  mt-1">{directErrors.amount.message}</p>}
                   </div>
                   <div>
@@ -1225,28 +1290,31 @@ export const Income = () => {
 
       {/* Payment Modal */}
       <AnimatePresence>
-        {paymentModal.isOpen && paymentModal.income && (
+        {paymentModal.isOpen && paymentModal.income && paymentModal.entry && (
           <>
-            <motion.div key="payment-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPaymentModal({ isOpen: false, income: null })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+            <motion.div key="payment-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPaymentModal({ isOpen: false, income: null, entry: null })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
             <motion.div key="payment-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-md">
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.income.markPayment')}</h2>
-                  <button onClick={() => setPaymentModal({ isOpen: false, income: null })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.income.markPayment')}</h2>
+                    <p className="text-xs text-gray-500">{paymentModal.income.source_name} · {months[paymentModal.entry.month - 1]?.label} {paymentModal.entry.year}</p>
+                  </div>
+                  <button onClick={() => setPaymentModal({ isOpen: false, income: null, entry: null })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="p-6">
                   <div className="grid grid-cols-3 gap-3 mb-6 p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
                     <div className="text-center">
                       <p className=" text-gray-500">{t('finance.income.totalDue')}</p>
-                      <p className="text-lg font-bold text-gray-900 dark:text-white">₹{paymentModal.income.amount_due}</p>
+                      <p className="text-lg font-bold text-gray-900 dark:text-white">₹{paymentModal.entry.amount_due}</p>
                     </div>
                     <div className="text-center">
                       <p className=" text-gray-500">{t('finance.income.alreadyPaid')}</p>
-                      <p className="text-lg font-bold text-green-600">₹{paymentModal.income.amount_paid}</p>
+                      <p className="text-lg font-bold text-green-600">₹{paymentModal.entry.amount_paid}</p>
                     </div>
                     <div className="text-center">
                       <p className=" text-gray-500">{t('finance.income.remaining')}</p>
-                      <p className="text-lg font-bold text-orange-600">₹{paymentModal.income.balance}</p>
+                      <p className="text-lg font-bold text-orange-600">₹{paymentModal.entry.balance}</p>
                     </div>
                   </div>
                   <div className="space-y-4">
@@ -1273,7 +1341,7 @@ export const Income = () => {
                   </div>
                 </div>
                 <div className="flex justify-end gap-3 p-6 border-t border-gray-100 dark:border-gray-800">
-                  <button onClick={() => setPaymentModal({ isOpen: false, income: null })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">{t('common.cancel')}</button>
+                  <button onClick={() => setPaymentModal({ isOpen: false, income: null, entry: null })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800">{t('common.cancel')}</button>
                   <button onClick={handleMarkPayment} className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg">{t('finance.income.recordPayment')}</button>
                 </div>
               </div>
@@ -1286,29 +1354,32 @@ export const Income = () => {
       <AnimatePresence>
         {historyModal.isOpen && (
           <>
-            <motion.div key="history-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setHistoryModal({ isOpen: false, history: [] })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+            <motion.div key="history-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '' })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
             <motion.div key="history-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
-                  <h2 className="text-lg font-bold text-gray-900 dark:text-white">{t('finance.income.paymentHistory')}</h2>
-                  <button onClick={() => setHistoryModal({ isOpen: false, history: [] })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900 dark:text-white">Subscription History</h2>
+                    {historyModal.templateName && <p className="text-sm text-gray-500">{historyModal.templateName}</p>}
+                  </div>
+                  <button onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '' })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
                   {historyModal.history.length === 0 ? (
-                    <p className="text-center text-gray-500">{t('finance.income.noPaymentHistory')}</p>
+                    <p className="text-center text-gray-500">No entries yet.</p>
                   ) : (
-                    <div className="space-y-3">
-                      {historyModal.history.map((payment, index) => (
-                        <div key={index} className="p-4 bg-gray-50 dark:bg-[#252731] rounded-xl">
-                          <div className="flex justify-between items-center mb-2">
-                            <span className="font-medium text-gray-900 dark:text-white">₹{payment.payment_amount?.toLocaleString()}</span>
-                            <span className=" text-gray-500">{new Date(payment.payment_date).toLocaleDateString()}</span>
+                    <div className="space-y-2">
+                      {historyModal.history.map((entry) => (
+                        <div key={entry._id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#252731] rounded-xl">
+                          <div>
+                            <p className="font-medium text-gray-900 dark:text-white text-sm">
+                              {months[entry.month - 1]?.label} {entry.year}
+                            </p>
+                            <p className="text-xs text-gray-500">
+                              Paid: ₹{entry.amount_paid?.toLocaleString()} / ₹{entry.amount_due?.toLocaleString()}
+                            </p>
                           </div>
-                          <div className="flex justify-between ">
-                            <span className="text-gray-600">{t('finance.income.method')}: {payment.payment_method}</span>
-                            {payment.reference_no && <span className="text-gray-600">Ref: {payment.reference_no}</span>}
-                          </div>
-                          {payment.notes && <p className=" text-gray-500 mt-2">{payment.notes}</p>}
+                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entry.status)}`}>{entry.status}</span>
                         </div>
                       ))}
                     </div>
@@ -1322,6 +1393,88 @@ export const Income = () => {
 
       {/* Receipt Modal */}
       <IncomeReceipt isOpen={receiptModal.isOpen} onClose={() => setReceiptModal({ isOpen: false, income: null, type: '' })} income={receiptModal.income} type={receiptModal.type} />
+
+      {/* WhatsApp Reminder Modal */}
+      <AnimatePresence>
+        {reminderModal.isOpen && reminderModal.income && (
+          <>
+            <motion.div key="reminder-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setReminderModal({ isOpen: false, income: null, phone: '', message: '' })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+            <motion.div key="reminder-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
+              <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-md">
+
+                {/* Header */}
+                <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl" style={{ backgroundColor: '#25D36620' }}>
+                      <MessageCircle size={22} style={{ color: '#25D366' }} />
+                    </div>
+                    <div>
+                      <h2 className="text-base font-bold text-gray-900 dark:text-white">WhatsApp Reminder</h2>
+                      <p className="text-xs text-gray-500">{reminderModal.income.source_name}</p>
+                    </div>
+                  </div>
+                  <button onClick={() => setReminderModal({ isOpen: false, income: null, phone: '', message: '' })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={18} className="text-gray-500" /></button>
+                </div>
+
+                <div className="p-5 space-y-4">
+                  {/* Due summary */}
+                  <div className="flex items-center gap-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-100 dark:border-orange-800">
+                    <AlertCircle size={16} className="text-orange-500 shrink-0" />
+                    <p className="text-sm text-orange-700 dark:text-orange-300">
+                      <span className="font-semibold">₹{reminderModal.income.entry?.balance?.toLocaleString()}</span> pending for {months.find(m => m.value === reminderModal.income.entry?.month)?.label} {reminderModal.income.entry?.year}
+                    </p>
+                  </div>
+
+                  {/* Phone number */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 flex items-center gap-1.5">
+                      <Phone size={13} /> WhatsApp Number
+                    </label>
+                    <input
+                      type="tel"
+                      value={reminderModal.phone}
+                      onChange={e => setReminderModal(prev => ({ ...prev, phone: e.target.value }))}
+                      className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#252731] text-sm focus:outline-none focus:ring-2 focus:ring-[#25D366] dark:text-white"
+                      placeholder="e.g. 9876543210"
+                    />
+                    {!reminderModal.phone && (
+                      <p className="text-xs text-amber-500 mt-1">No number saved — enter a number to send the reminder.</p>
+                    )}
+                  </div>
+
+                  {/* Message preview */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message Preview</label>
+                    <textarea
+                      value={reminderModal.message}
+                      onChange={e => setReminderModal(prev => ({ ...prev, message: e.target.value }))}
+                      rows={7}
+                      className="w-full px-3 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#252731] text-sm focus:outline-none focus:ring-2 focus:ring-[#25D366] dark:text-white resize-none font-mono leading-relaxed"
+                    />
+                    <p className="text-xs text-gray-400 mt-1">You can edit the message before sending.</p>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="flex items-center justify-end gap-3 p-5 border-t border-gray-100 dark:border-gray-800">
+                  <button onClick={() => setReminderModal({ isOpen: false, income: null, phone: '', message: '' })} className="px-4 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300">
+                    Cancel
+                  </button>
+                  <button
+                    onClick={sendWhatsAppReminder}
+                    disabled={!reminderModal.phone.trim()}
+                    className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                    style={{ backgroundColor: '#25D366' }}
+                  >
+                    <MessageCircle size={16} />
+                    Open WhatsApp
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* View Modal */}
       <AnimatePresence>

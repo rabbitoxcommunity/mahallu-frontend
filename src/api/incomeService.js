@@ -1,6 +1,6 @@
 import axios from './axios';
 
-// Due Based Income APIs
+// Due Based Income APIs (template / subscription)
 export const createDueIncome = async (data) => {
   const response = await axios.post('/finance/income/due/create', data);
   return response.data;
@@ -21,13 +21,21 @@ export const deleteDueIncome = async (id) => {
   return response.data;
 };
 
+// id = entry._id (monthly entry, not template)
 export const markDuePayment = async (id, data) => {
   const response = await axios.put(`/finance/income/due/pay/${id}`, data);
   return response.data;
 };
 
+// id = entry._id — payment receipts for one monthly entry
 export const getDuePaymentHistory = async (id) => {
   const response = await axios.get(`/finance/income/due/history/${id}`);
+  return response.data;
+};
+
+// id = template._id — all monthly entries across every month
+export const getTemplateEntries = async (id) => {
+  const response = await axios.get(`/finance/income/due/${id}/entries`);
   return response.data;
 };
 
@@ -55,6 +63,5 @@ export const deleteDirectIncome = async (id) => {
 // Summary API
 export const getIncomeSummary = async (params = {}) => {
   const response = await axios.get('/finance/income/summary', { params });
-  console.log(response,'response')
   return response.data;
 };

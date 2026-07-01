@@ -75,3 +75,40 @@ export const getExpenseSummary = async () => {
   const response = await axios.get('/finance/expense/summary');
   return response.data;
 };
+
+// ============ Due Based Expense ============
+
+export const getDueExpenses = async (params) => {
+  const response = await axios.get('/finance/due-expense', { params });
+  return response.data;
+};
+
+export const createDueExpense = async (data) => {
+  const response = await axios.post('/finance/due-expense/create', data);
+  return response.data;
+};
+
+export const updateDueExpense = async (id, data) => {
+  const response = await axios.put(`/finance/due-expense/${id}`, data);
+  return response.data;
+};
+
+export const deleteDueExpense = async (id) => {
+  const response = await axios.delete(`/finance/due-expense/${id}`);
+  return response.data;
+};
+
+export const markDueExpensePayment = async (entryId, data) => {
+  const response = await axios.put(`/finance/due-expense/pay/${entryId}`, data);
+  return response.data;
+};
+
+export const getDueExpenseTemplateEntries = async (templateId) => {
+  const response = await axios.get(`/finance/due-expense/${templateId}/entries`);
+  return response.data;
+};
+
+export const getDueExpenseSummary = async (params) => {
+  const response = await axios.get('/finance/due-expense/summary', { params });
+  return response.data;
+};
