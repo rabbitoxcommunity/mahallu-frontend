@@ -10,6 +10,7 @@ import { SidebarProvider } from "./context/SidebarContext";
 import PlatformAdminDashboard from "./pages/PlatformAdmin/PlatformAdminDashboard";
 import TenantsList from "./pages/PlatformAdmin/TenantsList";
 import CreateTenant from "./pages/PlatformAdmin/CreateTenant";
+import EditTenant from "./pages/PlatformAdmin/EditTenant";
 import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
 import StaffList from "./pages/SuperAdmin/StaffList";
 import CreateStaff from "./pages/SuperAdmin/CreateStaff";
@@ -99,6 +100,7 @@ function App() {
                             <Route path="/platform-admin" element={<PlatformAdminDashboard />} />
                             <Route path="/platform-admin/tenants" element={<TenantsList />} />
                             <Route path="/platform-admin/tenants/create" element={<CreateTenant />} />
+                            <Route path="/platform-admin/tenants/:id/edit" element={<EditTenant />} />
                         </Route>
 
                         {/* Protected Routes Wrapper (With Sidebar) */}

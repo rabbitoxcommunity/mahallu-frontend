@@ -183,6 +183,9 @@ export default function TenantsList() {
                       <div>
                         <div className="text-sm font-medium text-gray-900 dark:text-white">
                           {tenant.name}
+                          {tenant.nameMalayalam && (
+                            <span className="text-gray-500 dark:text-gray-400 font-normal"> ({tenant.nameMalayalam})</span>
+                          )}
                         </div>
                         <div className="text-xs text-gray-500 dark:text-gray-400">
                           {tenant.slug}
@@ -220,6 +223,13 @@ export default function TenantsList() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
+                      <Link
+                        to={`/platform-admin/tenants/${tenant._id}/edit`}
+                        className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 transition-colors"
+                        title="Edit tenant"
+                      >
+                        <Edit size={16} />
+                      </Link>
                       <button
                         onClick={() => handleStatusToggle(tenant._id, tenant.status)}
                         className={`p-2 rounded-lg transition-colors ${

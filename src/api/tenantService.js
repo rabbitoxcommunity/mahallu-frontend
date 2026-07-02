@@ -24,6 +24,12 @@ export const updateTenantStatus = async (tenantId, status) => {
   return response.data;
 };
 
+// Update tenant details
+export const updateTenant = async (tenantId, tenantData) => {
+  const response = await axios.put(`/tenants/${tenantId}`, tenantData);
+  return response.data;
+};
+
 // Search tenants (optional - for future enhancement)
 export const searchTenants = async (query, page = 1, limit = 10) => {
   const response = await axios.get(`/tenants/search?q=${query}&page=${page}&limit=${limit}`);
