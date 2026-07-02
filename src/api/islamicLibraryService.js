@@ -4,8 +4,12 @@ const BACKEND = import.meta.env.VITE_API_URL
   ? import.meta.env.VITE_API_URL.replace('/api', '')
   : 'http://localhost:5005';
 
-export const getPdfUrl = (filename) =>
-  filename ? `${BACKEND}/uploads/islamic/${filename}` : null;
+// pdf_file is now a full R2 URL; older records may still hold a bare local
+// filename from before the R2 migration, so keep resolving those too.
+export const getPdfUrl = (pdfFile) => {
+  if (!pdfFile) return null;
+  return /^https?:\/\//i.test(pdfFile) ? pdfFile : `${BACKEND}/uploads/islamic/${pdfFile}`;
+};
 
 const slug = () =>
   localStorage.getItem('portal_tenant') ||
