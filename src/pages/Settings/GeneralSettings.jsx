@@ -138,8 +138,8 @@ const GeneralSettings = () => {
     <div className="w-full">
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('settings.categories.title')}</h2>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">{t('settings.categories.description')}</p>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('finance.settings.categories.title')}</h2>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">{t('finance.settings.categories.description')}</p>
         </div>
 
         <div className="p-6">
@@ -152,7 +152,7 @@ const GeneralSettings = () => {
               className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
             >
               <Plus size={18} />
-              {t('settings.categories.addIncomeCategory')}
+              {t('finance.settings.categories.addIncomeCategory')}
             </button>
             <button
               onClick={() => {
@@ -162,7 +162,7 @@ const GeneralSettings = () => {
               className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
             >
               <Plus size={18} />
-              {t('settings.categories.addExpenseCategory')}
+              {t('finance.settings.categories.addExpenseCategory')}
             </button>
           </div>
 
@@ -171,7 +171,7 @@ const GeneralSettings = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Calendar size={20} className="text-[#0B65F6]" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('settings.categories.dueCategories')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('finance.settings.categories.dueCategories')}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {dueCategories.map((category) => (
@@ -205,7 +205,7 @@ const GeneralSettings = () => {
                 ))}
                 {dueCategories.length === 0 && (
                   <div className="col-span-3 text-center py-8 text-gray-500 dark:text-gray-400">
-                    {t('settings.categories.noDueCategories')}
+                    {t('finance.settings.categories.noDueCategories')}
                   </div>
                 )}
               </div>
@@ -215,7 +215,7 @@ const GeneralSettings = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <Wallet size={20} className="text-green-600" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('settings.categories.incomeCategories')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('finance.settings.categories.incomeCategories')}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {incomeCategories.map((category) => (
@@ -249,7 +249,7 @@ const GeneralSettings = () => {
                 ))}
                 {incomeCategories.length === 0 && (
                   <div className="col-span-3 text-center py-8 text-gray-500 dark:text-gray-400">
-                    {t('settings.categories.noIncomeCategories')}
+                    {t('finance.settings.categories.noIncomeCategories')}
                   </div>
                 )}
               </div>
@@ -259,7 +259,7 @@ const GeneralSettings = () => {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <CreditCard size={20} className="text-red-600" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('settings.categories.expenseCategories')}</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('finance.settings.categories.expenseCategories')}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {expenseCategories.map((category) => (
@@ -293,7 +293,7 @@ const GeneralSettings = () => {
                 ))}
                 {expenseCategories.length === 0 && (
                   <div className="col-span-3 text-center py-8 text-gray-500 dark:text-gray-400">
-                    {t('settings.categories.noExpenseCategories')}
+                    {t('finance.settings.categories.noExpenseCategories')}
                   </div>
                 )}
               </div>
@@ -329,8 +329,8 @@ const GeneralSettings = () => {
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-bold text-gray-900 dark:text-white">
                       {addModal.categoryType === 'expense' || editModal.categoryType === 'expense'
-                        ? (editModal.isOpen ? t('settings.categories.editExpenseCategory') : t('settings.categories.addExpenseCategory'))
-                        : (editModal.isOpen ? t('settings.categories.editCategory') : t('settings.categories.addCategory'))
+                        ? (editModal.isOpen ? t('finance.settings.categories.editExpenseCategory') : t('finance.settings.categories.addExpenseCategory'))
+                        : (editModal.isOpen ? t('finance.settings.categories.editCategory') : t('finance.settings.categories.addCategory'))
                       }
                     </h3>
                     <button
@@ -348,7 +348,7 @@ const GeneralSettings = () => {
                   {addModal.categoryType === 'income' || editModal.categoryType === 'income' ? (
                     <div>
                       <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t('settings.categories.categoryType')} *
+                        {t('finance.settings.categories.categoryType')} *
                       </label>
                       <select
                         value={formData.type}
@@ -356,14 +356,14 @@ const GeneralSettings = () => {
                         className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
                         required
                       >
-                        <option value="due">Due</option>
-                        <option value="income">Income</option>
+                        <option value="due">{t('finance.income.due')}</option>
+                        <option value="income">{t('common.income')}</option>
                       </select>
                     </div>
                   ) : null}
                   <div>
                     <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      {t('settings.categories.categoryName')} *
+                      {t('finance.settings.categories.categoryName')} *
                     </label>
                     <input
                       type="text"
@@ -375,7 +375,7 @@ const GeneralSettings = () => {
                   </div>
                   <div>
                     <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      {t('settings.categories.description')}
+                      {t('finance.settings.categories.description')}
                     </label>
                     <textarea
                       value={formData.description}
@@ -399,7 +399,7 @@ const GeneralSettings = () => {
                       type="submit"
                       className="flex-1 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors"
                     >
-                      {editModal.isOpen ? t('common.update') : t('common.add')} {t('settings.categories.category')}
+                      {editModal.isOpen ? t('common.update') : t('common.add')} {t('finance.settings.categories.category')}
                     </button>
                   </div>
                 </form>
@@ -430,9 +430,9 @@ const GeneralSettings = () => {
             >
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl w-full max-w-md border border-gray-100 dark:border-gray-800">
                 <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('settings.categories.deleteCategory')}</h3>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{t('finance.settings.categories.deleteCategory')}</h3>
                   <p className="text-gray-600 dark:text-gray-400 mb-6">
-                    {t('settings.categories.deleteConfirmation')} "{deleteModal.category.name}"? {t('settings.categories.deleteWarning')}
+                    {t('finance.settings.categories.deleteConfirmation')} "{deleteModal.category.name}"? {t('finance.settings.categories.deleteWarning')}
                   </p>
                   <div className="flex gap-3">
                     <button

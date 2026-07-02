@@ -53,7 +53,8 @@
     "createdBy": "Created By",
     "showing": "Showing",
     "deleteConfirm": "Are you sure?",
-    "deleteText": "This action cannot be undone."
+    "deleteText": "This action cannot be undone.",
+    "saving": "Saving..."
   },
   "sidebar": {
     "main": "MAIN",
@@ -288,7 +289,14 @@
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 6 characters",
     "staffCreatedToast": "Staff created successfully!",
-    "staffCreateFailed": "Failed to create staff"
+    "staffCreateFailed": "Failed to create staff",
+    "editStaffPermissions": "Edit Staff Permissions",
+    "manageModuleAccessFor": "Manage module access for",
+    "staffNotFound": "Staff not found",
+    "staffNotFoundDesc": "The staff member you're looking for doesn't exist or you don't have access.",
+    "permissionNoteTitle": "Permission Note",
+    "permissionNoteDesc": "Staff members can only access the modules you enable here. SuperAdmins and PlatformAdmins bypass all permission restrictions.",
+    "savePermissions": "Save Permissions"
   },
   "public": {
     "welcome": "Welcome to Mahallu Portal",
@@ -1558,5 +1566,14 @@
       "title": "Dua Library",
       "desc": "Manage Islamic Duas for the public portal"
     }
+  },
+  "moduleDescriptions": {
+    "dashboard": "Manage dashboard and analytics",
+    "family": "Manage family records and members",
+    "finance": "Manage finance records and members",
+    "community": "Manage community welfare programs",
+    "results": "Manage madrasa exam results",
+    "settings": "Manage general settings",
+    "islamicLibrary": "Manage Surah and Dua library"
   }
 }

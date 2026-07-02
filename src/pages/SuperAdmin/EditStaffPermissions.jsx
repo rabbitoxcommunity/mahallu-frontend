@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { 
   Shield, 
@@ -22,6 +23,7 @@ export default function EditStaffPermissions() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { refreshPermissions } = useAuth();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [staff, setStaff] = useState(null);
@@ -101,16 +103,16 @@ export default function EditStaffPermissions() {
       <div className="text-center py-12">
         <Users size={48} className="mx-auto text-gray-400 mb-4" />
         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          Staff not found
+          {t('superAdmin.staffNotFound')}
         </h3>
         <p className="text-gray-500 dark:text-gray-400 mb-6">
-          The staff member you're looking for doesn't exist or you don't have access.
+          {t('superAdmin.staffNotFoundDesc')}
         </p>
         <button
           onClick={() => navigate('/super-admin/staff')}
           className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-lg hover:bg-[#0B65F6]/90 transition-colors"
         >
-          Back to Staff
+          {t('superAdmin.backToStaff')}
         </button>
       </div>
     );
@@ -124,11 +126,11 @@ export default function EditStaffPermissions() {
           className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-4 transition-colors"
         >
           <ArrowLeft size={20} />
-          Back to Staff
+          {t('superAdmin.backToStaff')}
         </button>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Edit Staff Permissions</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{t('superAdmin.editStaffPermissions')}</h1>
         <p className="text-gray-500 dark:text-gray-400 mt-1">
-          Manage module access for {staff.name}
+          {t('superAdmin.manageModuleAccessFor')} {staff.name}
         </p>
       </div>
 
@@ -162,7 +164,7 @@ export default function EditStaffPermissions() {
                     ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
                     : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
                 }`}>
-                  {staff.is_active ? 'Active' : 'Inactive'}
+                  {staff.is_active ? t('common.active') : t('common.inactive')}
                 </span>
               </div>
             </div>
@@ -173,7 +175,7 @@ export default function EditStaffPermissions() {
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
               <Settings size={20} />
-              Module Permissions
+              {t('superAdmin.modulePermissions')}
             </h3>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -209,7 +211,7 @@ export default function EditStaffPermissions() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
                           <h4 className="font-medium text-gray-900 dark:text-white">
-                            {module.label}
+                            {t(module.label)}
                           </h4>
                           <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
                             isEnabled
@@ -222,7 +224,7 @@ export default function EditStaffPermissions() {
                           </div>
                         </div>
                         <p className=" text-gray-500 dark:text-gray-400 mt-1">
-                          {module.description}
+                          {t(`moduleDescriptions.${module.key}`)}
                         </p>
                       </div>
                     </div>
@@ -242,8 +244,7 @@ export default function EditStaffPermissions() {
               <div className="flex items-start gap-3">
                 <ShieldAlert size={20} className="text-blue-600 dark:text-blue-400 mt-0.5" />
                 <div className=" text-blue-800 dark:text-blue-200">
-                  <strong>Permission Note:</strong> Staff members can only access the modules you enable here. 
-                  SuperAdmins and PlatformAdmins bypass all permission restrictions.
+                  <strong>{t('superAdmin.permissionNoteTitle')}:</strong> {t('superAdmin.permissionNoteDesc')}
                 </div>
               </div>
             </div>
@@ -255,7 +256,7 @@ export default function EditStaffPermissions() {
               onClick={() => navigate('/super-admin/staff')}
               className="flex-1 px-4 py-2 border border-gray-100 dark:border-gray-800/60 text-gray-900 dark:text-white rounded-lg hover:bg-gray-50 dark:hover:bg-[#252731]/50 transition-colors"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
@@ -265,12 +266,12 @@ export default function EditStaffPermissions() {
               {saving ? (
                 <>
                   <Loader2 size={16} className="animate-spin" />
-                  Saving...
+                  {t('common.saving')}
                 </>
               ) : (
                 <>
                   <CheckCircle size={16} />
-                  Save Permissions
+                  {t('superAdmin.savePermissions')}
                 </>
               )}
             </button>
