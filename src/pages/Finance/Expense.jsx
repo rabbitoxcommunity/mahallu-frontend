@@ -7,7 +7,7 @@ import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import {
   Wallet, IndianRupee, Calendar, Search, ChevronLeft, ChevronRight,
-  RefreshCw, Download, Eye, Printer, Plus, X, Edit2, Trash2,
+  RefreshCw, Eye, Image, Printer, Plus, X, Edit2, Trash2,
   CreditCard, Banknote, Smartphone, History, CheckCircle,
   AlertCircle, TrendingUp
 } from 'lucide-react';
@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 import {
   getExpenses, getExpenseById, createExpense, updateExpense, deleteExpense, getExpenseSummary,
   getDueExpenses, createDueExpense, updateDueExpense, deleteDueExpense,
-  markDueExpensePayment, getDueExpenseTemplateEntries, getDueExpenseSummary
+  markDueExpensePayment, getDueExpenseTemplateEntries, getDueExpenseSummary, viewReceipt
 } from '../../api/expenseService';
 import { getExpenseCategories } from '../../api/expenseCategoryService';
 
@@ -148,6 +148,7 @@ const Expense = () => {
   const [editModal, setEditModal] = useState({ isOpen: false, expense: null });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, expense: null });
   const [voucherModal, setVoucherModal] = useState({ isOpen: false, expense: null });
+  const [receiptModal, setReceiptModal] = useState({ isOpen: false, loading: false, blobUrl: null, contentType: null });
   const [printModal, setPrintModal] = useState({ isOpen: false, allExpenses: [] });
 
   const fileInputRef = useRef(null);
@@ -322,6 +323,22 @@ const Expense = () => {
       amount: expense.amount?.toString() || '', payment_method: expense.payment_method,
       reference_no: expense.reference_no || '', notes: expense.notes || '', bill_file: expense.bill_file || ''
     });
+  };
+
+  const handleViewReceipt = async (expenseId) => {
+    setReceiptModal({ isOpen: true, loading: true, blobUrl: null, contentType: null });
+    try {
+      const blob = await viewReceipt(expenseId);
+      setReceiptModal({ isOpen: true, loading: false, blobUrl: URL.createObjectURL(blob), contentType: blob.type });
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to load receipt');
+      setReceiptModal({ isOpen: false, loading: false, blobUrl: null, contentType: null });
+    }
+  };
+
+  const closeReceiptModal = () => {
+    if (receiptModal.blobUrl) URL.revokeObjectURL(receiptModal.blobUrl);
+    setReceiptModal({ isOpen: false, loading: false, blobUrl: null, contentType: null });
   };
 
   // ==================== DUE EXPENSE HANDLERS ====================
@@ -769,7 +786,7 @@ const Expense = () => {
                                   <button onClick={() => openEditModal(expense)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Edit"><Edit2 size={18} /></button>
                                   <button onClick={() => setDeleteModal({ isOpen: true, expense })} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={18} /></button>
                                   {expense.bill_file && (
-                                    <a href={expense.bill_file} target="_blank" rel="noopener noreferrer" className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="View Receipt"><Download size={18} /></a>
+                                    <button onClick={() => handleViewReceipt(expense._id)} className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="View Receipt"><Image size={18} /></button>
                                   )}
                                   <button onClick={() => setVoucherModal({ isOpen: true, expense })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Print Voucher"><Printer size={18} /></button>
                                 </div>
@@ -802,7 +819,7 @@ const Expense = () => {
                           <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                             <button onClick={() => setViewModal({ isOpen: true, expense })} className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">View</button>
                             {expense.bill_file && (
-                              <a href={expense.bill_file} target="_blank" rel="noopener noreferrer" className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium text-center">Receipt</a>
+                              <button onClick={() => handleViewReceipt(expense._id)} className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium text-center">Receipt</button>
                             )}
                             <button onClick={() => setVoucherModal({ isOpen: true, expense })} className="flex-1 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium">Voucher</button>
                           </div>
@@ -1073,7 +1090,7 @@ const Expense = () => {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
                   {editModal.expense?.bill_file && (
                     <div className="mb-2">
-                      <a href={editModal.expense.bill_file} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">View Current File</a>
+                      <button type="button" onClick={() => handleViewReceipt(editModal.expense._id)} className="text-sm text-blue-600 hover:underline">View Current File</button>
                     </div>
                   )}
                   <input type="file" accept="image/*,.pdf" onChange={(e) => setEditForm({ ...editForm, bill_file: e.target.files[0] })} className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]" />
@@ -1133,6 +1150,32 @@ const Expense = () => {
                   <button onClick={() => setDeleteModal({ isOpen: false, expense: null })} className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm hover:bg-gray-50 dark:hover:bg-gray-800">{t('common.cancel')}</button>
                   <button onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded-xl text-sm hover:bg-red-600">{t('common.delete')}</button>
                 </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Receipt View Modal */}
+      <AnimatePresence>
+        {receiptModal.isOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white dark:bg-[#1e1f25] rounded-2xl w-full max-w-2xl h-[85vh] flex flex-col">
+              <div className="p-5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white">Receipt</h2>
+                <button onClick={closeReceiptModal} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><X size={20} /></button>
+              </div>
+              <div className="flex-1 bg-gray-100 dark:bg-[#0f1013] rounded-b-2xl overflow-auto flex items-center justify-center">
+                {receiptModal.loading && (
+                  <div className="w-8 h-8 border-2 border-blue-500/30 border-t-blue-500 rounded-full animate-spin" />
+                )}
+                {!receiptModal.loading && receiptModal.blobUrl && (
+                  receiptModal.contentType?.startsWith('image/') ? (
+                    <img src={receiptModal.blobUrl} alt="Receipt" className="max-w-full max-h-full object-contain" />
+                  ) : (
+                    <iframe src={receiptModal.blobUrl} title="Receipt" className="w-full h-full border-0" />
+                  )
+                )}
               </div>
             </motion.div>
           </div>

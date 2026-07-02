@@ -30,6 +30,13 @@ export const generatePDF = async (id) => {
   return response.data;
 };
 
+// Admin API - Fetch PDF as a blob for inline viewing/printing (no
+// Content-Disposition: attachment, unlike the R2 URL used for downloads)
+export const viewPDF = async (id) => {
+  const response = await axios.get(`/admin/marriages/${id}/pdf/view`, { responseType: 'blob' });
+  return response.data;
+};
+
 // Public API - Search marriage
 export const searchMarriage = async (params) => {
   const response = await axios.get('/public/marriages/search', { params });

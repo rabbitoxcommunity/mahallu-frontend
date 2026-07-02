@@ -76,6 +76,13 @@ export const getExpenseSummary = async () => {
   return response.data;
 };
 
+// Fetch a receipt as a blob for inline viewing (no Content-Disposition:
+// attachment, unlike the R2 URL, so images/PDFs render instead of downloading)
+export const viewReceipt = async (id) => {
+  const response = await axios.get(`/finance/expense/${id}/receipt/view`, { responseType: 'blob' });
+  return response.data;
+};
+
 // ============ Due Based Expense ============
 
 export const getDueExpenses = async (params) => {

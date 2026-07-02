@@ -16,7 +16,8 @@ import {
   getMarriageById,
   createMarriage,
   updateMarriage,
-  generatePDF
+  generatePDF,
+  viewPDF
 } from '../../api/marriageService';
 import MarriageForm from '../../components/certificate/MarriageForm';
 import MarriageTable from '../../components/certificate/MarriageTable';
@@ -163,23 +164,13 @@ const Marriages = () => {
 
   const handlePrint = async (id) => {
     try {
-      const marriage = await getMarriageById(id);
-      
-      if (!marriage.pdf_url) {
-        toast.info('Generating PDF for printing...');
-        const response = await generatePDF(id);
-        if (response.pdf_url) {
-          marriage.pdf_url = response.pdf_url;
-        } else {
-          toast.error('PDF generation failed');
-          return;
-        }
-      }
-      
-      // Open PDF in new window and trigger print
-      const pdfUrl = resolveCertUrl(marriage.pdf_url);
-      const printWindow = window.open(pdfUrl, '_blank');
-      
+      // Fetch as a blob (no Content-Disposition: attachment) so the browser
+      // renders it inline instead of downloading it — the R2 URL used for
+      // downloads always force-downloads, which left nothing to print.
+      const blob = await viewPDF(id);
+      const blobUrl = URL.createObjectURL(blob);
+      const printWindow = window.open(blobUrl, '_blank');
+
       if (printWindow) {
         printWindow.onload = () => {
           printWindow.print();

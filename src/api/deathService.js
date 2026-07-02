@@ -27,6 +27,11 @@ export const markCertificateGenerated = (id) =>
 export const generatePDF = (id) =>
     axiosInstance.get(`/community/death/${id}/pdf`).then(r => r.data);
 
+// Fetch PDF as a blob for inline viewing/printing (no Content-Disposition:
+// attachment, unlike the R2 URL used for downloads)
+export const viewPDF = (id) =>
+    axiosInstance.get(`/community/death/${id}/pdf/view`, { responseType: 'blob' }).then(r => r.data);
+
 // Reports
 export const getDeathReports = (params) =>
     axiosInstance.get('/community/death/reports', { params }).then(r => r.data);

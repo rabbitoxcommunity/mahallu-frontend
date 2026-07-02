@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Download, Printer, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { markCertificateGenerated, generatePDF } from '../../../api/deathService';
-import { resolveCertUrl } from '../../../utils/certUtil';
+import { markCertificateGenerated, viewPDF } from '../../../api/deathService';
 
 const CertificateModal = ({ record, onClose }) => {
     const { t } = useTranslation();
     const markedRef = useRef(false);
     const [loading, setLoading] = useState(true);
-    const [pdfUrl, setPdfUrl] = useState(resolveCertUrl(record?.pdf_url));
+    const [blobUrl, setBlobUrl] = useState(null);
 
     useEffect(() => {
         if (record && !markedRef.current) {
@@ -24,8 +23,11 @@ const CertificateModal = ({ record, onClose }) => {
         let cancelled = false;
         (async () => {
             try {
-                const data = await generatePDF(record._id);
-                if (!cancelled) setPdfUrl(resolveCertUrl(data.pdf_url));
+                // Fetch as a blob (no Content-Disposition: attachment) so it
+                // renders inline for preview/print. The R2 download URL always
+                // force-downloads, which broke both the iframe preview and print.
+                const blob = await viewPDF(record._id);
+                if (!cancelled) setBlobUrl(URL.createObjectURL(blob));
             } catch {
                 if (!cancelled) toast.error(t('death.certificate.generateFailed', 'Failed to generate certificate'));
             } finally {
@@ -35,16 +37,24 @@ const CertificateModal = ({ record, onClose }) => {
         return () => { cancelled = true; };
     }, [record, t]);
 
+    useEffect(() => {
+        // Release the blob URL when replaced or the modal unmounts.
+        return () => { if (blobUrl) URL.revokeObjectURL(blobUrl); };
+    }, [blobUrl]);
+
     if (!record) return null;
 
     const handleDownloadPDF = () => {
-        if (!pdfUrl) return;
-        window.open(pdfUrl, '_blank');
+        if (!blobUrl) return;
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `${record.certificate_no || record.death_id}.pdf`;
+        a.click();
     };
 
     const handlePrint = () => {
-        if (!pdfUrl) return;
-        const w = window.open(pdfUrl, '_blank');
+        if (!blobUrl) return;
+        const w = window.open(blobUrl, '_blank');
         if (w) {
             w.addEventListener('load', () => w.print());
         }
@@ -75,7 +85,7 @@ const CertificateModal = ({ record, onClose }) => {
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={handleDownloadPDF}
-                                disabled={!pdfUrl}
+                                disabled={!blobUrl}
                                 className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white rounded-xl text-xs font-medium transition-colors"
                             >
                                 <Download size={13} />
@@ -83,7 +93,7 @@ const CertificateModal = ({ record, onClose }) => {
                             </button>
                             <button
                                 onClick={handlePrint}
-                                disabled={!pdfUrl}
+                                disabled={!blobUrl}
                                 className="flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 disabled:opacity-50 text-gray-700 dark:text-gray-300 rounded-xl text-xs font-medium transition-colors"
                             >
                                 <Printer size={13} />
@@ -106,14 +116,14 @@ const CertificateModal = ({ record, onClose }) => {
                                 <p className="text-sm">{t('death.certificate.generating', 'Generating certificate…')}</p>
                             </div>
                         )}
-                        {!loading && pdfUrl && (
+                        {!loading && blobUrl && (
                             <iframe
-                                src={pdfUrl}
+                                src={blobUrl}
                                 title="Death Certificate"
                                 className="w-full h-full border-0"
                             />
                         )}
-                        {!loading && !pdfUrl && (
+                        {!loading && !blobUrl && (
                             <div className="w-full h-full flex items-center justify-center text-sm text-gray-400">
                                 {t('death.certificate.generateFailed', 'Failed to generate certificate')}
                             </div>
