@@ -35,6 +35,7 @@ export default function EditTenant() {
           name: tenant.name,
           nameMalayalam: tenant.nameMalayalam,
           address: tenant.address,
+          addressMalayalam: tenant.addressMalayalam,
           regNo: tenant.regNo
         });
       } catch (error) {
@@ -56,6 +57,7 @@ export default function EditTenant() {
         name: data.name,
         nameMalayalam: data.nameMalayalam,
         address: data.address,
+        addressMalayalam: data.addressMalayalam,
         regNo: data.regNo
       });
 
@@ -140,12 +142,27 @@ export default function EditTenant() {
                 Address
               </label>
               <div className="relative">
-                <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                <input
-                  type="text"
+                <Building2 className="absolute left-3 top-3 text-gray-400" size={20} />
+                <textarea
                   {...register('address')}
-                  className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] dark:bg-[#252731] dark:border-gray-800/60 dark:text-white border-gray-300"
+                  rows={3}
+                  className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] dark:bg-[#252731] dark:border-gray-800/60 dark:text-white border-gray-300 resize-none"
                   placeholder="Enter mahallu address"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Address (Malayalam)
+              </label>
+              <div className="relative">
+                <Building2 className="absolute left-3 top-3 text-gray-400" size={20} />
+                <textarea
+                  {...register('addressMalayalam')}
+                  rows={3}
+                  className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] dark:bg-[#252731] dark:border-gray-800/60 dark:text-white border-gray-300 resize-none"
+                  placeholder="മഹല്ല് വിലാസം"
                 />
               </div>
             </div>
