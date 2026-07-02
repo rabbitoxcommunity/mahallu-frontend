@@ -49,6 +49,9 @@ import PortalMarriageCertPage from "./pages/portal/services/MarriageCertificateP
 import PortalDeathCertPage from "./pages/portal/services/DeathCertificatePage";
 import PortalResultsPage from "./pages/portal/services/ResultsPage";
 import PortalBloodDonorPage from "./pages/portal/services/BloodDonorPage";
+import PortalIslamicServicesPage from "./pages/portal/services/IslamicServicesPage";
+import SurahLibrary from "./pages/IslamicLibrary/SurahLibrary";
+import DuaLibrary from "./pages/IslamicLibrary/DuaLibrary";
 import PublicPortalSettings from "./pages/Settings/PublicPortalSettings";
 import { PortalProvider } from "./context/PortalContext";
 import ScrollToTop from "./components/ScrollToTop";
@@ -85,6 +88,7 @@ function App() {
                             <Route path="/portal/services/death-certificate" element={<PortalDeathCertPage />} />
                             <Route path="/portal/services/results" element={<PortalResultsPage />} />
                             <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
+                            <Route path="/portal/services/islamic-services" element={<PortalIslamicServicesPage />} />
                         </Route>
 
                         {/* Login Route */}
@@ -140,6 +144,10 @@ function App() {
                             {/* Result Management Routes */}
                             <Route path="/results" element={<ResultManagement />} />
                             <Route path="/results/settings" element={<ResultSettingsPage />} />
+
+                            {/* Islamic Library Routes */}
+                            <Route path="/islamic-library/surah" element={<SurahLibrary />} />
+                            <Route path="/islamic-library/dua" element={<DuaLibrary />} />
 
                             {/* Admin Routes */}
                             <Route path="/admin/marriages" element={<Marriages />} />

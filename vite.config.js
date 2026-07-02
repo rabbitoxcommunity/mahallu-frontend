@@ -11,6 +11,9 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'favicon.svg'],
+      devOptions: {
+        enabled: true,
+      },
       manifest: {
         name: 'Mahallu CRM',
         short_name: 'MahaCRM',

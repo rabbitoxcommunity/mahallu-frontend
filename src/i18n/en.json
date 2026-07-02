@@ -79,7 +79,10 @@
     "incomeCategory": "Income Category",
     "results": "Result Management",
     "resultsList": "Results",
-    "resultSettings": "Settings"
+    "resultSettings": "Settings",
+    "islamicLibrary": "Islamic Library",
+    "surahLibrary": "Surah Library",
+    "duaLibrary": "Dua Library"
   },
   "welfare": {
     "title": "Welfare Management",
@@ -964,27 +967,25 @@
     "brideAgeError": "Bride must be at least 18 years old"
   },
   "settings": {
-    "categories": {
-      "title": "Categories",
-      "description": "Manage income and expense categories",
-      "addIncomeCategory": "Add Income Category",
-      "addExpenseCategory": "Add Expense Category",
-      "dueCategories": "Due Categories",
-      "incomeCategories": "Income Categories",
-      "expenseCategories": "Expense Categories",
-      "noDueCategories": "No due categories found. Click \"Add Category\" to create one.",
-      "noIncomeCategories": "No income categories found. Click \"Add Category\" to create one.",
-      "noExpenseCategories": "No expense categories found. Click \"Add Expense Category\" to create one.",
-      "editExpenseCategory": "Edit Expense Category",
-      "addCategory": "Add Category",
-      "editCategory": "Edit Category",
-      "categoryType": "Category Type",
-      "categoryName": "Category Name",
-      "category": "Category",
-      "deleteCategory": "Delete Category",
-      "deleteConfirmation": "Are you sure you want to delete",
-      "deleteWarning": "This action cannot be undone."
-    }
+    "portalSettings": "Public Portal Settings",
+    "portalSettingsDesc": "Control which services are available on the public portal.",
+    "portalUrlLabel": "Your Public Portal URL",
+    "portalServices": "Public Services",
+    "allowPublicDownload": "Allow Public Download",
+    "publishPublic": "Publish to Public Portal",
+    "publicSearchEnabled": "Public Search Enabled",
+    "showOnPortal": "Show on Public Portal",
+    "bloodDonorShowContact": "Show Donor Contact",
+    "bloodDonorShowContactDesc": "Show mobile number of blood donors on search results.",
+    "portalContactInfo": "Contact Information",
+    "aboutDescription": "About Description",
+    "themeColor": "Theme Color",
+    "islamicServices": "Islamic Services",
+    "prayerLocation": "Prayer Location",
+    "prayerLatitude": "Latitude",
+    "prayerLongitude": "Longitude",
+    "prayerCity": "City Name",
+    "prayerMethod": "Calculation Method"
   },
   "website": {
     "header": {
@@ -1499,7 +1500,9 @@
       "bloodDonor": "Blood Donor Search",
       "bloodDonorDesc": "Find blood donors by blood group in your community.",
       "announcements": "Announcements",
-      "announcementsDesc": "Read the latest official announcements from your Mahallu."
+      "announcementsDesc": "Read the latest official announcements from your Mahallu.",
+      "islamicServices": "Islamic Services",
+      "islamicServicesDesc": "Prayer times, Qibla direction & library"
     },
     "announcements": {
       "subtitle": "Official announcements published by your Mahallu.",
@@ -1531,21 +1534,29 @@
       "search": "Search Donors",
       "notFound": "No donors found for {{group}}.",
       "found": "donors found"
+    },
+    "islamic": {
+      "title": "Islamic Services",
+      "subtitle": "Prayer times, Qibla direction, Surahs & Duas",
+      "prayerTimes": "Prayer Times",
+      "qibla": "Qibla Direction",
+      "surahLibrary": "Surah Library",
+      "duaLibrary": "Dua Library",
+      "openPdf": "Open PDF",
+      "nextPrayer": "Next",
+      "findQibla": "Find Qibla Direction",
+      "noLocation": "Prayer location not configured. Contact your Mahallu admin.",
+      "noLocationQibla": "Location not configured for Qibla direction"
     }
   },
-  "settings": {
-    "portalSettings": "Public Portal Settings",
-    "portalSettingsDesc": "Control which services are available on the public portal.",
-    "portalUrlLabel": "Your Public Portal URL",
-    "portalServices": "Public Services",
-    "allowPublicDownload": "Allow Public Download",
-    "publishPublic": "Publish to Public Portal",
-    "publicSearchEnabled": "Public Search Enabled",
-    "showOnPortal": "Show on Public Portal",
-    "bloodDonorShowContact": "Show Donor Contact",
-    "bloodDonorShowContactDesc": "Show mobile number of blood donors on search results.",
-    "portalContactInfo": "Contact Information",
-    "aboutDescription": "About Description",
-    "themeColor": "Theme Color"
+  "islamicLibrary": {
+    "surah": {
+      "title": "Surah Library",
+      "desc": "Manage Islamic Surah PDFs for the public portal"
+    },
+    "dua": {
+      "title": "Dua Library",
+      "desc": "Manage Islamic Duas for the public portal"
+    }
   }
 }

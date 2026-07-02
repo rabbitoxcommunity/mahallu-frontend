@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(sips -z 192 192 \"/Users/smarthatch/Documents/Backups/MAHALLU CRM/frontend/public/logo.png\" --out \"/Users/smarthatch/Documents/Backups/MAHALLU CRM/frontend/public/icons/icon-192x192.png\")",
-      "Bash(sips -z 512 512 \"/Users/smarthatch/Documents/Backups/MAHALLU CRM/frontend/public/logo.png\" --out \"/Users/smarthatch/Documents/Backups/MAHALLU CRM/frontend/public/icons/icon-512x512.png\")"
+      "Bash(sips -z 512 512 \"/Users/smarthatch/Documents/Backups/MAHALLU CRM/frontend/public/logo.png\" --out \"/Users/smarthatch/Documents/Backups/MAHALLU CRM/frontend/public/icons/icon-512x512.png\")",
+      "Bash(python3 -c \"import json; json.load\\(open\\('/Users/smarthatch/Documents/Backups/MAHALLU CRM/frontend/dist/manifest.webmanifest'\\)\\)\")"
     ]
   }
 }

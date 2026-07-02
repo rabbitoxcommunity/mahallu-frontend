@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { FileText, GraduationCap, Droplets, Megaphone, FileX } from 'lucide-react';
+import { FileText, GraduationCap, Droplets, Megaphone, FileX, Moon } from 'lucide-react';
 import PortalLayout from '../../components/portal/PortalLayout';
 import ServiceCard from '../../components/portal/ServiceCard';
 import { usePortal } from '../../context/PortalContext';
@@ -24,6 +24,7 @@ const ServicesPage = () => {
     { key: 'results',              icon: GraduationCap, title: t('portal.services.results', {defaultValue: 'Exam Results'}),       desc: t('portal.services.resultsDesc', {defaultValue: 'Madrasa results'}),         to: `/portal/services/results${q}`,              color: 'purple' },
     { key: 'blood_donor',          icon: Droplets,      title: t('portal.services.bloodDonor', {defaultValue: 'Blood Donors'}),    desc: t('portal.services.bloodDonorDesc', {defaultValue: 'Find a donor'}),      to: `/portal/services/blood-donor${q}`,          color: 'red' },
     { key: 'announcements',        icon: Megaphone,     title: t('portal.services.announcements', {defaultValue: 'Announcements'}), desc: t('portal.services.announcementsDesc', {defaultValue: 'News & updates'}),   to: `/portal/announcements${q}`,                 color: 'green' },
+    { key: 'islamic_services',     icon: Moon,          title: t('portal.services.islamicServices', {defaultValue: 'Islamic Services'}), desc: t('portal.services.islamicServicesDesc', {defaultValue: 'Prayer times, Qibla & library'}), to: `/portal/services/islamic-services${q}`, color: 'green' },
   ];
 
   return (

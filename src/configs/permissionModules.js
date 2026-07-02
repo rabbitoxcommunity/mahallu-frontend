@@ -7,6 +7,7 @@ import {
   BookOpen,
   MessageSquare,
   GraduationCap,
+  Moon,
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -90,6 +91,18 @@ export const permissionModules = [
       { label: "finance.settings.varisankhyaConfig.title", path: "/settings/varisankhya-config", roles: ["admin", "superAdmin"] },
       { label: "settings.portalSettings", path: "/settings/public-portal", roles: ["admin", "superAdmin"] }
     ]
+  },
+  {
+    key: 'islamicLibrary',
+    label: 'sidebar.islamicLibrary',
+    icon: Moon,
+    path: '/islamic-library/surah',
+    description: 'Manage Surah and Dua library',
+    roles: ['admin', 'superAdmin'],
+    subItems: [
+      { label: 'sidebar.surahLibrary', path: '/islamic-library/surah', roles: ['admin', 'superAdmin'] },
+      { label: 'sidebar.duaLibrary',   path: '/islamic-library/dua',   roles: ['admin', 'superAdmin'] },
+    ],
   },
 ];
 

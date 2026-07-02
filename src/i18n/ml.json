@@ -79,7 +79,10 @@
     "incomeCategory": "വരുമാന വിഭാഗം",
     "results": "ഫലം മാനേജ്മെന്റ്",
     "resultsList": "ഫലങ്ങൾ",
-    "resultSettings": "ക്രമീകരണങ്ങൾ"
+    "resultSettings": "ക്രമീകരണങ്ങൾ",
+    "islamicLibrary": "ഇസ്‌ലാമിക ലൈബ്രറി",
+    "surahLibrary": "സൂറ ലൈബ്രറി",
+    "duaLibrary": "ദുആ ലൈബ്രറി"
   },
   "welfare": {
     "title": "ക്ഷേമ മാനേജ്മെന്റ്",
@@ -963,27 +966,25 @@
     "brideAgeError": "വധുവിന് കുറഞ്ഞത് 18 വയസ്സ് ആയിരിക്കണം"
   },
   "settings": {
-    "categories": {
-      "title": "വിഭാഗങ്ങൾ",
-      "description": "വരുമാന ചെലവ് വിഭാഗങ്ങൾ നിർവഹിക്കുക",
-      "addIncomeCategory": "വരുമാന വിഭാഗം ചേർക്കുക",
-      "addExpenseCategory": "ചെലവ് വിഭാഗം ചേർക്കുക",
-      "dueCategories": "ബാധ്യത വിഭാഗങ്ങൾ",
-      "incomeCategories": "വരുമാന വിഭാഗങ്ങൾ",
-      "expenseCategories": "ചെലവ് വിഭാഗങ്ങൾ",
-      "noDueCategories": "ബാധ്യത വിഭാഗങ്ങൾ ലഭ്യമല്ല. ഒന്ന് സൃഷ്ടിക്കാൻ \"വിഭാഗം ചേർക്കുക\" ക്ലിക്ക് ചെയ്യുക.",
-      "noIncomeCategories": "വരുമാന വിഭാഗങ്ങൾ ലഭ്യമല്ല. ഒന്ന് സൃഷ്ടിക്കാൻ \"വിഭാഗം ചേർക്കുക\" ക്ലിക്ക് ചെയ്യുക.",
-      "noExpenseCategories": "ചെലവ് വിഭാഗങ്ങൾ ലഭ്യമല്ല. ഒന്ന് സൃഷ്ടിക്കാൻ \"ചെലവ് വിഭാഗം ചേർക്കുക\" ക്ലിക്ക് ചെയ്യുക.",
-      "editExpenseCategory": "ചെലവ് വിഭാഗം എഡിറ്റ് ചെയ്യുക",
-      "addCategory": "വിഭാഗം ചേർക്കുക",
-      "editCategory": "വിഭാഗം എഡിറ്റ് ചെയ്യുക",
-      "categoryType": "വിഭാഗം തരം",
-      "categoryName": "വിഭാഗത്തിന്റെ പേര്",
-      "category": "വിഭാഗം",
-      "deleteCategory": "വിഭാഗം ഇല്ലാതാക്കുക",
-      "deleteConfirmation": "ഇല്ലാതാക്കണമെന്ന് തീർച്ചയാണോ",
-      "deleteWarning": "ഈ പ്രവർത്തനം പിന്നോട്ടിലാക്കാനാവില്ല."
-    }
+    "portalSettings": "പൊതു പോർട്ടൽ ക്രമീകരണങ്ങൾ",
+    "portalSettingsDesc": "പൊതു പോർട്ടലിൽ ലഭ്യമായ സേവനങ്ങൾ നിയന്ത്രിക്കുക.",
+    "portalUrlLabel": "നിങ്ങളുടെ പൊതു പോർട്ടൽ URL",
+    "portalServices": "പൊതു സേവനങ്ങൾ",
+    "allowPublicDownload": "പൊതു ഡൗൺലോഡ് അനുവദിക്കുക",
+    "publishPublic": "പൊതു പോർട്ടലിൽ പ്രസിദ്ധീകരിക്കുക",
+    "publicSearchEnabled": "പൊതു തിരയൽ",
+    "showOnPortal": "പോർട്ടലിൽ കാണിക്കുക",
+    "bloodDonorShowContact": "ദാതാ ബന്ധപ്പെടൽ കാണിക്കുക",
+    "bloodDonorShowContactDesc": "തിരയൽ ഫലങ്ങളിൽ ദാതാക്കളുടെ ഫോൺ നമ്പർ കാണിക്കുക.",
+    "portalContactInfo": "ബന്ധപ്പെടൽ വിവരങ്ങൾ",
+    "aboutDescription": "വിവരണം",
+    "themeColor": "തീം നിറം",
+    "islamicServices": "ഇസ്‌ലാമിക സേവനങ്ങൾ",
+    "prayerLocation": "നമസ്കാര സ്ഥാനം",
+    "prayerLatitude": "അക്ഷാംശം",
+    "prayerLongitude": "രേഖാംശം",
+    "prayerCity": "നഗര നാമം",
+    "prayerMethod": "കണക്കുകൂട്ടൽ രീതി"
   },
   "website": {
     "header": {
@@ -1498,7 +1499,9 @@
       "bloodDonor": "രക്ത ദാതാ തിരയൽ",
       "bloodDonorDesc": "നിങ്ങളുടെ സമൂഹത്തിൽ രക്ത ഗ്രൂപ്പ് അനുസരിച്ച് ദാതാക്കളെ കണ്ടെത്തുക.",
       "announcements": "അറിയിപ്പുകൾ",
-      "announcementsDesc": "നിങ്ങളുടെ മഹല്ലിന്റെ പുതിയ അറിയിപ്പുകൾ വായിക്കുക."
+      "announcementsDesc": "നിങ്ങളുടെ മഹല്ലിന്റെ പുതിയ അറിയിപ്പുകൾ വായിക്കുക.",
+      "islamicServices": "ഇസ്‌ലാമിക സേവനങ്ങൾ",
+      "islamicServicesDesc": "നമസ്കാര സമയം, ഖിബ്ല ദിശ & ലൈബ്രറി"
     },
     "announcements": {
       "subtitle": "നിങ്ങളുടെ മഹല്ൽ പ്രസിദ്ധീകരിച്ച ഔദ്യോഗിക അറിയിപ്പുകൾ.",
@@ -1530,21 +1533,29 @@
       "search": "ദാതാക്കളെ തിരയുക",
       "notFound": "{{group}} ഗ്രൂപ്പിൽ ദാതാക്കളെ കണ്ടെത്തിയില്ല.",
       "found": "ദാതാക്കൾ കണ്ടെത്തി"
+    },
+    "islamic": {
+      "title": "ഇസ്‌ലാമിക സേവനങ്ങൾ",
+      "subtitle": "നമസ്കാര സമയം, ഖിബ്ല ദിശ, സൂറകൾ & ദുആകൾ",
+      "prayerTimes": "നമസ്കാര സമയം",
+      "qibla": "ഖിബ്ല ദിശ",
+      "surahLibrary": "സൂറ ലൈബ്രറി",
+      "duaLibrary": "ദുആ ലൈബ്രറി",
+      "openPdf": "PDF തുറക്കുക",
+      "nextPrayer": "അടുത്തത്",
+      "findQibla": "ഖിബ്ല കണ്ടെത്തുക",
+      "noLocation": "പ്രാർത്ഥനാ സ്ഥലം ക്രമീകരിച്ചിട്ടില്ല. മഹല്ല് അഡ്മിനെ ബന്ധപ്പെടുക.",
+      "noLocationQibla": "ഖിബ്ല ദിശക്ക് സ്ഥാനം ലഭ്യമല്ല"
     }
   },
-  "settings": {
-    "portalSettings": "പൊതു പോർട്ടൽ ക്രമീകരണങ്ങൾ",
-    "portalSettingsDesc": "പൊതു പോർട്ടലിൽ ലഭ്യമായ സേവനങ്ങൾ നിയന്ത്രിക്കുക.",
-    "portalUrlLabel": "നിങ്ങളുടെ പൊതു പോർട്ടൽ URL",
-    "portalServices": "പൊതു സേവനങ്ങൾ",
-    "allowPublicDownload": "പൊതു ഡൗൺലോഡ് അനുവദിക്കുക",
-    "publishPublic": "പൊതു പോർട്ടലിൽ പ്രസിദ്ധീകരിക്കുക",
-    "publicSearchEnabled": "പൊതു തിരയൽ",
-    "showOnPortal": "പോർട്ടലിൽ കാണിക്കുക",
-    "bloodDonorShowContact": "ദാതാ ബന്ധപ്പെടൽ കാണിക്കുക",
-    "bloodDonorShowContactDesc": "തിരയൽ ഫലങ്ങളിൽ ദാതാക്കളുടെ ഫോൺ നമ്പർ കാണിക്കുക.",
-    "portalContactInfo": "ബന്ധപ്പെടൽ വിവരങ്ങൾ",
-    "aboutDescription": "വിവരണം",
-    "themeColor": "തീം നിറം"
+  "islamicLibrary": {
+    "surah": {
+      "title": "സൂറ ലൈബ്രറി",
+      "desc": "പൊതു പോർട്ടലിനായി ഇസ്‌ലാമിക സൂറ PDF കൈകാര്യം ചെയ്യുക"
+    },
+    "dua": {
+      "title": "ദുആ ലൈബ്രറി",
+      "desc": "പൊതു പോർട്ടലിനായി ഇസ്‌ലാമിക ദുആകൾ കൈകാര്യം ചെയ്യുക"
+    }
   }
 }

@@ -120,7 +120,30 @@ const PublicPortalSettings = () => {
             <ToggleRow label={t('portal.nav.about')}              desc=""                                  value={form.about_page}            onChange={set('about_page')} />
             <ToggleRow label={t('portal.nav.contact')}            desc=""                                  value={form.contact_page}          onChange={set('contact_page')} />
             <ToggleRow label={t('settings.bloodDonorShowContact')} desc={t('settings.bloodDonorShowContactDesc')} value={form.blood_donor_show_contact} onChange={set('blood_donor_show_contact')} />
+            <ToggleRow label={t('portal.services.islamicServices', {defaultValue: 'Islamic Services'})} desc={t('settings.showOnPortal')} value={form.islamic_services} onChange={set('islamic_services')} />
           </div>
+        </div>
+
+        {/* Islamic Services — Prayer Location */}
+        <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1">{t('settings.prayerLocation', {defaultValue: 'Prayer Times Location'})}</h2>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{t('settings.prayerLocationDesc', {defaultValue: 'Used to calculate accurate prayer times on the portal.'})}</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Field label={t('settings.prayerCity', {defaultValue: 'City Name'})} value={form.prayer_city || ''} onChange={set('prayer_city')} placeholder="e.g. Calicut" />
+            <div>
+              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">{t('settings.prayerMethod', {defaultValue: 'Calculation Method'})}</label>
+              <select value={form.prayer_method || 'MWL'} onChange={e => set('prayer_method')(e.target.value)}
+                className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="MWL">MWL – Muslim World League</option>
+                <option value="ISNA">ISNA – North America</option>
+                <option value="Egypt">Egyptian General Authority</option>
+                <option value="MF">Moonsighting.com (MF)</option>
+              </select>
+            </div>
+            <Field label={t('settings.prayerLatitude', {defaultValue: 'Latitude'})} value={form.prayer_latitude ?? ''} onChange={set('prayer_latitude')} placeholder="e.g. 11.2588" />
+            <Field label={t('settings.prayerLongitude', {defaultValue: 'Longitude'})} value={form.prayer_longitude ?? ''} onChange={set('prayer_longitude')} placeholder="e.g. 75.7804" />
+          </div>
+          <p className="text-xs text-gray-400 mt-3">Tip: Find coordinates at <a href="https://www.latlong.net/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">latlong.net</a></p>
         </div>
 
         {/* About / Contact Info */}
