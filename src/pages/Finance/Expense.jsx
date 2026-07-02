@@ -769,7 +769,7 @@ const Expense = () => {
                                   <button onClick={() => openEditModal(expense)} className="p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" title="Edit"><Edit2 size={18} /></button>
                                   <button onClick={() => setDeleteModal({ isOpen: true, expense })} className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete"><Trash2 size={18} /></button>
                                   {expense.bill_file && (
-                                    <a href={`http://localhost:5005/uploads/${expense.bill_file}`} target="_blank" rel="noopener noreferrer" className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="View Receipt"><Download size={18} /></a>
+                                    <a href={expense.bill_file} target="_blank" rel="noopener noreferrer" className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" title="View Receipt"><Download size={18} /></a>
                                   )}
                                   <button onClick={() => setVoucherModal({ isOpen: true, expense })} className="p-2 text-purple-600 hover:bg-purple-50 rounded-lg transition-colors" title="Print Voucher"><Printer size={18} /></button>
                                 </div>
@@ -802,7 +802,7 @@ const Expense = () => {
                           <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                             <button onClick={() => setViewModal({ isOpen: true, expense })} className="flex-1 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">View</button>
                             {expense.bill_file && (
-                              <a href={`http://localhost:5005/uploads/${expense.bill_file}`} target="_blank" rel="noopener noreferrer" className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium text-center">Receipt</a>
+                              <a href={expense.bill_file} target="_blank" rel="noopener noreferrer" className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium text-center">Receipt</a>
                             )}
                             <button onClick={() => setVoucherModal({ isOpen: true, expense })} className="flex-1 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium">Voucher</button>
                           </div>
@@ -1073,7 +1073,7 @@ const Expense = () => {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bill/Receipt Upload</label>
                   {editModal.expense?.bill_file && (
                     <div className="mb-2">
-                      <a href={`http://localhost:5005/uploads/${editModal.expense.bill_file}`} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">View Current File</a>
+                      <a href={editModal.expense.bill_file} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-600 hover:underline">View Current File</a>
                     </div>
                   )}
                   <input type="file" accept="image/*,.pdf" onChange={(e) => setEditForm({ ...editForm, bill_file: e.target.files[0] })} className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]" />

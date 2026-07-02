@@ -24,6 +24,9 @@ export const deleteDeathRecord = (id) =>
 export const markCertificateGenerated = (id) =>
     axiosInstance.put(`/community/death/${id}/certificate`).then(r => r.data);
 
+export const generatePDF = (id) =>
+    axiosInstance.get(`/community/death/${id}/pdf`).then(r => r.data);
+
 // Reports
 export const getDeathReports = (params) =>
     axiosInstance.get('/community/death/reports', { params }).then(r => r.data);

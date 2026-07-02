@@ -20,6 +20,7 @@ import {
 } from '../../api/marriageService';
 import MarriageForm from '../../components/certificate/MarriageForm';
 import MarriageTable from '../../components/certificate/MarriageTable';
+import { resolveCertUrl } from '../../utils/certUtil';
 import MarriageViewModal from '../../components/certificate/MarriageViewModal';
 
 const Marriages = () => {
@@ -150,7 +151,7 @@ const Marriages = () => {
       }
       
       // Open the PDF
-      const pdfUrl = `http://localhost:5005${marriage.pdf_url}`;
+      const pdfUrl = resolveCertUrl(marriage.pdf_url);
       console.log('Opening PDF URL:', pdfUrl);
       window.open(pdfUrl, '_blank');
       toast.success('Opening PDF...');
@@ -176,7 +177,7 @@ const Marriages = () => {
       }
       
       // Open PDF in new window and trigger print
-      const pdfUrl = `http://localhost:5005${marriage.pdf_url}`;
+      const pdfUrl = resolveCertUrl(marriage.pdf_url);
       const printWindow = window.open(pdfUrl, '_blank');
       
       if (printWindow) {

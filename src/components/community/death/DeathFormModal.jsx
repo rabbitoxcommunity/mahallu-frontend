@@ -1,12 +1,13 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm, Controller, useWatch } from 'react-hook-form';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Languages, Loader2 } from 'lucide-react';
 import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { toast } from 'react-toastify';
 import { createDeathRecord, updateDeathRecord, searchMembersForSelect } from '../../../api/deathService';
+import { translateWithSuggestions, isMalayalam } from '../../../utils/translateUtil';
 
 const GENDER_OPTIONS = [
     { value: 'Male', label: 'Male' },
@@ -76,13 +77,38 @@ const toDateInput = (d) => {
     return date.toISOString().split('T')[0];
 };
 
-const InputField = ({ label, error, children, required }) => (
+const InputField = ({ label, error, children, required, loading, suggestions, onSelectSuggestion }) => (
     <div>
         <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">
             {label} {required && <span className="text-red-500">*</span>}
         </label>
-        {children}
+        <div className="relative">
+            {loading && (
+                <Loader2 size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-blue-500 animate-spin pointer-events-none" />
+            )}
+            {children}
+        </div>
         {error && <p className="text-xs text-red-500 mt-1">{error}</p>}
+        {loading && (
+            <p className="mt-1 text-[11px] text-blue-500 dark:text-blue-400 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-ping" />
+                Translating…
+            </p>
+        )}
+        {!loading && suggestions?.length > 1 && (
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {suggestions.map((s, i) => (
+                    <button
+                        key={`${s}-${i}`}
+                        type="button"
+                        onClick={() => onSelectSuggestion(s)}
+                        className="px-2 py-0.5 text-[11px] rounded-full border border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                    >
+                        {s}
+                    </button>
+                ))}
+            </div>
+        )}
     </div>
 );
 
@@ -125,6 +151,8 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
             hospital: '',
             janaza_date: '',
             janaza_time: '',
+            janaza_place: '',
+            imam: '',
             charge_applicable: false,
             charge_amount: '',
             payment_status: null,
@@ -132,6 +160,10 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
             notes: '',
         },
     });
+
+    const [lang, setLang] = useState(editRecord?.certificate_language === 'ml' ? 'ml' : 'en');
+    const [translating, setTranslating] = useState(() => new Set());
+    const [suggestions, setSuggestions] = useState({});
 
     const isRegisteredMember = watch('is_registered_member');
     const chargeApplicable = watch('charge_applicable');
@@ -162,6 +194,8 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
                 hospital: editRecord.hospital || '',
                 janaza_date: toDateInput(editRecord.janaza_date),
                 janaza_time: editRecord.janaza_time || '',
+                janaza_place: editRecord.janaza_place || '',
+                imam: editRecord.imam || '',
                 charge_applicable: editRecord.charge_applicable || false,
                 charge_amount: editRecord.charge_amount || '',
                 payment_status: editRecord.payment_status
@@ -174,6 +208,65 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
             });
         }
     }, [editRecord, reset]);
+
+    const clearSuggestions = (name) => {
+        setSuggestions((prev) => {
+            if (!prev[name]) return prev;
+            const next = { ...prev };
+            delete next[name];
+            return next;
+        });
+    };
+
+    const selectSuggestion = (name, text) => {
+        setValue(name, text, { shouldDirty: true });
+        clearSuggestions(name);
+    };
+
+    const handleAutoTranslate = async (name, value) => {
+        if (lang !== 'ml') return;
+        const val = (value || '').trim();
+        if (!val || isMalayalam(val)) return;
+
+        setTranslating((prev) => new Set(prev).add(name));
+        try {
+            const { translated, suggestions: alts } = await translateWithSuggestions(val, 'ml');
+            setValue(name, translated, { shouldDirty: true });
+            setSuggestions((prev) => ({ ...prev, [name]: alts }));
+        } catch {
+            // keep the original text if translation fails
+        } finally {
+            setTranslating((prev) => {
+                const next = new Set(prev);
+                next.delete(name);
+                return next;
+            });
+        }
+    };
+
+    // Registers a field like `register`, but auto-translates its value to
+    // Malayalam on blur when the language toggle is set to ML.
+    const registerT = (name, options) => {
+        const field = register(name, options);
+        return {
+            ...field,
+            onChange: (e) => {
+                field.onChange(e);
+                clearSuggestions(name);
+            },
+            onBlur: (e) => {
+                field.onBlur(e);
+                handleAutoTranslate(name, e.target.value);
+            },
+        };
+    };
+
+    // Bundles the loading + suggestion props a translatable field needs.
+    const tProps = (name) => ({
+        loading: translating.has(name),
+        suggestions: suggestions[name],
+        onSelectSuggestion: (s) => selectSuggestion(name, s),
+    });
 
     const loadMemberOptions = useCallback(async (inputValue) => {
         if (!inputValue || inputValue.length < 2) return [];
@@ -215,11 +308,14 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
                 hospital: data.hospital || undefined,
                 janaza_date: data.janaza_date || undefined,
                 janaza_time: data.janaza_time || undefined,
+                janaza_place: data.janaza_place || undefined,
+                imam: data.imam || undefined,
                 charge_applicable: data.charge_applicable,
                 charge_amount: data.charge_applicable ? Number(data.charge_amount) || 0 : 0,
                 payment_status: data.charge_applicable && data.payment_status ? data.payment_status.value : undefined,
                 payment_method: data.charge_applicable && data.payment_method ? data.payment_method.value : undefined,
                 notes: data.notes || undefined,
+                certificate_language: lang,
             };
 
             if (isEdit) {
@@ -257,12 +353,27 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                             {isEdit ? t('death.form.editTitle') : t('death.form.title')}
                         </h2>
-                        <button
-                            onClick={onClose}
-                            className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
-                        >
-                            <X size={18} className="text-gray-500" />
-                        </button>
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-2" title="Controls both field auto-translation and the generated certificate PDF's language">
+                                <Languages size={14} className="text-gray-400" />
+                                <div className="inline-flex rounded-lg border border-gray-200 dark:border-gray-700 p-0.5 bg-gray-50 dark:bg-[#252731]">
+                                    <button type="button" onClick={() => setLang('en')}
+                                        className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${lang === 'en' ? 'bg-blue-600 text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                                        EN
+                                    </button>
+                                    <button type="button" onClick={() => setLang('ml')}
+                                        className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${lang === 'ml' ? 'bg-blue-600 text-white' : 'text-gray-500 dark:text-gray-400'}`}>
+                                        മലയാളം
+                                    </button>
+                                </div>
+                            </div>
+                            <button
+                                onClick={onClose}
+                                className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors"
+                            >
+                                <X size={18} className="text-gray-500" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Modal Body */}
@@ -328,9 +439,12 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
                             )}
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <InputField label={t('death.form.name')} error={errors.name?.message} required>
+                                <InputField label={t('death.form.name')} error={errors.name?.message} required
+                                    {...(!(isRegisteredMember && !isEdit) ? tProps('name') : {})}>
                                     <input
-                                        {...register('name', { required: t('death.form.nameRequired') })}
+                                        {...(isRegisteredMember && !isEdit
+                                            ? register('name', { required: t('death.form.nameRequired') })
+                                            : registerT('name', { required: t('death.form.nameRequired') }))}
                                         readOnly={isRegisteredMember && !isEdit}
                                         className={isRegisteredMember && !isEdit ? readOnlyClass : inputClass}
                                         placeholder={t('death.form.name')}
@@ -379,25 +493,25 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
                                     />
                                 </InputField>
 
-                                <InputField label={t('death.form.fatherName')}>
+                                <InputField label={t('death.form.fatherName')} {...tProps('father_name')}>
                                     <input
-                                        {...register('father_name')}
+                                        {...registerT('father_name')}
                                         className={inputClass}
                                         placeholder={t('death.form.fatherName')}
                                     />
                                 </InputField>
 
-                                <InputField label={t('death.form.motherName')}>
+                                <InputField label={t('death.form.motherName')} {...tProps('mother_name')}>
                                     <input
-                                        {...register('mother_name')}
+                                        {...registerT('mother_name')}
                                         className={inputClass}
                                         placeholder={t('death.form.motherName')}
                                     />
                                 </InputField>
 
-                                <InputField label={t('death.form.spouseName')}>
+                                <InputField label={t('death.form.spouseName')} {...tProps('spouse_name')}>
                                     <input
-                                        {...register('spouse_name')}
+                                        {...registerT('spouse_name')}
                                         className={inputClass}
                                         placeholder={t('death.form.spouseName')}
                                     />
@@ -435,25 +549,25 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
                                     />
                                 </InputField>
 
-                                <InputField label={t('death.form.placeOfDeath')}>
+                                <InputField label={t('death.form.placeOfDeath')} {...tProps('place_of_death')}>
                                     <input
-                                        {...register('place_of_death')}
+                                        {...registerT('place_of_death')}
                                         className={inputClass}
                                         placeholder={t('death.form.placeOfDeath')}
                                     />
                                 </InputField>
 
-                                <InputField label={t('death.form.causeOfDeath')}>
+                                <InputField label={t('death.form.causeOfDeath')} {...tProps('cause_of_death')}>
                                     <input
-                                        {...register('cause_of_death')}
+                                        {...registerT('cause_of_death')}
                                         className={inputClass}
                                         placeholder={t('death.form.causeOfDeath')}
                                     />
                                 </InputField>
 
-                                <InputField label={t('death.form.hospital')}>
+                                <InputField label={t('death.form.hospital')} {...tProps('hospital')}>
                                     <input
-                                        {...register('hospital')}
+                                        {...registerT('hospital')}
                                         className={inputClass}
                                         placeholder={t('death.form.hospital')}
                                     />
@@ -478,6 +592,22 @@ const DeathFormModal = ({ editRecord, onClose, onSuccess }) => {
                                         type="time"
                                         {...register('janaza_time')}
                                         className={inputClass}
+                                    />
+                                </InputField>
+
+                                <InputField label={t('death.form.janazaPlace')} {...tProps('janaza_place')}>
+                                    <input
+                                        {...registerT('janaza_place')}
+                                        className={inputClass}
+                                        placeholder={t('death.form.janazaPlace')}
+                                    />
+                                </InputField>
+
+                                <InputField label={t('death.form.imam')} {...tProps('imam')}>
+                                    <input
+                                        {...registerT('imam')}
+                                        className={inputClass}
+                                        placeholder={t('death.form.imam')}
                                     />
                                 </InputField>
 

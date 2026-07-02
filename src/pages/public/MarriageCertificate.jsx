@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Search, Phone, FileText, Download, Printer, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { searchMarriage, generatePDF } from '../../api/marriageService';
+import { resolveCertUrl } from '../../utils/certUtil';
 
 const MarriageCertificate = () => {
   const { t } = useTranslation();
@@ -53,7 +54,7 @@ const MarriageCertificate = () => {
 
   const handleDownload = (marriage) => {
     if (marriage.pdf_url) {
-      window.open(`http://localhost:5005${marriage.pdf_url}`, '_blank');
+      window.open(resolveCertUrl(marriage.pdf_url), '_blank');
     } else {
       toast.info('PDF not available for this certificate');
     }
@@ -61,7 +62,7 @@ const MarriageCertificate = () => {
 
   const handlePrint = (marriage) => {
     if (marriage.pdf_url) {
-      const pdfUrl = `http://localhost:5005${marriage.pdf_url}`;
+      const pdfUrl = resolveCertUrl(marriage.pdf_url);
       const printWindow = window.open(pdfUrl, '_blank');
       
       if (printWindow) {
