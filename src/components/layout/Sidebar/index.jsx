@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { useSidebar } from "../../../context/SidebarContext";
 import { menuConfig } from "../../../configs/sidebarConfig";
@@ -18,6 +19,7 @@ const Sidebar = () => {
     const { user, logout } = useAuth();
     const { isCollapsed, toggleCollapse, isMobileOpen, closeMobile } = useSidebar();
     const { t, i18n } = useTranslation();
+    const [openMenu, setOpenMenu] = useState(null);
 
     const role = user?.role || "user";
 
@@ -141,7 +143,12 @@ const Sidebar = () => {
                             <div className="space-y-1">
                                 {section.items.map((item, itemIdx) => (
                                     item.subItems ? (
-                                        <SubMenu key={itemIdx} item={item} />
+                                        <SubMenu
+                                            key={itemIdx}
+                                            item={item}
+                                            openMenu={openMenu}
+                                            setOpenMenu={setOpenMenu}
+                                        />
                                     ) : (
                                         <MenuItem key={itemIdx} item={item} />
                                     )

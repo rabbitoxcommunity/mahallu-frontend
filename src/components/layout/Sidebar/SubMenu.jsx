@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { useSidebar } from "../../../context/SidebarContext";
 import { useAuth } from "../../../context/AuthContext";
@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-const SubMenu = ({ item }) => {
+const SubMenu = ({ item, openMenu, setOpenMenu }) => {
     const { isCollapsed, closeMobile } = useSidebar();
     const { pathname } = useLocation();
     const { user } = useAuth();
@@ -14,33 +14,25 @@ const SubMenu = ({ item }) => {
     const lang = i18n.language;
     const role = user?.role || "user";
 
-
     // Filter subItems based on user role and permissions
     const filteredSubItems = item.subItems?.filter(subItem => {
-        // SuperAdmin and PlatformAdmin bypass all permission checks
         if (role === "superAdmin" || role === "platformAdmin") {
             return subItem.roles?.includes(role);
         }
-        
-        // For Admin role, check both role AND permissions
         if (role === "admin") {
             const hasRoleAccess = subItem.roles?.includes(role);
             const requiredPermission = subItem.permission;
             const hasPermission = requiredPermission ? user?.permissions?.[requiredPermission] : true;
-            
             return hasRoleAccess && hasPermission;
         }
-        
         return subItem.roles?.includes(role);
     }) || [];
 
-    // Auto-expand if a child route is active
     const isChildActive = filteredSubItems.some(sub => pathname === sub.path);
-    const [isOpen, setIsOpen] = useState(isChildActive);
+    const isOpen = !isCollapsed && openMenu === item.label;
 
     useEffect(() => {
-        if (isChildActive) setIsOpen(true);
-        if (isCollapsed) setIsOpen(false);
+        if (isChildActive && !isCollapsed) setOpenMenu(item.label);
     }, [isChildActive, isCollapsed]);
 
     const Icon = item.icon;
@@ -49,7 +41,7 @@ const SubMenu = ({ item }) => {
         <div className="flex flex-col">
             {/* Parent Item */}
             <button
-                onClick={() => !isCollapsed && setIsOpen(!isOpen)}
+                onClick={() => !isCollapsed && setOpenMenu(isOpen ? null : item.label)}
                 className={`
                     relative flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 group w-full hover:z-50
                     ${isChildActive
