@@ -101,7 +101,13 @@ const Sidebar = () => {
             {/* Main Sidebar */}
             <motion.aside
                 initial={false}
-                animate={isMobileOpen ? { x: 0 } : window.innerWidth < 1024 ? { x: "-100%" } : isCollapsed ? "collapsed" : "expanded"}
+                animate={
+                    isMobileOpen
+                        ? { x: 0, transition: { duration: 0.15, ease: "easeOut" } }
+                        : window.innerWidth < 1024
+                            ? { x: "-100%", transition: { duration: 0.15, ease: "easeIn" } }
+                            : isCollapsed ? "collapsed" : "expanded"
+                }
                 variants={sidebarVariants}
                 className={`
                     fixed top-0 left-0 h-full bg-white dark:bg-[#16171d] border-r border-gray-200 dark:border-gray-800 z-50
