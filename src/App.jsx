@@ -39,7 +39,7 @@ import ResultSettingsPage from "./pages/results/ResultSettingsPage";
 import PublicHome from "./pages/public/Home";
 import PublicSearch from "./pages/public/Search";
 import PublicFamilyView from "./pages/public/FamilyView";
-import MarriageCertificate from "./pages/Public/MarriageCertificate";
+import MarriageCertificate from "./pages/public/MarriageCertificate";
 // Public Portal
 import PortalHomePage from "./pages/portal/HomePage";
 import PortalServicesPage from "./pages/portal/ServicesPage";
