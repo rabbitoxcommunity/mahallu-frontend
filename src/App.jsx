@@ -56,6 +56,7 @@ import DuaLibrary from "./pages/IslamicLibrary/DuaLibrary";
 import PublicPortalSettings from "./pages/Settings/PublicPortalSettings";
 import { PortalProvider } from "./context/PortalContext";
 import ScrollToTop from "./components/ScrollToTop";
+import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 function App() {
     return (
@@ -63,6 +64,7 @@ function App() {
             <SidebarProvider>
                 <BrowserRouter>
                     <ScrollToTop />
+                    <PWAInstallPrompt />
                     <ToastContainer
                         position="top-right"
                         autoClose={3000}
