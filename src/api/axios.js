@@ -17,6 +17,13 @@ instance.interceptors.response.use(
     (error) => {
         const message = error.response?.data?.message || "Something went wrong!";
         toast.error(message);
+
+        if (error.response?.status === 401 && window.location.pathname !== "/login") {
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "/login";
+        }
+
         return Promise.reject(error);
     }
 );
