@@ -54,7 +54,10 @@
     "showing": "Showing",
     "deleteConfirm": "Are you sure?",
     "deleteText": "This action cannot be undone.",
-    "saving": "Saving..."
+    "saving": "Saving...",
+    "showSummary": "Show Summary",
+    "hideSummary": "Hide Summary",
+    "logout": "Logout"
   },
   "sidebar": {
     "main": "MAIN",

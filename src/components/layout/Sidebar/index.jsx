@@ -164,8 +164,8 @@ const Sidebar = () => {
                     ))}
                 </div>
 
-                {/* Footer Actions & User Section */}
-                <div className="p-4 border-t border-gray-100 dark:border-gray-800 space-y-4">
+                {/* Footer Actions & User Section - desktop only, mobile uses header profile menu */}
+                <div className="hidden lg:block p-4 border-t border-gray-100 dark:border-gray-800 space-y-4">
                     {/* User Profile */}
                     <div className={`
                         flex items-center gap-3 p-2

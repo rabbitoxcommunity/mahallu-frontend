@@ -20,7 +20,9 @@ import {
   TrendingUp,
   AlertCircle,
   Plus,
-  X
+  X,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -46,6 +48,7 @@ const Varisankhya = () => {
   const [loading, setLoading] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStats, setShowStats] = useState(false);
 
   // Data states
   const [monthlyData, setMonthlyData] = useState({
@@ -397,7 +400,15 @@ console.log(paymentHistoryData,'paymentHistoryData')
 
       {/* Summary Cards */}
       {activeTab === 'monthly' && monthlyData.summary && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
+        <>
+          <button
+            onClick={() => setShowStats(!showStats)}
+            className="sm:hidden flex items-center justify-center gap-2 w-full mb-4 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            {showStats ? t('common.hideSummary') : t('common.showSummary')}
+            {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8`}>
           <SummaryCard
             title={t('finance.varisankhya.totalHouses')}
             value={monthlyData.summary.total_houses || 0}
@@ -428,7 +439,8 @@ console.log(paymentHistoryData,'paymentHistoryData')
             icon={AlertCircle}
             color="bg-orange-500"
           />
-        </div>
+          </div>
+        </>
       )}
 
       {/* Tabs */}

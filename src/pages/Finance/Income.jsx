@@ -11,7 +11,8 @@ import {
   History, Edit2, Trash2, Download, X, CheckCircle, Calendar,
   CreditCard, Banknote, Smartphone, Receipt, AlertCircle, TrendingUp,
   Wallet, Building2, ShoppingBag, Palmtree, Home, MoreHorizontal,
-  DollarSign, PartyPopper, Heart, Box, Eye, Printer, MessageCircle, Phone
+  DollarSign, PartyPopper, Heart, Box, Eye, Printer, MessageCircle, Phone,
+  ChevronDown, ChevronUp
 } from 'lucide-react';
 import { getDueIncome, getDirectIncome, createDueIncome, updateDueIncome, deleteDueIncome, createDirectIncome, updateDirectIncome, deleteDirectIncome, getIncomeSummary, markDuePayment, getDuePaymentHistory, getTemplateEntries } from '../../api/incomeService';
 import { getHadiyaSummary } from '../../api/hadiyaService';
@@ -27,6 +28,7 @@ export const Income = () => {
   });
   const [month, setMonth] = useState(new Date().getMonth() + 1);
   const [year, setYear] = useState(new Date().getFullYear());
+  const [showStats, setShowStats] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -535,8 +537,15 @@ export const Income = () => {
       </div>
 
       {/* Summary Cards */}
+      <button
+        onClick={() => setShowStats(!showStats)}
+        className="sm:hidden flex items-center justify-center gap-2 w-full mb-4 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
+      >
+        {showStats ? t('common.hideSummary') : t('common.showSummary')}
+        {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+      </button>
       {activeTab === 'due' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
+        <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -614,7 +623,7 @@ export const Income = () => {
           </motion.div>
         </div>
       ) : activeTab === 'direct' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+        <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -677,7 +686,7 @@ export const Income = () => {
           </motion.div>
         </div>
       ) : activeTab === 'hadiya' ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

@@ -9,7 +9,7 @@ import {
     Tooltip,
     ResponsiveContainer,
 } from 'recharts';
-import { Users, Calendar, TrendingUp, FileText, RefreshCw } from 'lucide-react';
+import { Users, Calendar, TrendingUp, FileText, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 import { getDeathDashboard } from '../../../api/deathService';
 
 const SummaryCard = ({ icon: Icon, label, value, gradient }) => (
@@ -44,6 +44,7 @@ const DeathDashboard = () => {
     const { t } = useTranslation();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showStats, setShowStats] = useState(false);
 
     const fetchData = async () => {
         try {
@@ -94,7 +95,14 @@ const DeathDashboard = () => {
     return (
         <div className="space-y-6">
             {/* Summary Cards */}
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <button
+                onClick={() => setShowStats(!showStats)}
+                className="sm:hidden flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
+            >
+                {showStats ? t('common.hideSummary') : t('common.showSummary')}
+                {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button>
+            <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4`}>
                 {loading
                     ? Array.from({ length: 4 }).map((_, i) => <SkeletonCard key={i} />)
                     : summaryCards.map((card, i) => <SummaryCard key={i} {...card} />)}

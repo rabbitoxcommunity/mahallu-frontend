@@ -9,7 +9,7 @@ import {
   Wallet, IndianRupee, Calendar, Search, ChevronLeft, ChevronRight,
   RefreshCw, Eye, Image, Printer, Plus, X, Edit2, Trash2,
   CreditCard, Banknote, Smartphone, History, CheckCircle,
-  AlertCircle, TrendingUp
+  AlertCircle, TrendingUp, ChevronDown, ChevronUp
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
@@ -130,6 +130,7 @@ const Expense = () => {
   const [year, setYear] = useState(new Date().getFullYear());
 
   const years = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - 2 + i);
+  const [showStats, setShowStats] = useState(false);
 
   // ==================== DIRECT EXPENSE STATE ====================
   const [searchTerm, setSearchTerm] = useState('');
@@ -501,7 +502,14 @@ const Expense = () => {
       {activeTab === 'due' && (
         <>
           {/* Due Summary Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6">
+          <button
+            onClick={() => setShowStats(!showStats)}
+            className="sm:hidden flex items-center justify-center gap-2 w-full mb-4 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            {showStats ? t('common.hideSummary') : t('common.showSummary')}
+            {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6`}>
             <div className="col-span-2 sm:col-span-3 lg:col-span-2 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5">
               <p className="text-red-100 text-sm">Total Due</p>
               <h3 className="text-2xl font-bold text-white mt-1">₹{(dueSummary.total_due || 0).toLocaleString()}</h3>
@@ -683,7 +691,14 @@ const Expense = () => {
       {activeTab === 'direct' && (
         <>
           {/* Summary Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
+          <button
+            onClick={() => setShowStats(!showStats)}
+            className="sm:hidden flex items-center justify-center gap-2 w-full mb-4 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            {showStats ? t('common.hideSummary') : t('common.showSummary')}
+            {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8`}>
             <SummaryCard title={t('finance.expense.thisMonth')} value={`₹${summaryData.month_total?.toLocaleString()}`} icon={Calendar} color="bg-green-500" />
             <SummaryCard title={t('finance.expense.cashExpense')} value={`₹${summaryData.cash_total?.toLocaleString()}`} icon={Banknote} color="bg-yellow-500" />
             <SummaryCard title={t('finance.expense.bankExpense')} value={`₹${summaryData.bank_total?.toLocaleString()}`} icon={CreditCard} color="bg-purple-500" />
