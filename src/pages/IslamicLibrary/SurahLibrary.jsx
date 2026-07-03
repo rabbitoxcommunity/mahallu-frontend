@@ -151,7 +151,7 @@ export default function SurahLibrary() {
       <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <BookOpen size={24} className="text-emerald-600" />
+            <BookOpen size={24} className="text-[#0B65F6]" />
             {t('islamicLibrary.surah.title', { defaultValue: 'Surah Library' })}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">
@@ -160,7 +160,7 @@ export default function SurahLibrary() {
         </div>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors text-sm font-medium"
         >
           <Plus size={16} /> Add Surah
         </button>
@@ -174,7 +174,7 @@ export default function SurahLibrary() {
             <input
               value={search} onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by title..."
-              className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
             />
           </div>
           {search && (
@@ -187,7 +187,7 @@ export default function SurahLibrary() {
         {/* Table */}
         <div className="p-4 pt-0">
           {loading ? (
-            <div className="flex justify-center py-12"><RefreshCw size={28} className="text-emerald-500 animate-spin" /></div>
+            <div className="flex justify-center py-12"><RefreshCw size={28} className="text-[#0B65F6] animate-spin" /></div>
           ) : (
             <>
               {/* Desktop */}
@@ -319,26 +319,26 @@ export default function SurahLibrary() {
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Title (English) *</label>
                   <input {...register('title', { required: 'Title is required' })}
                     placeholder="e.g. Surah Yaseen"
-                    className={`w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 ${errors.title ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`} />
+                    className={`w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] ${errors.title ? 'border-red-500' : 'border-gray-200 dark:border-gray-700'}`} />
                   {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title.message}</p>}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Arabic Title</label>
                   <input {...register('arabic_title')} dir="rtl" placeholder="سورة يس"
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 text-right font-arabic" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6] text-right font-arabic" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Description</label>
                   <textarea {...register('description')} rows={3} placeholder="Optional description..."
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]" />
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Display Order</label>
                   <input type="number" {...register('display_order')} onWheel={(e) => e.target.blur()}
-                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500" />
+                    className="w-full px-4 py-2 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]" />
                 </div>
 
                 <div>
@@ -351,10 +351,10 @@ export default function SurahLibrary() {
                       <FileText size={12} /> View current PDF
                     </a>
                   )}
-                  <div className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl hover:border-emerald-400 transition-colors">
+                  <div className="flex items-center gap-3 p-4 border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl hover:border-[#0B65F6] transition-colors">
                     <Upload size={18} className="text-gray-400" />
                     <input type="file" accept="application/pdf" ref={fileRef}
-                      className="flex-1 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-emerald-50 file:text-emerald-600 hover:file:bg-emerald-100" />
+                      className="flex-1 text-sm text-gray-500 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-medium file:bg-blue-50 file:text-[#0B65F6] hover:file:bg-blue-100" />
                   </div>
                   <p className="text-xs text-gray-400 mt-1">PDF only · Max 20MB</p>
                 </div>
@@ -363,7 +363,7 @@ export default function SurahLibrary() {
                   <button type="button" onClick={closeModal}
                     className="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm hover:bg-gray-50 dark:hover:bg-gray-800">Cancel</button>
                   <button type="submit"
-                    className="px-4 py-2 bg-emerald-600 text-white rounded-xl text-sm hover:bg-emerald-700">
+                    className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl text-sm hover:bg-blue-700">
                     {modal.item ? 'Update' : 'Create'}
                   </button>
                 </div>

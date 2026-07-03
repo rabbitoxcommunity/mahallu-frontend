@@ -4,6 +4,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
 } from 'recharts';
+import { motion } from 'framer-motion';
 import { Users, ShieldCheck, CalendarCheck, IndianRupee, FolderHeart, RefreshCw, ChevronDown, ChevronUp } from 'lucide-react';
 import { getWelfareDashboard } from '../../../api/welfareService';
 
@@ -12,27 +13,31 @@ const formatAmount = (n) => `₹${(n || 0).toLocaleString('en-IN')}`;
 const COLORS = ['#0B65F6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
 
 const SummaryCard = ({ icon: Icon, label, value, color, gradient }) => (
-  <div className={`bg-white dark:bg-[#1e1f25] rounded-2xl p-5 border border-gray-100 dark:border-gray-800 shadow-sm`}>
-    <div className="flex items-center justify-between">
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800"
+  >
+    <div className="flex items-start justify-between">
       <div>
-        <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</p>
-        <p className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</p>
+        <p className="text-gray-500 dark:text-gray-400">{label}</p>
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</h3>
       </div>
-      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${gradient}`}>
-        <Icon size={22} className="text-white" />
+      <div className={`p-3 rounded-xl ${gradient || color}`}>
+        <Icon size={24} className="text-white" />
       </div>
     </div>
-  </div>
+  </motion.div>
 );
 
 const SkeletonCard = () => (
-  <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-5 border border-gray-100 dark:border-gray-800 animate-pulse">
-    <div className="flex items-center justify-between">
+  <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 animate-pulse">
+    <div className="flex items-start justify-between">
       <div className="space-y-2">
-        <div className="h-3 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
-        <div className="h-7 w-16 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div className="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded" />
+        <div className="h-8 w-16 bg-gray-200 dark:bg-gray-700 rounded mt-1" />
       </div>
-      <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-2xl" />
+      <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-xl" />
     </div>
   </div>
 );
