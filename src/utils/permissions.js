@@ -26,7 +26,7 @@ export const getFirstAccessiblePath = (user) => {
       if (!m.roles.includes('admin')) continue;
       // Restricted staff skip modules without a permission key (dashboard, settings, community)
       if (restricted && !m.permission) continue;
-      if (!m.permission || permissions?.[m.permission] === true) return m.path;
+      if (!m.permission || permissions?.[m.permission] === true) return m.subItems?.[0]?.path || m.path;
     }
 
     return '/dashboard';
