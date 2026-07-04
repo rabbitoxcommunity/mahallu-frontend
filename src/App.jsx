@@ -130,6 +130,7 @@ function App() {
                             <Route path="/family/member/:id" element={<MemberDetailedView />} />
 
                             {/* Finance Routes */}
+                            <Route path="/finance" element={<Navigate to="/finance/varisankhya" replace />} />
                             <Route path="/finance/varisankhya" element={<Varisankhya />} />
                             <Route path="/finance/income" element={<Income />} />
                             <Route path="/finance/expense" element={<Expense />} />
