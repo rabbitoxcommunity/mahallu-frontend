@@ -259,18 +259,6 @@ export default function MemberDetailedView() {
                                 </div>
 
                                 <div className="flex items-start gap-3">
-                                    <div className="w-4 h-4 mt-0.5 text-green-600 shrink-0 font-bold flex justify-center">₹</div>
-                                    <div>
-                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">
-                                            {t('family.form.monthlyIncomeLabel')}
-                                        </p>
-                                        <p className="text-gray-900 dark:text-gray-200 font-medium">
-                                            {member.monthly_income > 0 ? `₹${member.monthly_income}` : '-'}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-3">
                                     <Droplets size={16} className="text-red-500 mt-0.5 shrink-0" />
                                     <div>
                                         <p className="text-[10px] text-gray-500 uppercase tracking-wider font-semibold mb-0.5">

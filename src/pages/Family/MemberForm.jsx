@@ -7,6 +7,54 @@ import { toast } from 'react-toastify';
 import SearchableSelect from '../../components/ui/SearchableSelect';
 import Toggle from '../../components/ui/Toggle';
 
+// value = canonical string stored in the DB (must stay stable across languages); key = i18n key for the label
+const RELATION_OPTIONS = [
+    ['Self', 'self'], ['Husband', 'husband'], ['Wife', 'wife'], ['Son', 'son'],
+    ['Daughter', 'daughter'], ['Father', 'father'], ['Mother', 'mother'],
+    ['Brother', 'brother'], ['Sister', 'sister'], ['Father-in-law', 'fatherInLaw'],
+    ['Mother-in-law', 'motherInLaw'], ['Son-in-law', 'sonInLaw'],
+    ['Daughter-in-law', 'daughterInLaw'], ['Brother-in-law', 'brotherInLaw'],
+    ['Sister-in-law', 'sisterInLaw'], ['Grandfather', 'grandfather'],
+    ['Grandmother', 'grandmother'], ['Grandson', 'grandson'],
+    ['Granddaughter', 'granddaughter'], ['Uncle', 'uncle'], ['Aunt', 'aunt'],
+    ['Nephew', 'nephew'], ['Niece', 'niece'], ['Cousin', 'cousin'],
+].map(([value, key]) => ({ value, key }));
+const RELATION_VALUES = RELATION_OPTIONS.map(o => o.value);
+
+const OCCUPATION_OPTIONS = [
+    ['Student', 'student'], ['Homemaker', 'homemaker'], ['Unemployed', 'unemployed'],
+    ['Retired', 'retired'], ['Farmer / Agriculture', 'farmerAgriculture'],
+    ['Dairy Farmer', 'dairyFarmer'], ['Poultry Farmer', 'poultryFarmer'],
+    ['Rubber Tapper', 'rubberTapper'], ['Coconut Climber', 'coconutClimber'],
+    ['Toddy Tapper', 'toddyTapper'], ['Fisherman', 'fisherman'],
+    ['Daily Wage Labourer', 'dailyWageLabourer'], ['Construction Worker', 'constructionWorker'],
+    ['Mason', 'mason'], ['Carpenter', 'carpenter'], ['Electrician', 'electrician'],
+    ['Plumber', 'plumber'], ['Painter', 'painter'], ['Welder', 'welder'],
+    ['Mechanic', 'mechanic'], ['Blacksmith', 'blacksmith'], ['Goldsmith', 'goldsmith'],
+    ['Potter', 'potter'], ['Weaver', 'weaver'], ['Driver', 'driver'],
+    ['Auto Rickshaw Driver', 'autoRickshawDriver'], ['Taxi Driver', 'taxiDriver'],
+    ['Lorry / Truck Driver', 'lorryTruckDriver'], ['Tailor / Textile Worker', 'tailorTextileWorker'],
+    ['Factory Worker', 'factoryWorker'], ['Textile Mill Worker', 'textileMillWorker'],
+    ['Barber / Salon', 'barberSalon'], ['Cook / Chef', 'cookChef'], ['Hotel Staff', 'hotelStaff'],
+    ['Shopkeeper / Business', 'shopkeeperBusiness'], ['Trader / Merchant', 'traderMerchant'],
+    ['Vendor', 'vendor'], ['Salesman', 'salesman'], ['Security Guard', 'securityGuard'],
+    ['Watchman', 'watchman'], ['Cleaner / Housekeeping', 'cleanerHousekeeping'],
+    ['Domestic Worker', 'domesticWorker'], ['Gulf / Abroad Employee', 'gulfAbroadEmployee'],
+    ['NRI Employee', 'nriEmployee'], ['Government Employee', 'governmentEmployee'],
+    ['Private Company Employee', 'privateCompanyEmployee'], ['Bank Employee', 'bankEmployee'],
+    ['Teacher', 'teacher'], ['Professor', 'professor'], ['Madrasa Teacher', 'madrasaTeacher'],
+    ['Religious Scholar (Ustad / Imam / Khatheeb)', 'religiousScholar'],
+    ['Doctor', 'doctor'], ['Nurse', 'nurse'], ['Pharmacist', 'pharmacist'],
+    ['Lab Technician', 'labTechnician'], ['Engineer', 'engineer'],
+    ['Software / IT Professional', 'softwareItProfessional'], ['Accountant', 'accountant'],
+    ['Lawyer / Advocate', 'lawyerAdvocate'], ['Police', 'police'],
+    ['Army / Defence Personnel', 'armyDefencePersonnel'], ['Photographer', 'photographer'],
+    ['Journalist / Media', 'journalistMedia'], ['Artist', 'artist'], ['Musician', 'musician'],
+    ['Real Estate Agent', 'realEstateAgent'], ['Insurance Agent', 'insuranceAgent'],
+    ['Contractor', 'contractor'],
+].map(([value, key]) => ({ value, key }));
+const OCCUPATION_VALUES = OCCUPATION_OPTIONS.map(o => o.value);
+
 export default function MemberForm({ initialData, onSuccess, onCancel, defaultHouseId }) {
     const { t } = useTranslation();
     const isEdit = !!initialData?._id;
@@ -21,15 +69,16 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
             full_name: '',
             dob: '',
             gender: 'Male',
-            relation_to_head: '',
+            relation_to_head_option: '',
+            relation_to_head_other: '',
             whatsapp: '',
             contact_number: '',
             yateem_status: false,
             marital_status: 'Single',
             religious_education: '',
             general_education: '',
-            occupation: '',
-            monthly_income: 0,
+            occupation_option: '',
+            occupation_other: '',
             blood_group: '',
             medical_notes: '',
             skills: '',
@@ -63,20 +112,27 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
     useEffect(() => {
         if (initialData) {
+            const relation = initialData.relation_to_head || '';
+            const isKnownRelation = RELATION_VALUES.includes(relation);
+
+            const occupation = initialData.occupation || '';
+            const isKnownOccupation = OCCUPATION_VALUES.includes(occupation);
+
             reset({
                 house_id: initialData.house_id?._id || initialData.house_id || defaultHouseId || '',
                 full_name: initialData.full_name || '',
                 dob: initialData.dob ? new Date(initialData.dob).toISOString().split('T')[0] : '',
                 gender: initialData.gender || 'Male',
-                relation_to_head: initialData.relation_to_head || '',
+                relation_to_head_option: relation ? (isKnownRelation ? relation : 'Other') : '',
+                relation_to_head_other: relation && !isKnownRelation ? relation : '',
                 whatsapp: initialData.whatsapp || '',
                 contact_number: initialData.contact_number || '',
                 yateem_status: initialData.yateem_status || false,
                 marital_status: initialData.marital_status || 'Single',
                 religious_education: initialData.religious_education || '',
                 general_education: initialData.general_education || '',
-                occupation: initialData.occupation || '',
-                monthly_income: initialData.monthly_income || 0,
+                occupation_option: occupation ? (isKnownOccupation ? occupation : 'Other') : '',
+                occupation_other: occupation && !isKnownOccupation ? occupation : '',
                 blood_group: initialData.blood_group || '',
                 medical_notes: initialData.medical_notes || '',
                 skills: initialData.skills || '',
@@ -86,7 +142,14 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
         }
     }, [initialData, reset, defaultHouseId]);
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (formData) => {
+        const { relation_to_head_option, relation_to_head_other, occupation_option, occupation_other, ...rest } = formData;
+        const data = {
+            ...rest,
+            relation_to_head: relation_to_head_option === 'Other' ? relation_to_head_other : relation_to_head_option,
+            occupation: occupation_option === 'Other' ? occupation_other : occupation_option,
+        };
+
         try {
             if (isEdit) {
                 await axios.put(`/member/${initialData._id}`, data);
@@ -117,6 +180,16 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
         { value: 'Married', label: 'Married' },
         { value: 'Widow', label: 'Widow' },
         { value: 'Divorced', label: 'Divorced' }
+    ];
+
+    const otherOption = { value: 'Other', label: t('common.other', 'Other') };
+    const relationOptions = [
+        ...RELATION_OPTIONS.map(o => ({ value: o.value, label: t(`family.form.relationOptions.${o.key}`, o.value) })),
+        otherOption,
+    ];
+    const occupationOptions = [
+        ...OCCUPATION_OPTIONS.map(o => ({ value: o.value, label: t(`family.form.occupationOptions.${o.key}`, o.value) })),
+        otherOption,
     ];
 
     return (
@@ -195,13 +268,19 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
 
                     {/* Relation to Head */}
                     <div>
-                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.relationToHeadLabel')}</label>
-                        <input
-                            type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
-                            placeholder={t('family.form.relationToHeadPlaceholder')}
-                            {...register("relation_to_head")}
+                        <SearchableSelect
+                            name="relation_to_head_option"
+                            label={t('family.form.relationToHeadLabel')}
+                            options={relationOptions}
                         />
+                        {watch('relation_to_head_option') === 'Other' && (
+                            <input
+                                type="text"
+                                className="block w-full mt-2 px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                                placeholder={t('family.form.specifyRelationPlaceholder')}
+                                {...register("relation_to_head_other")}
+                            />
+                        )}
                     </div>
 
                     {/* Marital Status */}
@@ -283,24 +362,21 @@ export default function MemberForm({ initialData, onSuccess, onCancel, defaultHo
                         />
                     </div>
 
-                    <div>
-                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1.5">
-                            <Briefcase size={16} /> {t('family.form.occupationLabel')}
-                        </label>
-                        <input
-                            type="text"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
-                            {...register("occupation")}
+                    <div className="md:col-span-2">
+                        <SearchableSelect
+                            name="occupation_option"
+                            label={t('family.form.occupationLabel')}
+                            options={occupationOptions}
+                            icon={Briefcase}
                         />
-                    </div>
-
-                    <div>
-                        <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">{t('family.form.monthlyIncomeLabel')}</label>
-                        <input
-                            type="number"
-                            className="block w-full px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
-                            {...register("monthly_income")}
-                        />
+                        {watch('occupation_option') === 'Other' && (
+                            <input
+                                type="text"
+                                className="block w-full mt-2 px-3 py-2.5 bg-gray-50 dark:bg-[#16171d] border border-gray-200 dark:border-gray-800 rounded-xl  text-gray-900 dark:text-white focus:ring-1 focus:ring-[#0B65F6] outline-none"
+                                placeholder={t('family.form.specifyOccupationPlaceholder')}
+                                {...register("occupation_other")}
+                            />
+                        )}
                     </div>
                 </div>
 

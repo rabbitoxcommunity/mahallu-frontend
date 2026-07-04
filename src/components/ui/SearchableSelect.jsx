@@ -1,18 +1,21 @@
 import React from 'react';
 import Select from 'react-select';
 import { useFormContext, Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-const SearchableSelect = ({ 
-    name, 
-    options, 
-    label, 
-    error, 
-    placeholder = "തിരഞ്ഞെടുക്കുക (Select...)", 
+const SearchableSelect = ({
+    name,
+    options,
+    label,
+    error,
+    placeholder,
     required = false,
     icon: Icon,
-    ...props 
+    ...props
 }) => {
     const { control } = useFormContext();
+    const { t } = useTranslation();
+    const resolvedPlaceholder = placeholder ?? t('common.select');
 
     const customStyles = {
         control: (base, state) => ({
@@ -23,7 +26,7 @@ const SearchableSelect = ({
             paddingLeft: Icon ? '2.5rem' : '0.5rem',
             paddingTop: '0.125rem',
             paddingBottom: '0.125rem',
-            fontSize: '0.75rem',
+            fontSize: '14px',
             boxShadow: state.isFocused ? '0 0 0 1px #0B65F6' : 'none',
             '&:hover': {
                 borderColor: error ? '#ef4444' : '#0B65F6',
@@ -41,7 +44,7 @@ const SearchableSelect = ({
         }),
         option: (base, state) => ({
             ...base,
-            fontSize: '0.75rem',
+            fontSize: '14px',
             backgroundColor: state.isSelected ? '#0B65F6' : (state.isFocused ? '#f3f4f6' : 'transparent'),
             color: state.isSelected ? '#ffffff' : '#374151',
             cursor: 'pointer',
@@ -77,7 +80,7 @@ const SearchableSelect = ({
         });
         customStyles.option = (base, state) => ({
             ...base,
-            fontSize: '0.75rem',
+            fontSize: '14px',
             backgroundColor: state.isSelected ? '#0B65F6' : (state.isFocused ? '#374151' : 'transparent'),
             color: state.isSelected ? '#ffffff' : '#d1d5db',
             cursor: 'pointer',
@@ -107,7 +110,7 @@ const SearchableSelect = ({
                                 {...field}
                                 {...props}
                                 options={options}
-                                placeholder={placeholder}
+                                placeholder={resolvedPlaceholder}
                                 styles={customStyles}
                                 classNamePrefix="react-select"
                                 value={options.find(option => option.value === field.value)}
