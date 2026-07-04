@@ -6,6 +6,18 @@ export const getSummary = async () => {
   return response.data;
 };
 
+// Income tab
+export const getIncomeReport = async (params) => {
+  const response = await axios.get('/finance/reports/income', { params });
+  return response.data;
+};
+
+// Expense tab
+export const getExpenseReport = async (params) => {
+  const response = await axios.get('/finance/reports/expense', { params });
+  return response.data;
+};
+
 // Financial Statement
 export const getStatement = async (params) => {
   const response = await axios.get('/finance/reports/statement', { params });

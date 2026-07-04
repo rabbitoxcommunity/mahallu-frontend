@@ -791,7 +791,24 @@
       "annualSummary": "വാർഷിക സംഗ്രഹം",
       "monthlyBreakdown": "മാസിക വിശകലനം",
       "uncategorized": "വിഭാഗീകരിക്കാത്തത്",
-      "source": "സോഴ്സ്"
+      "source": "സോഴ്സ്",
+      "openingAmount": "ആരംഭ തുക",
+      "dueBasedIncome": "ബാധ്യതാധിഷ്ഠിത വരുമാനം",
+      "directIncome": "നേരിട്ടുള്ള വരുമാനം",
+      "quickHadiyaCollection": "ക്വിക്ക് ഹദിയ ശേഖരണം",
+      "dueBasedExpense": "ബാധ്യതാധിഷ്ഠിത ചെലവ്",
+      "directExpense": "നേരിട്ടുള്ള ചെലവ്",
+      "incomeFormula": "ബാധ്യതാധിഷ്ഠിതം + നേരിട്ടുള്ളത് + ഹദിയ",
+      "expenseFormula": "ബാധ്യതാധിഷ്ഠിതം + നേരിട്ടുള്ളത്",
+      "total": "ആകെ",
+      "noTransactionsPeriod": "ഈ കാലയളവിൽ ഇടപാടുകളൊന്നുമില്ല.",
+      "formula": "സൂത്രവാക്യം",
+      "openingIncomeExpenseFormula": "ആരംഭം + വരുമാനം - ചെലവ്",
+      "openingBalanceFormula": "ആരംഭ വരുമാനം − ആരംഭ ചെലവ്",
+      "item": "ഇനം",
+      "last12Months": "കഴിഞ്ഞ 12 മാസങ്ങൾ",
+      "showingRows": "{{total}} ൽ {{from}}–{{to}} കാണിക്കുന്നു",
+      "pageOf": "പേജ് {{page}} / {{pages}}"
     },
     "settings": {
       "categories": {

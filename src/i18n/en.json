@@ -790,7 +790,24 @@
       "annualSummary": "Annual Summary",
       "monthlyBreakdown": "Monthly Breakdown",
       "uncategorized": "Uncategorized",
-      "source": "Source"
+      "source": "Source",
+      "openingAmount": "Opening Amount",
+      "dueBasedIncome": "Due Based Income",
+      "directIncome": "Direct Income",
+      "quickHadiyaCollection": "Quick Hadiya Collection",
+      "dueBasedExpense": "Due Based Expense",
+      "directExpense": "Direct Expense",
+      "incomeFormula": "Due Based + Direct + Hadiya",
+      "expenseFormula": "Due Based + Direct",
+      "total": "Total",
+      "noTransactionsPeriod": "No transactions for this period.",
+      "formula": "Formula",
+      "openingIncomeExpenseFormula": "Opening + Income - Expense",
+      "openingBalanceFormula": "Opening Income − Opening Expense",
+      "item": "Item",
+      "last12Months": "Last 12 Months",
+      "showingRows": "Showing {{from}}–{{to}} of {{total}}",
+      "pageOf": "Page {{page}} of {{pages}}"
     },
     "settings": {
       "categories": {
