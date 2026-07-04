@@ -429,7 +429,7 @@ console.log(paymentHistoryData,'paymentHistoryData')
           />
           <SummaryCard
             title={t('finance.varisankhya.totalCollected')}
-            value={`₹${(monthlyData.summary.total_expected || 0).toLocaleString()}`}
+            value={`₹${(monthlyData.summary.total_collected || 0).toLocaleString()}`}
             icon={IndianRupee}
             color="bg-purple-500"
           />

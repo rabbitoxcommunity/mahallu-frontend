@@ -26,8 +26,16 @@ export const Income = () => {
     const savedTab = localStorage.getItem('incomeActiveTab');
     return savedTab || 'due';
   });
-  const [month, setMonth] = useState(new Date().getMonth() + 1);
-  const [year, setYear] = useState(new Date().getFullYear());
+  // Persist the selected Month/Year so a page refresh keeps the same view
+  // instead of resetting to the current month.
+  const [month, setMonth] = useState(() => {
+    const saved = localStorage.getItem('incomeViewMonth');
+    return saved ? Number(saved) : new Date().getMonth() + 1;
+  });
+  const [year, setYear] = useState(() => {
+    const saved = localStorage.getItem('incomeViewYear');
+    return saved ? Number(saved) : new Date().getFullYear();
+  });
   const [showStats, setShowStats] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
@@ -64,10 +72,10 @@ export const Income = () => {
   const [dueModal, setDueModal] = useState({ isOpen: false, income: null, isEdit: false });
   const [directModal, setDirectModal] = useState({ isOpen: false, income: null, isEdit: false });
   const [paymentModal, setPaymentModal] = useState({ isOpen: false, income: null, entry: null });
-  const [historyModal, setHistoryModal] = useState({ isOpen: false, history: [], templateName: '' });
+  const [historyModal, setHistoryModal] = useState({ isOpen: false, history: [], templateName: '', income: null });
   const [receiptModal, setReceiptModal] = useState({ isOpen: false, income: null, type: '' });
   const [viewModal, setViewModal] = useState({ isOpen: false, income: null });
-  const [reminderModal, setReminderModal] = useState({ isOpen: false, income: null, phone: '', message: '' });
+  const [reminderModal, setReminderModal] = useState({ isOpen: false, income: null, phone: '', message: '', language: 'en' });
 
   // Forms with react-hook-form
   const {
@@ -246,6 +254,11 @@ export const Income = () => {
   }, [searchTerm, month, year, categoryFilter, paymentMethodFilter, t]);
 
   useEffect(() => {
+    localStorage.setItem('incomeViewMonth', String(month));
+    localStorage.setItem('incomeViewYear', String(year));
+  }, [month, year]);
+
+  useEffect(() => {
     fetchSummary();
   }, [month, year, fetchSummary]);
 
@@ -274,7 +287,20 @@ export const Income = () => {
       setDueModal({ isOpen: false, income: null, isEdit: false });
       resetDue();
       setSelectedDueCategory(null);
-      fetchDue(); fetchSummary();
+      // Jump the table view to the subscription's start month so the newly created entry is visible
+      // (otherwise the view stays on the current month and shows a later auto-generated entry).
+      const startM = Number(data.start_month);
+      const startY = Number(data.start_year);
+      if (startM === month && startY === year) {
+        // Already viewing the start month — closure values are current, so fetch directly.
+        fetchDue(); fetchSummary();
+      } else {
+        // Changing month/year re-runs the fetch effects with the new values.
+        // Avoid calling fetchDue() here too — that would fire a second request with the
+        // stale (old) month and can race the correct one, overwriting it.
+        setMonth(startM);
+        setYear(startY);
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to create');
     }
@@ -320,6 +346,12 @@ export const Income = () => {
       setPaymentModal({ isOpen: false, income: null, entry: null });
       setPaymentForm({ payment_amount: '', payment_method: 'cash', reference_no: '', notes: '' });
       fetchDue(); fetchSummary();
+      // If paid from the Subscription History modal, refresh its list in place
+      // so the user can keep clearing other overdue months without reopening it.
+      if (historyModal.isOpen && historyModal.income) {
+        const data = await getTemplateEntries(historyModal.income._id);
+        setHistoryModal(prev => ({ ...prev, history: data.entries }));
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || t('finance.income.paymentRecorded'));
     }
@@ -381,17 +413,18 @@ export const Income = () => {
   const viewHistory = async (income) => {
     try {
       const data = await getTemplateEntries(income._id);
-      setHistoryModal({ isOpen: true, history: data.entries, templateName: income.source_name });
+      setHistoryModal({ isOpen: true, history: data.entries, templateName: income.source_name, income });
     } catch {
       toast.error(t('finance.income.fetchPaymentHistoryFailed'));
     }
   };
 
-  const openPaymentModal = (income) => {
-    const entry = income.entry;
+  const openPaymentModalForEntry = (income, entry) => {
     setPaymentModal({ isOpen: true, income, entry });
     setPaymentForm({ payment_amount: entry.balance.toString(), payment_method: 'cash', reference_no: '', notes: '' });
   };
+
+  const openPaymentModal = (income) => openPaymentModalForEntry(income, income.entry);
 
   const openEditDue = (income) => {
     setDueModal({ isOpen: true, income, isEdit: true });
@@ -456,16 +489,48 @@ export const Income = () => {
     return entryYear < cy || (entryYear === cy && entryMonth <= cm);
   };
 
-  const openReminderModal = (income) => {
+  const malayalamMonths = {
+    1: 'ജനുവരി', 2: 'ഫെബ്രുവരി', 3: 'മാർച്ച്', 4: 'ഏപ്രിൽ',
+    5: 'മെയ്', 6: 'ജൂൺ', 7: 'ജൂലൈ', 8: 'ഓഗസ്റ്റ്',
+    9: 'സെപ്റ്റംബർ', 10: 'ഒക്ടോബർ', 11: 'നവംബർ', 12: 'ഡിസംബർ'
+  };
+
+  const buildReminderMessage = (income, language) => {
     const entry = income.entry;
+    const amount = entry.balance?.toLocaleString();
+    const category = income.category?.replaceAll('_', ' ');
+
+    if (language === 'ml') {
+      const monthName = malayalamMonths[entry.month] || '';
+      return (
+        `അസ്സലാമു അലൈക്കും, പ്രിയപ്പെട്ട *${income.source_name}*,\n\n` +
+        `*${monthName} ${entry.year}* മാസത്തെ (${category}) നിങ്ങളുടെ *₹${amount}* കുടിശ്ശിക ഇനിയും അടച്ചിട്ടില്ല എന്ന് ഓർമ്മപ്പെടുത്തുന്നു.\n\n` +
+        `ദയവായി എത്രയും വേഗം തുക അടയ്ക്കാൻ അപേക്ഷിക്കുന്നു.\n\n` +
+        `നന്ദി 🙏`
+      );
+    }
+
     const monthName = months.find(m => m.value === entry.month)?.label || '';
-    const message =
+    return (
       `Assalamu Alaikum, Dear *${income.source_name}*,\n\n` +
-      `This is a gentle reminder that your payment of *₹${entry.balance?.toLocaleString()}* ` +
-      `for *${monthName} ${entry.year}* (${income.category?.replaceAll('_', ' ')}) is still pending.\n\n` +
+      `This is a gentle reminder that your payment of *₹${amount}* ` +
+      `for *${monthName} ${entry.year}* (${category}) is still pending.\n\n` +
       `Kindly make the payment at your earliest convenience.\n\n` +
-      `Thank you 🙏`;
-    setReminderModal({ isOpen: true, income, phone: income.whatsapp || '', message });
+      `Thank you 🙏`
+    );
+  };
+
+  const openReminderModal = (income) => {
+    const message = buildReminderMessage(income, 'en');
+    setReminderModal({ isOpen: true, income, phone: income.whatsapp || '', message, language: 'en' });
+  };
+
+  const setReminderLanguage = (language) => {
+    setReminderModal(prev => ({
+      ...prev,
+      language,
+      message: prev.income ? buildReminderMessage(prev.income, language) : prev.message
+    }));
   };
 
   const sendWhatsAppReminder = () => {
@@ -485,6 +550,37 @@ export const Income = () => {
       upcoming: 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400',
     };
     return styles[status] || styles.unpaid;
+  };
+
+  // A due-based subscription's monthly entry may not exist yet for the month/year
+  // currently being viewed. That happens for two different reasons, which must not
+  // be conflated:
+  //   1. "notStarted"  — the viewed month is before the subscription's start date.
+  //      Nothing is due for that period at all.
+  //   2. "notGenerated" — the subscription has already started, but the entry for
+  //      a future month (relative to today) hasn't been auto-generated yet.
+  // Previously both cases displayed the subscription's original start month/year
+  // regardless of which month was being viewed, making the table look "stuck" when
+  // browsing forward. This derives the correct label/amounts for each case instead.
+  const getDueRowInfo = (income) => {
+    const entry = income.entry;
+    const notStarted = income.start_year > year || (income.start_year === year && income.start_month > month);
+    const entryStatus = entry?.status || 'upcoming';
+    const showActions = !!entry && entryStatus !== 'paid';
+
+    const monthYearLabel = entry
+      ? `${months[entry.month - 1]?.label} ${entry.year}`
+      : notStarted
+        ? `${t('finance.income.startsFrom', 'Starts')} ${months[income.start_month - 1]?.label} ${income.start_year}`
+        : `${months[month - 1]?.label} ${year}`;
+
+    // Only project the recurring amount for a month the subscription has actually
+    // reached; before the start date there is genuinely nothing due yet.
+    const dueAmount     = entry ? entry.amount_due    : (notStarted ? null : income.amount_due);
+    const paidAmount    = entry ? entry.amount_paid   : (notStarted ? null : 0);
+    const balanceAmount = entry ? entry.balance       : (notStarted ? null : income.amount_due);
+
+    return { entry, notStarted, entryStatus, showActions, monthYearLabel, dueAmount, paidAmount, balanceAmount };
   };
 
   // FIX: Use replaceAll to handle all underscores (e.g. "misc_income" → "misc income")
@@ -510,28 +606,54 @@ export const Income = () => {
             <p className="text-gray-500 dark:text-gray-400 mt-1">{activeTab === 'hadiya' ? t('finance.income.hadiyaDescription') : t('finance.income.description')}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            {activeTab !== 'hadiya' && (
-              <>
-                <select
-                  value={month}
-                  onChange={(e) => setMonth(Number(e.target.value))}
-                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                >
-                  {months.map(m => (
-                    <option key={m.value} value={m.value}>{m.label}</option>
-                  ))}
-                </select>
-                <select
-                  value={year}
-                  onChange={(e) => setYear(Number(e.target.value))}
-                  className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                >
-                  {years.map(y => (
-                    <option key={y} value={y}>{y}</option>
-                  ))}
-                </select>
-              </>
-            )}
+            {activeTab !== 'hadiya' && (() => {
+              const now = new Date();
+              const isCurrentMonth = month === now.getMonth() + 1 && year === now.getFullYear();
+              return (
+                <div className="flex flex-col gap-1">
+                  <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide px-1">
+                    {t('finance.income.viewingPeriod', 'Viewing')}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <div className={`flex items-center gap-1.5 rounded-xl border transition-colors ${
+                      isCurrentMonth
+                        ? 'bg-white dark:bg-[#1e1f25] border-gray-200 dark:border-gray-700'
+                        : 'bg-amber-50 dark:bg-amber-900/20 border-amber-300 dark:border-amber-700'
+                    }`}>
+                      <Calendar size={16} className={`ml-3 shrink-0 ${isCurrentMonth ? 'text-gray-400' : 'text-amber-500'}`} />
+                      <select
+                        value={month}
+                        onChange={(e) => setMonth(Number(e.target.value))}
+                        aria-label={t('finance.income.monthYear')}
+                        className="pl-1 pr-2 py-2 bg-transparent focus:outline-none"
+                      >
+                        {months.map(m => (
+                          <option key={m.value} value={m.value}>{m.label}</option>
+                        ))}
+                      </select>
+                      <select
+                        value={year}
+                        onChange={(e) => setYear(Number(e.target.value))}
+                        aria-label={t('common.year', 'Year')}
+                        className="pr-3 py-2 bg-transparent focus:outline-none border-l border-gray-200 dark:border-gray-700"
+                      >
+                        {years.map(y => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
+                    {!isCurrentMonth && (
+                      <button
+                        onClick={() => { setMonth(now.getMonth() + 1); setYear(now.getFullYear()); }}
+                        className="px-3 py-2 text-xs font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-xl transition-colors whitespace-nowrap"
+                      >
+                        {t('finance.income.jumpToThisMonth', 'This Month')}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         </div>
       </div>
@@ -835,8 +957,10 @@ export const Income = () => {
                   >
                     <option value="">{t('finance.income.allStatus')}</option>
                     <option value="paid">{t('common.paid')}</option>
+                    <option value="partial">{t('finance.income.partial')}</option>
                     <option value="unpaid">{t('common.unpaid')}</option>
                     <option value="overdue">{t('finance.income.overdue')}</option>
+                    <option value="upcoming">{t('finance.income.upcoming')}</option>
                   </select>
                 )}
 
@@ -908,20 +1032,18 @@ export const Income = () => {
                     </tr>
                   ) : (
                     dueData.incomes.map((income) => {
-                      const entry = income.entry;
-                      const entryStatus = entry?.status || 'upcoming';
-                      const showActions = !!entry && entryStatus !== 'paid';
+                      const { entry, entryStatus, showActions, monthYearLabel, dueAmount, paidAmount, balanceAmount } = getDueRowInfo(income);
                       return (
                       <tr key={income._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
                         <td className="py-3 px-4 font-medium text-gray-900 dark:text-white">{income.income_code}</td>
                         <td className="py-3 px-4"><span className="capitalize">{formatCategory(income.category)}</span></td>
                         <td className="py-3 px-4 text-gray-700 dark:text-gray-300">{income.source_name}</td>
                         <td className="py-3 px-4 text-gray-700 dark:text-gray-300">
-                          {entry ? `${months[entry.month - 1]?.label} ${entry.year}` : <span className="text-gray-400 text-xs">From {months[income.start_month - 1]?.label} {income.start_year}</span>}
+                          {entry ? monthYearLabel : <span className="text-gray-400 text-xs">{monthYearLabel}</span>}
                         </td>
-                        <td className="py-3 px-4 text-right font-medium text-gray-900 dark:text-white">₹{(entry?.amount_due ?? income.amount_due)?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right font-medium text-green-600">₹{(entry?.amount_paid ?? 0)?.toLocaleString()}</td>
-                        <td className="py-3 px-4 text-right font-medium text-orange-600">₹{(entry?.balance ?? income.amount_due)?.toLocaleString()}</td>
+                        <td className="py-3 px-4 text-right font-medium text-gray-900 dark:text-white">{dueAmount != null ? `₹${dueAmount.toLocaleString()}` : '—'}</td>
+                        <td className="py-3 px-4 text-right font-medium text-green-600">{paidAmount != null ? `₹${paidAmount.toLocaleString()}` : '—'}</td>
+                        <td className="py-3 px-4 text-right font-medium text-orange-600">{balanceAmount != null ? `₹${balanceAmount.toLocaleString()}` : '—'}</td>
                         <td className="py-3 px-4 text-center"><span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entryStatus)}`}>{entryStatus}</span></td>
                         <td className="py-3 px-4">
                           <div className="flex items-center justify-center gap-2">
@@ -953,33 +1075,29 @@ export const Income = () => {
                 </div>
               ) : (
                 dueData.incomes.map((income) => {
-                  const entry = income.entry;
-                  const entryStatus = entry?.status || 'upcoming';
-                  const showActions = !!entry && entryStatus !== 'paid';
+                  const { entry, entryStatus, showActions, monthYearLabel, dueAmount, paidAmount, balanceAmount } = getDueRowInfo(income);
                   return (
                   <div key={income._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-3">
                     <div className="flex items-start justify-between gap-2">
                       <div>
                         <p className="font-semibold text-gray-900 dark:text-white">{income.income_code}</p>
                         <p className="text-xs text-gray-500 capitalize">{formatCategory(income.category)} · {income.source_name}</p>
-                        <p className="text-xs text-gray-400">
-                          {entry ? `${months[entry.month - 1]?.label} ${entry.year}` : `From ${months[income.start_month - 1]?.label} ${income.start_year}`}
-                        </p>
+                        <p className="text-xs text-gray-400">{monthYearLabel}</p>
                       </div>
                       <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full shrink-0 capitalize ${getStatusBadge(entryStatus)}`}>{entryStatus}</span>
                     </div>
                     <div className="grid grid-cols-3 gap-2 text-xs">
                       <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
                         <p className="text-gray-500">{t('finance.income.due')}</p>
-                        <p className="font-semibold text-gray-900 dark:text-white">₹{(entry?.amount_due ?? income.amount_due)?.toLocaleString()}</p>
+                        <p className="font-semibold text-gray-900 dark:text-white">{dueAmount != null ? `₹${dueAmount.toLocaleString()}` : '—'}</p>
                       </div>
                       <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
                         <p className="text-gray-500">{t('finance.income.paid')}</p>
-                        <p className="font-semibold text-green-600">₹{(entry?.amount_paid ?? 0)?.toLocaleString()}</p>
+                        <p className="font-semibold text-green-600">{paidAmount != null ? `₹${paidAmount.toLocaleString()}` : '—'}</p>
                       </div>
                       <div className="bg-white dark:bg-[#1e1f25] rounded-lg p-2 text-center">
                         <p className="text-gray-500">Balance</p>
-                        <p className="font-semibold text-orange-600">₹{(entry?.balance ?? income.amount_due)?.toLocaleString()}</p>
+                        <p className="font-semibold text-orange-600">{balanceAmount != null ? `₹${balanceAmount.toLocaleString()}` : '—'}</p>
                       </div>
                     </div>
                     <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
@@ -1301,8 +1419,8 @@ export const Income = () => {
       <AnimatePresence>
         {paymentModal.isOpen && paymentModal.income && paymentModal.entry && (
           <>
-            <motion.div key="payment-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPaymentModal({ isOpen: false, income: null, entry: null })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
-            <motion.div key="payment-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
+            <motion.div key="payment-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPaymentModal({ isOpen: false, income: null, entry: null })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[60]" />
+            <motion.div key="payment-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-[60] p-4">
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-md">
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
                   <div>
@@ -1363,7 +1481,7 @@ export const Income = () => {
       <AnimatePresence>
         {historyModal.isOpen && (
           <>
-            <motion.div key="history-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '' })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
+            <motion.div key="history-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '', income: null })} className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
             <motion.div key="history-modal" initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
               <div className="bg-white dark:bg-[#1e1f25] rounded-2xl shadow-2xl w-full max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
                 <div className="flex items-center justify-between p-6 border-b border-gray-100 dark:border-gray-800">
@@ -1371,7 +1489,7 @@ export const Income = () => {
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white">Subscription History</h2>
                     {historyModal.templateName && <p className="text-sm text-gray-500">{historyModal.templateName}</p>}
                   </div>
-                  <button onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '' })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
+                  <button onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '', income: null })} className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg"><X size={20} className="text-gray-500" /></button>
                 </div>
                 <div className="flex-1 overflow-y-auto p-6">
                   {historyModal.history.length === 0 ? (
@@ -1388,7 +1506,19 @@ export const Income = () => {
                               Paid: ₹{entry.amount_paid?.toLocaleString()} / ₹{entry.amount_due?.toLocaleString()}
                             </p>
                           </div>
-                          <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entry.status)}`}>{entry.status}</span>
+                          <div className="flex items-center gap-2">
+                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entry.status)}`}>{entry.status}</span>
+                            {entry.status !== 'paid' && (
+                              <button
+                                onClick={() => openPaymentModalForEntry(historyModal.income, entry)}
+                                className="flex items-center gap-1 px-2 py-1.5 text-xs font-medium text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-colors"
+                                title={t('finance.income.markPayment')}
+                              >
+                                <IndianRupee size={14} />
+                                {t('finance.income.payNow', 'Pay Now')}
+                              </button>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -1453,7 +1583,33 @@ export const Income = () => {
 
                   {/* Message preview */}
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Message Preview</label>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Message Preview</label>
+                      <div className="flex items-center gap-1 p-0.5 bg-gray-100 dark:bg-[#252731] rounded-lg">
+                        <button
+                          type="button"
+                          onClick={() => setReminderLanguage('en')}
+                          className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
+                            reminderModal.language === 'en'
+                              ? 'bg-white dark:bg-[#1e1f25] text-gray-900 dark:text-white shadow-sm'
+                              : 'text-gray-500 dark:text-gray-400'
+                          }`}
+                        >
+                          English
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setReminderLanguage('ml')}
+                          className={`px-2.5 py-1 text-xs font-semibold rounded-md transition-colors ${
+                            reminderModal.language === 'ml'
+                              ? 'bg-white dark:bg-[#1e1f25] text-gray-900 dark:text-white shadow-sm'
+                              : 'text-gray-500 dark:text-gray-400'
+                          }`}
+                        >
+                          മലയാളം
+                        </button>
+                      </div>
+                    </div>
                     <textarea
                       value={reminderModal.message}
                       onChange={e => setReminderModal(prev => ({ ...prev, message: e.target.value }))}
