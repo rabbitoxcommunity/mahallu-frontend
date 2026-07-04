@@ -1,62 +1,96 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import PrivateRoute from "./routes/PrivateRoute";
-import PlatformAdminRoute from "./routes/PlatformAdminRoute";
 import { AuthProvider } from "./context/AuthContext";
 import { SidebarProvider } from "./context/SidebarContext";
-import PlatformAdminDashboard from "./pages/PlatformAdmin/PlatformAdminDashboard";
-import TenantsList from "./pages/PlatformAdmin/TenantsList";
-import CreateTenant from "./pages/PlatformAdmin/CreateTenant";
-import EditTenant from "./pages/PlatformAdmin/EditTenant";
-import SuperAdminDashboard from "./pages/SuperAdmin/SuperAdminDashboard";
-import StaffList from "./pages/SuperAdmin/StaffList";
-import CreateStaff from "./pages/SuperAdmin/CreateStaff";
-import EditStaffPermissions from "./pages/SuperAdmin/EditStaffPermissions";
-import FamilyRegistration from "./pages/Family/FamilyRegistration";
-import HouseRegistration from "./pages/Family/HouseRegistration";
-import AddFamily from "./pages/Family/AddFamily";
-import AddHouse from "./pages/Family/AddHouse";
-import MemberRegistration from "./pages/Family/MemberRegistration";
-import AddMember from "./pages/Family/AddMember";
-import HouseDetailedView from "./pages/Family/HouseDetailedView";
-import MemberDetailedView from "./pages/Family/MemberDetailedView";
-import Analytics from "./pages/Analytics";
-import Varisankhya from "./pages/Finance/Varisankhya";
-import { Income } from "./pages/Finance/Income";
-import Expense from "./pages/Finance/Expense";
-import Reports from "./pages/Finance/Reports";
-import GeneralSettings from "./pages/Settings/GeneralSettings";
-import VarisankhyaConfig from "./pages/Settings/VarisankhyaConfig";
-import Marriages from "./pages/Admin/Marriages";
-import Welfare from "./pages/community/Welfare";
-import DeathRegistry from "./pages/community/DeathRegistry";
-import CommunicationCenter from "./pages/community/CommunicationCenter";
-import ResultManagement from "./pages/results/ResultManagement";
-import ResultSettingsPage from "./pages/results/ResultSettingsPage";
-import PublicHome from "./pages/public/Home";
-import PublicSearch from "./pages/public/Search";
-import PublicFamilyView from "./pages/public/FamilyView";
-import MarriageCertificate from "./pages/public/MarriageCertificate";
-// Public Portal
-import PortalHomePage from "./pages/portal/HomePage";
-import PortalServicesPage from "./pages/portal/ServicesPage";
-import PortalAnnouncementsPage from "./pages/portal/AnnouncementsPage";
-import PortalAboutPage from "./pages/portal/AboutPage";
-import PortalContactPage from "./pages/portal/ContactPage";
-import PortalMarriageCertPage from "./pages/portal/services/MarriageCertificatePage";
-import PortalDeathCertPage from "./pages/portal/services/DeathCertificatePage";
-import PortalResultsPage from "./pages/portal/services/ResultsPage";
-import PortalBloodDonorPage from "./pages/portal/services/BloodDonorPage";
-import PortalIslamicServicesPage from "./pages/portal/services/IslamicServicesPage";
-import SurahLibrary from "./pages/IslamicLibrary/SurahLibrary";
-import DuaLibrary from "./pages/IslamicLibrary/DuaLibrary";
-import PublicPortalSettings from "./pages/Settings/PublicPortalSettings";
 import { PortalProvider } from "./context/PortalContext";
 import ScrollToTop from "./components/ScrollToTop";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
+
+const PageLoader = () => (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-[#111217]">
+        <div className="w-10 h-10 border-4 border-gray-200 dark:border-gray-700 border-t-[#0B65F6] rounded-full animate-spin" />
+    </div>
+);
+
+// Route guards (each pulls in its own layout, so keep them lazy too)
+const PrivateRoute = lazy(() => import("./routes/PrivateRoute"));
+const PlatformAdminRoute = lazy(() => import("./routes/PlatformAdminRoute"));
+
+// Auth
+const Login = lazy(() => import("./pages/Login"));
+
+// Admin dashboard
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Analytics = lazy(() => import("./pages/Analytics"));
+
+// Platform Admin
+const PlatformAdminDashboard = lazy(() => import("./pages/PlatformAdmin/PlatformAdminDashboard"));
+const TenantsList = lazy(() => import("./pages/PlatformAdmin/TenantsList"));
+const CreateTenant = lazy(() => import("./pages/PlatformAdmin/CreateTenant"));
+const EditTenant = lazy(() => import("./pages/PlatformAdmin/EditTenant"));
+
+// Super Admin
+const SuperAdminDashboard = lazy(() => import("./pages/SuperAdmin/SuperAdminDashboard"));
+const StaffList = lazy(() => import("./pages/SuperAdmin/StaffList"));
+const CreateStaff = lazy(() => import("./pages/SuperAdmin/CreateStaff"));
+const EditStaffPermissions = lazy(() => import("./pages/SuperAdmin/EditStaffPermissions"));
+
+// Family
+const FamilyRegistration = lazy(() => import("./pages/Family/FamilyRegistration"));
+const HouseRegistration = lazy(() => import("./pages/Family/HouseRegistration"));
+const AddFamily = lazy(() => import("./pages/Family/AddFamily"));
+const AddHouse = lazy(() => import("./pages/Family/AddHouse"));
+const MemberRegistration = lazy(() => import("./pages/Family/MemberRegistration"));
+const AddMember = lazy(() => import("./pages/Family/AddMember"));
+const HouseDetailedView = lazy(() => import("./pages/Family/HouseDetailedView"));
+const MemberDetailedView = lazy(() => import("./pages/Family/MemberDetailedView"));
+
+// Finance
+const Varisankhya = lazy(() => import("./pages/Finance/Varisankhya"));
+const Income = lazy(() => import("./pages/Finance/Income").then(m => ({ default: m.Income })));
+const Expense = lazy(() => import("./pages/Finance/Expense"));
+const Reports = lazy(() => import("./pages/Finance/Reports"));
+
+// Settings
+const GeneralSettings = lazy(() => import("./pages/Settings/GeneralSettings"));
+const VarisankhyaConfig = lazy(() => import("./pages/Settings/VarisankhyaConfig"));
+const PublicPortalSettings = lazy(() => import("./pages/Settings/PublicPortalSettings"));
+
+// Community
+const Welfare = lazy(() => import("./pages/community/Welfare"));
+const DeathRegistry = lazy(() => import("./pages/community/DeathRegistry"));
+const CommunicationCenter = lazy(() => import("./pages/community/CommunicationCenter"));
+
+// Results
+const ResultManagement = lazy(() => import("./pages/results/ResultManagement"));
+const ResultSettingsPage = lazy(() => import("./pages/results/ResultSettingsPage"));
+
+// Islamic Library
+const SurahLibrary = lazy(() => import("./pages/IslamicLibrary/SurahLibrary"));
+const DuaLibrary = lazy(() => import("./pages/IslamicLibrary/DuaLibrary"));
+
+// Admin
+const Marriages = lazy(() => import("./pages/Admin/Marriages"));
+
+// Legacy public routes
+const PublicHome = lazy(() => import("./pages/public/Home"));
+const PublicSearch = lazy(() => import("./pages/public/Search"));
+const PublicFamilyView = lazy(() => import("./pages/public/FamilyView"));
+const MarriageCertificate = lazy(() => import("./pages/public/MarriageCertificate"));
+
+// Public Portal
+const PortalHomePage = lazy(() => import("./pages/portal/HomePage"));
+const PortalServicesPage = lazy(() => import("./pages/portal/ServicesPage"));
+const PortalAnnouncementsPage = lazy(() => import("./pages/portal/AnnouncementsPage"));
+const PortalAboutPage = lazy(() => import("./pages/portal/AboutPage"));
+const PortalContactPage = lazy(() => import("./pages/portal/ContactPage"));
+const PortalMarriageCertPage = lazy(() => import("./pages/portal/services/MarriageCertificatePage"));
+const PortalDeathCertPage = lazy(() => import("./pages/portal/services/DeathCertificatePage"));
+const PortalResultsPage = lazy(() => import("./pages/portal/services/ResultsPage"));
+const PortalBloodDonorPage = lazy(() => import("./pages/portal/services/BloodDonorPage"));
+const PortalIslamicServicesPage = lazy(() => import("./pages/portal/services/IslamicServicesPage"));
 
 function App() {
     return (
@@ -70,96 +104,98 @@ function App() {
                         autoClose={3000}
                         theme="colored"
                     />
-                    <Routes>
-                        {/* Redirect Root to Login */}
-                        <Route path="/" element={<Navigate to="/login" replace />} />
+                    <Suspense fallback={<PageLoader />}>
+                        <Routes>
+                            {/* Redirect Root to Login */}
+                            <Route path="/" element={<Navigate to="/login" replace />} />
 
-                        {/* Legacy public routes */}
-                        <Route path="/public" element={<PublicHome />} />
-                        <Route path="/public/search" element={<PublicSearch />} />
-                        <Route path="/public/family/:id" element={<PublicFamilyView />} />
-                        <Route path="/certificate/marriage" element={<MarriageCertificate />} />
+                            {/* Legacy public routes */}
+                            <Route path="/public" element={<PublicHome />} />
+                            <Route path="/public/search" element={<PublicSearch />} />
+                            <Route path="/public/family/:id" element={<PublicFamilyView />} />
+                            <Route path="/certificate/marriage" element={<MarriageCertificate />} />
 
-                        {/* Public Portal — all wrapped in PortalProvider so usePortal() works everywhere */}
-                        <Route element={<PortalProvider />}>
-                            <Route path="/portal" element={<PortalHomePage />} />
-                            <Route path="/portal/services" element={<PortalServicesPage />} />
-                            <Route path="/portal/announcements" element={<PortalAnnouncementsPage />} />
-                            <Route path="/portal/about" element={<PortalAboutPage />} />
-                            <Route path="/portal/contact" element={<PortalContactPage />} />
-                            <Route path="/portal/services/marriage-certificate" element={<PortalMarriageCertPage />} />
-                            <Route path="/portal/services/death-certificate" element={<PortalDeathCertPage />} />
-                            <Route path="/portal/services/results" element={<PortalResultsPage />} />
-                            <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
-                            <Route path="/portal/services/islamic-services" element={<PortalIslamicServicesPage />} />
-                        </Route>
+                            {/* Public Portal — all wrapped in PortalProvider so usePortal() works everywhere */}
+                            <Route element={<PortalProvider />}>
+                                <Route path="/portal" element={<PortalHomePage />} />
+                                <Route path="/portal/services" element={<PortalServicesPage />} />
+                                <Route path="/portal/announcements" element={<PortalAnnouncementsPage />} />
+                                <Route path="/portal/about" element={<PortalAboutPage />} />
+                                <Route path="/portal/contact" element={<PortalContactPage />} />
+                                <Route path="/portal/services/marriage-certificate" element={<PortalMarriageCertPage />} />
+                                <Route path="/portal/services/death-certificate" element={<PortalDeathCertPage />} />
+                                <Route path="/portal/services/results" element={<PortalResultsPage />} />
+                                <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
+                                <Route path="/portal/services/islamic-services" element={<PortalIslamicServicesPage />} />
+                            </Route>
 
-                        {/* Login Route */}
-                        <Route path="/login" element={<Login />} />
+                            {/* Login Route */}
+                            <Route path="/login" element={<Login />} />
 
-                        {/* Platform Admin Routes (Independent Layout) */}
-                        <Route element={<PlatformAdminRoute />}>
-                            <Route path="/platform-admin" element={<PlatformAdminDashboard />} />
-                            <Route path="/platform-admin/tenants" element={<TenantsList />} />
-                            <Route path="/platform-admin/tenants/create" element={<CreateTenant />} />
-                            <Route path="/platform-admin/tenants/:id/edit" element={<EditTenant />} />
-                        </Route>
+                            {/* Platform Admin Routes (Independent Layout) */}
+                            <Route element={<PlatformAdminRoute />}>
+                                <Route path="/platform-admin" element={<PlatformAdminDashboard />} />
+                                <Route path="/platform-admin/tenants" element={<TenantsList />} />
+                                <Route path="/platform-admin/tenants/create" element={<CreateTenant />} />
+                                <Route path="/platform-admin/tenants/:id/edit" element={<EditTenant />} />
+                            </Route>
 
-                        {/* Protected Routes Wrapper (With Sidebar) */}
-                        <Route element={<PrivateRoute />}>
-                            <Route path="/dashboard" element={<Dashboard />} />
-                            <Route path="/analytics" element={<Analytics />} />
+                            {/* Protected Routes Wrapper (With Sidebar) */}
+                            <Route element={<PrivateRoute />}>
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/analytics" element={<Analytics />} />
 
-                            {/* SuperAdmin Routes */}
-                            <Route path="/super-admin" element={<SuperAdminDashboard />} />
-                            <Route path="/super-admin/staff" element={<StaffList />} />
-                            <Route path="/super-admin/staff/create" element={<CreateStaff />} />
-                            <Route path="/super-admin/staff/:id/permissions" element={<EditStaffPermissions />} />
+                                {/* SuperAdmin Routes */}
+                                <Route path="/super-admin" element={<SuperAdminDashboard />} />
+                                <Route path="/super-admin/staff" element={<StaffList />} />
+                                <Route path="/super-admin/staff/create" element={<CreateStaff />} />
+                                <Route path="/super-admin/staff/:id/permissions" element={<EditStaffPermissions />} />
 
-                            {/* Family Routes */}
-                            <Route path="/family/register" element={<FamilyRegistration />} />
-                            <Route path="/family/register/create" element={<AddFamily />} />
+                                {/* Family Routes */}
+                                <Route path="/family/register" element={<FamilyRegistration />} />
+                                <Route path="/family/register/create" element={<AddFamily />} />
 
-                            <Route path="/family/house/register" element={<HouseRegistration />} />
-                            <Route path="/family/house/add" element={<AddHouse />} />
-                            <Route path="/family/house/:id" element={<HouseDetailedView />} />
+                                <Route path="/family/house/register" element={<HouseRegistration />} />
+                                <Route path="/family/house/add" element={<AddHouse />} />
+                                <Route path="/family/house/:id" element={<HouseDetailedView />} />
 
-                            {/* Member Routes */}
-                            <Route path="/family/member/register" element={<MemberRegistration />} />
-                            <Route path="/family/member/add" element={<AddMember />} />
-                            <Route path="/family/member/:id" element={<MemberDetailedView />} />
+                                {/* Member Routes */}
+                                <Route path="/family/member/register" element={<MemberRegistration />} />
+                                <Route path="/family/member/add" element={<AddMember />} />
+                                <Route path="/family/member/:id" element={<MemberDetailedView />} />
 
-                            {/* Finance Routes */}
-                            <Route path="/finance" element={<Navigate to="/finance/varisankhya" replace />} />
-                            <Route path="/finance/varisankhya" element={<Varisankhya />} />
-                            <Route path="/finance/income" element={<Income />} />
-                            <Route path="/finance/expense" element={<Expense />} />
-                            <Route path="/finance/reports" element={<Reports />} />
+                                {/* Finance Routes */}
+                                <Route path="/finance" element={<Navigate to="/finance/varisankhya" replace />} />
+                                <Route path="/finance/varisankhya" element={<Varisankhya />} />
+                                <Route path="/finance/income" element={<Income />} />
+                                <Route path="/finance/expense" element={<Expense />} />
+                                <Route path="/finance/reports" element={<Reports />} />
 
-                            {/* Settings Routes */}
-                            <Route path="/settings/general" element={<GeneralSettings />} />
-                            <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
-                            <Route path="/settings/public-portal" element={<PublicPortalSettings />} />
+                                {/* Settings Routes */}
+                                <Route path="/settings/general" element={<GeneralSettings />} />
+                                <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
+                                <Route path="/settings/public-portal" element={<PublicPortalSettings />} />
 
-                            {/* Community Routes */}
-                            <Route path="/community/welfare" element={<Welfare />} />
-                            <Route path="/community/death-registry" element={<DeathRegistry />} />
-                            <Route path="/community/communication" element={<CommunicationCenter />} />
+                                {/* Community Routes */}
+                                <Route path="/community/welfare" element={<Welfare />} />
+                                <Route path="/community/death-registry" element={<DeathRegistry />} />
+                                <Route path="/community/communication" element={<CommunicationCenter />} />
 
-                            {/* Result Management Routes */}
-                            <Route path="/results" element={<ResultManagement />} />
-                            <Route path="/results/settings" element={<ResultSettingsPage />} />
+                                {/* Result Management Routes */}
+                                <Route path="/results" element={<ResultManagement />} />
+                                <Route path="/results/settings" element={<ResultSettingsPage />} />
 
-                            {/* Islamic Library Routes */}
-                            <Route path="/islamic-library/surah" element={<SurahLibrary />} />
-                            <Route path="/islamic-library/dua" element={<DuaLibrary />} />
+                                {/* Islamic Library Routes */}
+                                <Route path="/islamic-library/surah" element={<SurahLibrary />} />
+                                <Route path="/islamic-library/dua" element={<DuaLibrary />} />
 
-                            {/* Admin Routes */}
-                            <Route path="/admin/marriages" element={<Marriages />} />
+                                {/* Admin Routes */}
+                                <Route path="/admin/marriages" element={<Marriages />} />
 
-                            {/* Add other protected pages here */}
-                        </Route>
-                    </Routes>
+                                {/* Add other protected pages here */}
+                            </Route>
+                        </Routes>
+                    </Suspense>
                 </BrowserRouter>
             </SidebarProvider>
         </AuthProvider>
