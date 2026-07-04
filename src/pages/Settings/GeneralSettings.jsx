@@ -132,7 +132,10 @@ const GeneralSettings = () => {
   };
 
   const dueCategories = categories.filter(c => c.type === 'due');
-  const incomeCategories = categories.filter(c => c.type === 'income');
+  const incomeCategories = categories.filter(c => c.type === 'direct');
+  const dueExpenseCategories = expenseCategories.filter(c => c.type === 'due');
+  // Fall back to "direct" for any legacy category saved before the type field existed.
+  const directExpenseCategories = expenseCategories.filter(c => c.type !== 'due');
 
   return (
     <div className="w-full">
@@ -157,7 +160,7 @@ const GeneralSettings = () => {
             <button
               onClick={() => {
                 setAddModal({ isOpen: true, categoryType: 'expense' });
-                setFormData({ name: '', description: '' });
+                setFormData({ name: '', type: 'direct', description: '' });
               }}
               className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
             >
@@ -255,14 +258,14 @@ const GeneralSettings = () => {
               </div>
             </div>
 
-            {/* Expense Categories */}
+            {/* Due Based Expense Categories */}
             <div>
               <div className="flex items-center gap-2 mb-4">
-                <CreditCard size={20} className="text-red-600" />
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('finance.settings.categories.expenseCategories')}</h3>
+                <Calendar size={20} className="text-orange-600" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('finance.settings.categories.dueExpenseCategories')}</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {expenseCategories.map((category) => (
+                {dueExpenseCategories.map((category) => (
                   <div
                     key={category._id}
                     className="p-4 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl"
@@ -291,9 +294,53 @@ const GeneralSettings = () => {
                     </div>
                   </div>
                 ))}
-                {expenseCategories.length === 0 && (
+                {dueExpenseCategories.length === 0 && (
                   <div className="col-span-3 text-center py-8 text-gray-500 dark:text-gray-400">
-                    {t('finance.settings.categories.noExpenseCategories')}
+                    {t('finance.settings.categories.noDueExpenseCategories')}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Direct Expense Categories */}
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <CreditCard size={20} className="text-red-600" />
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t('finance.settings.categories.directExpenseCategories')}</h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {directExpenseCategories.map((category) => (
+                  <div
+                    key={category._id}
+                    className="p-4 bg-gray-50 dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-medium text-gray-900 dark:text-white">{category.name}</h4>
+                        {category.description && (
+                          <p className=" text-gray-600 dark:text-gray-400 mt-1">{category.description}</p>
+                        )}
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => openEditModal(category, 'expense')}
+                          className="p-2 text-gray-600 dark:text-gray-400 hover:text-[#0B65F6] dark:hover:text-blue-400 transition-colors"
+                        >
+                          <Pencil size={16} />
+                        </button>
+                        <button
+                          onClick={() => openDeleteModal(category, 'expense')}
+                          className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {directExpenseCategories.length === 0 && (
+                  <div className="col-span-3 text-center py-8 text-gray-500 dark:text-gray-400">
+                    {t('finance.settings.categories.noDirectExpenseCategories')}
                   </div>
                 )}
               </div>
@@ -345,22 +392,46 @@ const GeneralSettings = () => {
                   </div>
                 </div>
                 <form onSubmit={editModal.isOpen ? handleUpdate : handleCreate} className="p-6 space-y-4">
-                  {addModal.categoryType === 'income' || editModal.categoryType === 'income' ? (
-                    <div>
-                      <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t('finance.settings.categories.categoryType')} *
-                      </label>
-                      <select
-                        value={formData.type}
-                        onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                        className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-                        required
-                      >
-                        <option value="due">{t('finance.income.due')}</option>
-                        <option value="income">{t('common.income')}</option>
-                      </select>
-                    </div>
-                  ) : null}
+                  {(() => {
+                    const categoryContext = addModal.categoryType || editModal.categoryType;
+                    if (categoryContext === 'income') {
+                      return (
+                        <div>
+                          <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {t('finance.settings.categories.categoryType')} *
+                          </label>
+                          <select
+                            value={formData.type}
+                            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                            className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                            required
+                          >
+                            <option value="due">{t('finance.income.due')}</option>
+                            <option value="direct">{t('common.direct')}</option>
+                          </select>
+                        </div>
+                      );
+                    }
+                    if (categoryContext === 'expense') {
+                      return (
+                        <div>
+                          <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            {t('finance.settings.categories.categoryType')} *
+                          </label>
+                          <select
+                            value={formData.type}
+                            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                            className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl  focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
+                            required
+                          >
+                            <option value="due">{t('finance.income.due')}</option>
+                            <option value="direct">{t('common.direct')}</option>
+                          </select>
+                        </div>
+                      );
+                    }
+                    return null;
+                  })()}
                   <div>
                     <label className="block  font-medium text-gray-700 dark:text-gray-300 mb-2">
                       {t('finance.settings.categories.categoryName')} *

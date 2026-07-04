@@ -80,15 +80,17 @@ const PaymentMethodBadge = ({ method }) => {
 };
 
 const SummaryCard = ({ title, value, subtext, icon: Icon, color }) => (
-  <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-6 border border-gray-100 dark:border-gray-800">
-    <div className="flex items-start justify-between">
-      <div>
-        <p className="text-sm text-gray-500 dark:text-gray-400">{title}</p>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-1">{value}</h3>
-        {subtext && <p className="text-xs text-gray-400 mt-1">{subtext}</p>}
+  <div className="bg-white dark:bg-[#1e1f25] rounded-2xl p-4 sm:p-6 border border-gray-100 dark:border-gray-800 h-full flex flex-col justify-center">
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <div className={`p-1.5 sm:p-2 rounded-lg shrink-0 ${color}`}>
+          <Icon size={16} className="text-white" />
+        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 break-words whitespace-normal flex-1">{title}</p>
       </div>
-      <div className={`p-3 rounded-xl ${color}`}>
-        <Icon size={24} className="text-white" />
+      <div className="min-w-0">
+        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white break-words whitespace-normal">{value}</h3>
+        {subtext && <p className="text-xs text-gray-400 mt-1 break-words whitespace-normal">{subtext}</p>}
       </div>
     </div>
   </div>
@@ -142,7 +144,8 @@ const Expense = () => {
 
   const [expensesData, setExpensesData] = useState({ expenses: [], total: 0, page: 1, pages: 1 });
   const [summaryData, setSummaryData] = useState({ today_total: 0, month_total: 0, cash_total: 0, bank_total: 0, total: 0 });
-  const [expenseCategories, setExpenseCategories] = useState([]);
+  const [dueExpenseCategories, setDueExpenseCategories] = useState([]);
+  const [directExpenseCategories, setDirectExpenseCategories] = useState([]);
 
   const [addModal, setAddModal] = useState({ isOpen: false });
   const [viewModal, setViewModal] = useState({ isOpen: false, expense: null });
@@ -180,7 +183,7 @@ const Expense = () => {
   // Due expense modals
   const [dueModal, setDueModal] = useState({ isOpen: false, expense: null, isEdit: false });
   const [paymentModal, setPaymentModal] = useState({ isOpen: false, expense: null, entry: null });
-  const [historyModal, setHistoryModal] = useState({ isOpen: false, history: [], templateName: '' });
+  const [historyModal, setHistoryModal] = useState({ isOpen: false, history: [], templateName: '', expense: null });
 
   const [selectedDueCategory, setSelectedDueCategory] = useState(null);
   const [paymentForm, setPaymentForm] = useState({ payment_amount: '', payment_method: 'cash', reference_no: '', notes: '' });
@@ -219,8 +222,12 @@ const Expense = () => {
 
   const fetchCategories = useCallback(async () => {
     try {
-      const cats = await getExpenseCategories();
-      setExpenseCategories(cats);
+      const [dueCats, directCats] = await Promise.all([
+        getExpenseCategories({ type: 'due' }),
+        getExpenseCategories({ type: 'direct' }),
+      ]);
+      setDueExpenseCategories(dueCats);
+      setDirectExpenseCategories(directCats);
     } catch (e) { console.error(e); }
   }, []);
 
@@ -407,16 +414,23 @@ const Expense = () => {
       setPaymentModal({ isOpen: false, expense: null, entry: null });
       setPaymentForm({ payment_amount: '', payment_method: 'cash', reference_no: '', notes: '' });
       fetchDue(); fetchDueSummary();
+      // If paid from the Payment History modal, refresh its list in place
+      // so the user can keep clearing other overdue months without reopening it.
+      if (historyModal.isOpen && historyModal.expense) {
+        const data = await getDueExpenseTemplateEntries(historyModal.expense._id);
+        setHistoryModal(prev => ({ ...prev, history: data.entries }));
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to record payment');
     }
   };
 
-  const openPaymentModal = (expense) => {
-    const entry = expense.entry;
+  const openPaymentModalForEntry = (expense, entry) => {
     setPaymentModal({ isOpen: true, expense, entry });
     setPaymentForm({ payment_amount: entry.balance.toString(), payment_method: 'cash', reference_no: '', notes: '' });
   };
+
+  const openPaymentModal = (expense) => openPaymentModalForEntry(expense, expense.entry);
 
   const openEditDue = (expense) => {
     setDueModal({ isOpen: true, expense, isEdit: true });
@@ -438,10 +452,34 @@ const Expense = () => {
   const viewHistory = async (expense) => {
     try {
       const data = await getDueExpenseTemplateEntries(expense._id);
-      setHistoryModal({ isOpen: true, history: data.entries, templateName: expense.paid_to });
+      setHistoryModal({ isOpen: true, history: data.entries, templateName: expense.paid_to, expense });
     } catch {
       toast.error('Failed to fetch history');
     }
+  };
+
+  // A due-expense subscription's monthly entry may not exist yet for the month/year
+  // currently being viewed — either because the subscription hasn't started yet as of
+  // that month, or because it's started but that future month hasn't been generated
+  // yet. These need different labels/amounts instead of both falling back to the
+  // subscription's original start date (see the identical fix applied to Income.jsx).
+  const getDueRowInfo = (expense) => {
+    const entry = expense.entry;
+    const notStarted = expense.start_year > year || (expense.start_year === year && expense.start_month > month);
+    const entryStatus = entry?.status || 'upcoming';
+    const showActions = !!entry && entryStatus !== 'paid';
+
+    const monthYearLabel = entry
+      ? `${MONTHS[entry.month - 1]?.label} ${entry.year}`
+      : notStarted
+        ? `Starts ${MONTHS[expense.start_month - 1]?.label} ${expense.start_year}`
+        : `${MONTHS[month - 1]?.label} ${year}`;
+
+    const dueAmount     = entry ? entry.amount      : (notStarted ? null : expense.amount);
+    const paidAmount    = entry ? entry.amount_paid : (notStarted ? null : 0);
+    const balanceAmount = entry ? entry.balance     : (notStarted ? null : expense.amount);
+
+    return { entry, notStarted, entryStatus, showActions, monthYearLabel, dueAmount, paidAmount, balanceAmount };
   };
 
   // ==================== RENDER ====================
@@ -455,19 +493,55 @@ const Expense = () => {
             <p className="text-gray-500 dark:text-gray-400 mt-1">{t('finance.expense.description')}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
-            {activeTab === 'due' && (
-              <>
-                <select value={month} onChange={(e) => setMonth(Number(e.target.value))} className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]">
-                  {MONTHS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
-                </select>
-                <select value={year} onChange={(e) => setYear(Number(e.target.value))} className="px-4 py-2 bg-white dark:bg-[#1e1f25] border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0B65F6]">
-                  {years.map(y => <option key={y} value={y}>{y}</option>)}
-                </select>
-                <button onClick={openAddDue} className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors">
-                  <Plus size={18} /> Add Due Expense
-                </button>
-              </>
-            )}
+            {activeTab === 'due' && (() => {
+              const now = new Date();
+              const isCurrentMonth = month === now.getMonth() + 1 && year === now.getFullYear();
+              return (
+                <>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide px-1">
+                      Viewing
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className={`flex items-center gap-1.5 rounded-xl border transition-colors ${
+                        isCurrentMonth
+                          ? 'bg-white dark:bg-[#1e1f25] border-gray-200 dark:border-gray-700'
+                          : 'bg-amber-50 dark:bg-amber-900/20 border-amber-300 dark:border-amber-700'
+                      }`}>
+                        <Calendar size={16} className={`ml-3 shrink-0 ${isCurrentMonth ? 'text-gray-400' : 'text-amber-500'}`} />
+                        <select
+                          value={month}
+                          onChange={(e) => setMonth(Number(e.target.value))}
+                          aria-label="Month"
+                          className="pl-1 pr-2 py-2 bg-transparent text-sm focus:outline-none"
+                        >
+                          {MONTHS.map(m => <option key={m.value} value={m.value}>{m.label}</option>)}
+                        </select>
+                        <select
+                          value={year}
+                          onChange={(e) => setYear(Number(e.target.value))}
+                          aria-label="Year"
+                          className="pr-3 py-2 bg-transparent text-sm focus:outline-none border-l border-gray-200 dark:border-gray-700"
+                        >
+                          {years.map(y => <option key={y} value={y}>{y}</option>)}
+                        </select>
+                      </div>
+                      {!isCurrentMonth && (
+                        <button
+                          onClick={() => { setMonth(now.getMonth() + 1); setYear(now.getFullYear()); }}
+                          className="px-3 py-2 text-xs font-medium text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/30 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-xl transition-colors whitespace-nowrap"
+                        >
+                          This Month
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  <button onClick={openAddDue} className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors">
+                    <Plus size={18} /> Add Due Expense
+                  </button>
+                </>
+              );
+            })()}
             {activeTab === 'direct' && (
               <>
                 <button onClick={() => setAddModal({ isOpen: true })} className="flex items-center gap-2 px-4 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors">
@@ -482,26 +556,9 @@ const Expense = () => {
         </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-1 p-1 bg-gray-100 dark:bg-[#252731] rounded-xl mb-6 w-fit no-print">
-        <button
-          onClick={() => setActiveTab('direct')}
-          className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'direct' ? 'bg-white dark:bg-[#1e1f25] text-[#0B65F6] shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
-        >
-          Direct Expense
-        </button>
-        <button
-          onClick={() => setActiveTab('due')}
-          className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === 'due' ? 'bg-white dark:bg-[#1e1f25] text-[#0B65F6] shadow-sm' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'}`}
-        >
-          Due Based
-        </button>
-      </div>
-
-      {/* ===================== DUE BASED TAB ===================== */}
-      {activeTab === 'due' && (
+      {/* Summary Cards */}
+      {activeTab === 'due' ? (
         <>
-          {/* Due Summary Cards */}
           <button
             onClick={() => setShowStats(!showStats)}
             className="sm:hidden flex items-center justify-center gap-2 w-full mb-4 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
@@ -509,20 +566,82 @@ const Expense = () => {
             {showStats ? t('common.hideSummary') : t('common.showSummary')}
             {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
-          <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4 mb-6`}>
-            <div className="col-span-2 sm:col-span-3 lg:col-span-2 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5">
-              <p className="text-red-100 text-sm">Total Due</p>
-              <h3 className="text-2xl font-bold text-white mt-1">₹{(dueSummary.total_due || 0).toLocaleString()}</h3>
+          <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-2 lg:grid-cols-6 gap-4 mb-6`}>
+            <div className="col-span-2 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-5 min-w-0 h-full flex flex-col justify-center">
+              <p className="text-red-100 text-sm break-words whitespace-normal">Total Due</p>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mt-1 break-words whitespace-normal">₹{(dueSummary.total_due || 0).toLocaleString()}</h3>
             </div>
             <SummaryCard title="Total Paid" value={`₹${(dueSummary.total_paid || 0).toLocaleString()}`} icon={CheckCircle} color="bg-green-500" />
             <SummaryCard title="Pending" value={`₹${(dueSummary.total_pending || 0).toLocaleString()}`} icon={AlertCircle} color="bg-orange-500" />
             <SummaryCard title="Paid" value={dueSummary.paid_count || 0} subtext="subscriptions" icon={CheckCircle} color="bg-green-600" />
-            <SummaryCard title="Partial" value={dueSummary.partial_count || 0} subtext="subscriptions" icon={TrendingUp} color="bg-yellow-500" />
+            {/* <SummaryCard title="Partial" value={dueSummary.partial_count || 0} subtext="subscriptions" icon={TrendingUp} color="bg-yellow-500" /> */}
             <SummaryCard title="Unpaid" value={(dueSummary.unpaid_count || 0) + (dueSummary.overdue_count || 0)} subtext="incl. overdue" icon={AlertCircle} color="bg-red-500" />
           </div>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={() => setShowStats(!showStats)}
+            className="sm:hidden flex items-center justify-center gap-2 w-full mb-4 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            {showStats ? t('common.hideSummary') : t('common.showSummary')}
+            {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+          </button>
+          <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8`}>
+            <SummaryCard title={t('finance.expense.thisMonth')} value={`₹${summaryData.month_total?.toLocaleString()}`} icon={Calendar} color="bg-green-500" />
+            <SummaryCard title={t('finance.expense.cashExpense')} value={`₹${summaryData.cash_total?.toLocaleString()}`} icon={Banknote} color="bg-yellow-500" />
+            <SummaryCard title={t('finance.expense.bankExpense')} value={`₹${summaryData.bank_total?.toLocaleString()}`} icon={CreditCard} color="bg-purple-500" />
+            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6 h-full flex flex-col justify-center">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="p-2 rounded-lg bg-white/20 shrink-0"><Wallet size={18} className="text-white" /></div>
+                  <p className="text-red-100 text-sm break-words whitespace-normal flex-1">{t('finance.expense.totalExpense')}</p>
+                </div>
+                <div className="min-w-0">
+                  <h3 className="text-2xl font-bold text-white break-words whitespace-normal">₹{summaryData.total?.toLocaleString()}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
 
-          {/* Due Filter + Table */}
-          <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden no-print">
+      {/* Tabs */}
+      <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden no-print">
+        <div className="flex border-b border-gray-100 dark:border-gray-800">
+          <button
+            onClick={() => setActiveTab('due')}
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
+              activeTab === 'due'
+                ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
+                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-1.5">
+              <Calendar size={16} className="shrink-0" />
+              <span className="hidden sm:inline">Due Based</span>
+              <span className="sm:hidden">Due</span>
+            </div>
+          </button>
+          <button
+            onClick={() => setActiveTab('direct')}
+            className={`flex-1 px-3 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors ${
+              activeTab === 'direct'
+                ? 'text-[#0B65F6] border-b-2 border-[#0B65F6] bg-blue-50/50 dark:bg-blue-900/10'
+                : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-1.5">
+              <Wallet size={16} className="shrink-0" />
+              <span className="hidden sm:inline">Direct Expense</span>
+              <span className="sm:hidden">Direct</span>
+            </div>
+          </button>
+        </div>
+
+        {/* ===================== DUE BASED TAB ===================== */}
+        {activeTab === 'due' && (
+          <>
             <div className="p-4 border-b border-gray-100 dark:border-gray-800">
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
@@ -570,6 +689,7 @@ const Expense = () => {
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Code</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Category</th>
                           <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Paid To</th>
+                          <th className="text-left py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Month/Year</th>
                           <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Monthly Amt</th>
                           <th className="text-right py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Balance</th>
                           <th className="text-center py-3 px-4 text-xs font-semibold text-gray-500 uppercase">Status</th>
@@ -579,7 +699,7 @@ const Expense = () => {
                       <tbody>
                         {dueData.expenses.length === 0 ? (
                           <tr>
-                            <td colSpan={7} className="py-12 text-center text-gray-400 dark:text-gray-500">
+                            <td colSpan={8} className="py-12 text-center text-gray-400 dark:text-gray-500">
                               <div className="flex flex-col items-center gap-2">
                                 <Wallet size={32} className="opacity-30" />
                                 <p className="text-sm">No due expenses found</p>
@@ -588,17 +708,18 @@ const Expense = () => {
                           </tr>
                         ) : (
                           dueData.expenses.map((expense) => {
-                            const entry = expense.entry;
-                            const entryStatus = entry?.status || 'upcoming';
-                            const showActions = !!entry && entryStatus !== 'paid';
+                            const { entry, entryStatus, showActions, monthYearLabel, dueAmount, balanceAmount } = getDueRowInfo(expense);
                             return (
                               <tr key={expense._id} className="border-b border-gray-50 dark:border-gray-800/50 hover:bg-gray-50/50 dark:hover:bg-gray-800/30">
                                 <td className="py-3 px-4 text-sm font-medium text-gray-900 dark:text-white">{expense.expense_code}</td>
                                 <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300 capitalize">{expense.category?.replaceAll('_', ' ')}</td>
                                 <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">{expense.paid_to}</td>
-                                <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">₹{expense.amount?.toLocaleString()}</td>
+                                <td className="py-3 px-4 text-sm text-gray-700 dark:text-gray-300">
+                                  {entry ? monthYearLabel : <span className="text-gray-400 text-xs">{monthYearLabel}</span>}
+                                </td>
+                                <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">{dueAmount != null ? `₹${dueAmount.toLocaleString()}` : '—'}</td>
                                 <td className="py-3 px-4 text-right text-sm font-medium text-gray-900 dark:text-white">
-                                  {entry ? `₹${entry.balance?.toLocaleString()}` : '—'}
+                                  {balanceAmount != null ? `₹${balanceAmount.toLocaleString()}` : '—'}
                                 </td>
                                 <td className="py-3 px-4 text-center">
                                   <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entryStatus)}`}>{entryStatus}</span>
@@ -635,21 +756,20 @@ const Expense = () => {
                       <p className="py-12 text-center text-gray-500 text-sm">No due expenses found.</p>
                     ) : (
                       dueData.expenses.map((expense) => {
-                        const entry = expense.entry;
-                        const entryStatus = entry?.status || 'upcoming';
-                        const showActions = !!entry && entryStatus !== 'paid';
+                        const { entryStatus, showActions, monthYearLabel, dueAmount, balanceAmount } = getDueRowInfo(expense);
                         return (
                           <div key={expense._id} className="bg-gray-50 dark:bg-[#252731] rounded-xl p-4 space-y-3">
                             <div className="flex justify-between items-start">
                               <div>
                                 <p className="font-medium text-gray-900 dark:text-white">{expense.paid_to}</p>
                                 <p className="text-xs text-gray-500">{expense.expense_code} · {expense.category?.replaceAll('_', ' ')}</p>
+                                <p className="text-xs text-gray-400">{monthYearLabel}</p>
                               </div>
                               <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full shrink-0 capitalize ${getStatusBadge(entryStatus)}`}>{entryStatus}</span>
                             </div>
                             <div className="flex justify-between text-sm">
-                              <span className="text-gray-500">Monthly: <span className="font-medium text-gray-900 dark:text-white">₹{expense.amount?.toLocaleString()}</span></span>
-                              {entry && <span className="text-gray-500">Balance: <span className="font-medium text-gray-900 dark:text-white">₹{entry.balance?.toLocaleString()}</span></span>}
+                              <span className="text-gray-500">Monthly: <span className="font-medium text-gray-900 dark:text-white">{dueAmount != null ? `₹${dueAmount.toLocaleString()}` : '—'}</span></span>
+                              <span className="text-gray-500">Balance: <span className="font-medium text-gray-900 dark:text-white">{balanceAmount != null ? `₹${balanceAmount.toLocaleString()}` : '—'}</span></span>
                             </div>
                             <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                               {showActions && (
@@ -683,38 +803,12 @@ const Expense = () => {
                 </>
               )}
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
 
-      {/* ===================== DIRECT EXPENSE TAB ===================== */}
-      {activeTab === 'direct' && (
-        <>
-          {/* Summary Cards */}
-          <button
-            onClick={() => setShowStats(!showStats)}
-            className="sm:hidden flex items-center justify-center gap-2 w-full mb-4 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1e1f25] text-sm font-medium text-gray-700 dark:text-gray-200"
-          >
-            {showStats ? t('common.hideSummary') : t('common.showSummary')}
-            {showStats ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </button>
-          <div className={`${showStats ? 'grid' : 'hidden'} sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8`}>
-            <SummaryCard title={t('finance.expense.thisMonth')} value={`₹${summaryData.month_total?.toLocaleString()}`} icon={Calendar} color="bg-green-500" />
-            <SummaryCard title={t('finance.expense.cashExpense')} value={`₹${summaryData.cash_total?.toLocaleString()}`} icon={Banknote} color="bg-yellow-500" />
-            <SummaryCard title={t('finance.expense.bankExpense')} value={`₹${summaryData.bank_total?.toLocaleString()}`} icon={CreditCard} color="bg-purple-500" />
-            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl p-6">
-              <div className="flex items-start justify-between">
-                <div>
-                  <p className="text-red-100 text-sm">{t('finance.expense.totalExpense')}</p>
-                  <h3 className="text-2xl font-bold text-white mt-1">₹{summaryData.total?.toLocaleString()}</h3>
-                </div>
-                <div className="p-3 rounded-xl bg-white/20"><Wallet size={24} className="text-white" /></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Filter + Table */}
-          <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden mb-6 no-print">
+        {/* ===================== DIRECT EXPENSE TAB ===================== */}
+        {activeTab === 'direct' && (
+          <>
             <div className="p-4 border-b border-gray-100 dark:border-gray-800">
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex-1 grid grid-cols-1 md:grid-cols-5 gap-3">
@@ -731,7 +825,7 @@ const Expense = () => {
                   <Select
                     value={categoryFilter ? { value: categoryFilter, label: categoryFilter } : null}
                     onChange={(s) => setCategoryFilter(s ? s.value : '')}
-                    options={[{ value: '', label: 'All Categories' }, ...expenseCategories.map(c => ({ value: c.name, label: c.name }))]}
+                    options={[{ value: '', label: 'All Categories' }, ...directExpenseCategories.map(c => ({ value: c.name, label: c.name }))]}
                     placeholder="All Categories"
                     styles={selectStyles}
                     classNamePrefix="react-select"
@@ -857,9 +951,9 @@ const Expense = () => {
                 </>
               )}
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
+      </div>
 
       {/* ===================== MODALS ===================== */}
 
@@ -878,7 +972,7 @@ const Expense = () => {
                   <Select
                     value={selectedDueCategory}
                     onChange={setSelectedDueCategory}
-                    options={expenseCategories.map(c => ({ value: c.name, label: c.name }))}
+                    options={dueExpenseCategories.map(c => ({ value: c.name, label: c.name }))}
                     placeholder="Select category"
                     styles={selectStyles}
                     classNamePrefix="react-select"
@@ -931,7 +1025,7 @@ const Expense = () => {
       {/* Payment Modal */}
       <AnimatePresence>
         {paymentModal.isOpen && paymentModal.expense && paymentModal.entry && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="bg-white dark:bg-[#1e1f25] rounded-2xl w-full max-w-md">
               <div className="p-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white">Mark Payment</h2>
@@ -978,7 +1072,7 @@ const Expense = () => {
                   <h2 className="text-xl font-bold text-gray-900 dark:text-white">Payment History</h2>
                   <p className="text-sm text-gray-500 mt-0.5">{historyModal.templateName}</p>
                 </div>
-                <button onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '' })} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><X size={20} /></button>
+                <button onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '', expense: null })} className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"><X size={20} /></button>
               </div>
               <div className="p-6 overflow-y-auto flex-1 space-y-3">
                 {historyModal.history.length === 0 ? (
@@ -990,13 +1084,25 @@ const Expense = () => {
                         <p className="text-sm font-medium text-gray-900 dark:text-white">{MONTHS.find(m => m.value === entry.month)?.label} {entry.year}</p>
                         <p className="text-xs text-gray-500 mt-0.5">Paid: ₹{entry.amount_paid?.toLocaleString()} / Due: ₹{entry.amount?.toLocaleString()}</p>
                       </div>
-                      <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entry.status)}`}>{entry.status}</span>
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${getStatusBadge(entry.status)}`}>{entry.status}</span>
+                        {entry.status !== 'paid' && (
+                          <button
+                            onClick={() => openPaymentModalForEntry(historyModal.expense, entry)}
+                            className="flex items-center gap-1 px-2 py-1.5 text-xs font-medium text-green-600 hover:bg-green-100 dark:hover:bg-green-900/30 rounded-lg transition-colors"
+                            title="Mark Payment"
+                          >
+                            <IndianRupee size={14} />
+                            Pay Now
+                          </button>
+                        )}
+                      </div>
                     </div>
                   ))
                 )}
               </div>
               <div className="p-4 border-t border-gray-100 dark:border-gray-800 flex justify-end">
-                <button onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '' })} className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl text-sm hover:bg-blue-700">Close</button>
+                <button onClick={() => setHistoryModal({ isOpen: false, history: [], templateName: '', expense: null })} className="px-4 py-2 bg-[#0B65F6] text-white rounded-xl text-sm hover:bg-blue-700">Close</button>
               </div>
             </motion.div>
           </div>
@@ -1025,7 +1131,7 @@ const Expense = () => {
                   <Controller
                     name="category" control={controlAdd} rules={{ required: t('finance.expense.categoryRequired') }}
                     render={({ field }) => (
-                      <Select {...field} options={expenseCategories.map(c => ({ value: c.name, label: c.name }))} placeholder={t('common.selectCategory')} styles={selectStyles} classNamePrefix="react-select" />
+                      <Select {...field} options={directExpenseCategories.map(c => ({ value: c.name, label: c.name }))} placeholder={t('common.selectCategory')} styles={selectStyles} classNamePrefix="react-select" />
                     )}
                   />
                   {addErrors.category && <p className="text-red-500 text-xs mt-1">{addErrors.category.message}</p>}
@@ -1084,7 +1190,7 @@ const Expense = () => {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{t('common.category')} *</label>
-                  <Select value={editForm.category ? { value: editForm.category, label: editForm.category } : null} onChange={(s) => setEditForm({ ...editForm, category: s ? s.value : '' })} options={expenseCategories.map(c => ({ value: c.name, label: c.name }))} placeholder="Select Category" styles={selectStyles} classNamePrefix="react-select" />
+                  <Select value={editForm.category ? { value: editForm.category, label: editForm.category } : null} onChange={(s) => setEditForm({ ...editForm, category: s ? s.value : '' })} options={directExpenseCategories.map(c => ({ value: c.name, label: c.name }))} placeholder="Select Category" styles={selectStyles} classNamePrefix="react-select" />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Paid To *</label>

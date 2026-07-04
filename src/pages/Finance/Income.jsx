@@ -198,7 +198,7 @@ export const Income = () => {
   const fetchCategories = useCallback(async () => {
     try {
       const dueCats = await getIncomeCategories({ type: 'due' });
-      const incCats = await getIncomeCategories({ type: 'income' });
+      const incCats = await getIncomeCategories({ type: 'direct' });
       setDueCategories(dueCats);
       setIncomeCategories(incCats);
     } catch (error) {
