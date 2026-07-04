@@ -8,6 +8,7 @@ import {
   MessageSquare,
   GraduationCap,
   Moon,
+  FileText,
 } from 'lucide-react';
 
 export const permissionModules = [
@@ -61,9 +62,19 @@ export const permissionModules = [
     roles: ['admin', 'superAdmin'],
     subItems: [
       { label: 'sidebar.welfare', path: '/community/welfare', roles: ['admin', 'superAdmin'] },
-      { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] },
-      { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] },
       { label: 'sidebar.communication', path: '/community/communication', roles: ['admin', 'superAdmin'] }
+    ]
+  },
+  {
+    key: 'certificates',
+    label: 'sidebar.certificates',
+    icon: FileText,
+    path: '/community/death-registry',
+    description: 'Manage death and marriage certificates',
+    roles: ['admin', 'superAdmin'],
+    subItems: [
+      { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] },
+      { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] }
     ]
   },
   {
