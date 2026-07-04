@@ -16,6 +16,7 @@ import {
   Search,
   Filter
 } from 'lucide-react';
+import Swal from 'sweetalert2';
 import axios from '../../api/axios';
 
 export default function StaffList() {
@@ -52,9 +53,20 @@ export default function StaffList() {
 
   const handleStatusToggle = async (staffId, currentStatus) => {
     const newStatus = !currentStatus;
-    const confirmMessage = `Are you sure you want to ${newStatus ? 'activate' : 'deactivate'} this staff member?`;
-    
-    if (!window.confirm(confirmMessage)) return;
+
+    const result = await Swal.fire({
+      title: newStatus ? 'Activate staff member?' : 'Deactivate staff member?',
+      text: `Are you sure you want to ${newStatus ? 'activate' : 'deactivate'} this staff member?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: newStatus ? '#22c55e' : '#ef4444',
+      cancelButtonColor: '#6b7280',
+      confirmButtonText: newStatus ? 'Yes, activate' : 'Yes, deactivate',
+      cancelButtonText: 'Cancel',
+      customClass: { popup: 'rounded-3xl' },
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await axios.patch(`/users/${staffId}/status`, { is_active: newStatus });

@@ -2,7 +2,7 @@ import Sidebar from "./Sidebar";
 import { useSidebar } from "../../context/SidebarContext";
 import { useAuth } from "../../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, LogOut, ChevronDown } from "lucide-react";
+import { Menu, LogOut, ChevronDown, RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
@@ -85,6 +85,16 @@ const DashboardLayout = ({ children }) => {
                         <span className="ml-4 font-bold text-gray-900 dark:text-gray-100">{user?.tenant_name || 'Mahallu'} CRM</span>
                     </div>
 
+                    <div className="flex items-center gap-1">
+                    {/* Refresh Page (mobile only) */}
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                        aria-label="Refresh page"
+                    >
+                        <RefreshCw size={18} className="text-gray-600 dark:text-gray-400" />
+                    </button>
+
                     {/* Profile Menu */}
                     <div className="relative" ref={profileMenuRef}>
                         <button
@@ -137,6 +147,7 @@ const DashboardLayout = ({ children }) => {
                                 </motion.div>
                             )}
                         </AnimatePresence>
+                    </div>
                     </div>
                 </header>
 
