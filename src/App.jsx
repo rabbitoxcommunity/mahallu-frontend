@@ -4,7 +4,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
 import { SidebarProvider } from "./context/SidebarContext";
-import { PortalProvider } from "./context/PortalContext";
 import ScrollToTop from "./components/ScrollToTop";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
@@ -74,24 +73,6 @@ const DuaLibrary = lazy(() => import("./pages/IslamicLibrary/DuaLibrary"));
 // Admin
 const Marriages = lazy(() => import("./pages/Admin/Marriages"));
 
-// Legacy public routes
-const PublicHome = lazy(() => import("./pages/public/Home"));
-const PublicSearch = lazy(() => import("./pages/public/Search"));
-const PublicFamilyView = lazy(() => import("./pages/public/FamilyView"));
-const MarriageCertificate = lazy(() => import("./pages/public/MarriageCertificate"));
-
-// Public Portal
-const PortalHomePage = lazy(() => import("./pages/portal/HomePage"));
-const PortalServicesPage = lazy(() => import("./pages/portal/ServicesPage"));
-const PortalAnnouncementsPage = lazy(() => import("./pages/portal/AnnouncementsPage"));
-const PortalAboutPage = lazy(() => import("./pages/portal/AboutPage"));
-const PortalContactPage = lazy(() => import("./pages/portal/ContactPage"));
-const PortalMarriageCertPage = lazy(() => import("./pages/portal/services/MarriageCertificatePage"));
-const PortalDeathCertPage = lazy(() => import("./pages/portal/services/DeathCertificatePage"));
-const PortalResultsPage = lazy(() => import("./pages/portal/services/ResultsPage"));
-const PortalBloodDonorPage = lazy(() => import("./pages/portal/services/BloodDonorPage"));
-const PortalIslamicServicesPage = lazy(() => import("./pages/portal/services/IslamicServicesPage"));
-
 function App() {
     return (
         <AuthProvider>
@@ -108,26 +89,6 @@ function App() {
                         <Routes>
                             {/* Redirect Root to Login */}
                             <Route path="/" element={<Navigate to="/login" replace />} />
-
-                            {/* Legacy public routes */}
-                            <Route path="/public" element={<PublicHome />} />
-                            <Route path="/public/search" element={<PublicSearch />} />
-                            <Route path="/public/family/:id" element={<PublicFamilyView />} />
-                            <Route path="/certificate/marriage" element={<MarriageCertificate />} />
-
-                            {/* Public Portal — all wrapped in PortalProvider so usePortal() works everywhere */}
-                            <Route element={<PortalProvider />}>
-                                <Route path="/portal" element={<PortalHomePage />} />
-                                <Route path="/portal/services" element={<PortalServicesPage />} />
-                                <Route path="/portal/announcements" element={<PortalAnnouncementsPage />} />
-                                <Route path="/portal/about" element={<PortalAboutPage />} />
-                                <Route path="/portal/contact" element={<PortalContactPage />} />
-                                <Route path="/portal/services/marriage-certificate" element={<PortalMarriageCertPage />} />
-                                <Route path="/portal/services/death-certificate" element={<PortalDeathCertPage />} />
-                                <Route path="/portal/services/results" element={<PortalResultsPage />} />
-                                <Route path="/portal/services/blood-donor" element={<PortalBloodDonorPage />} />
-                                <Route path="/portal/services/islamic-services" element={<PortalIslamicServicesPage />} />
-                            </Route>
 
                             {/* Login Route */}
                             <Route path="/login" element={<Login />} />

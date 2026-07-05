@@ -36,9 +36,3 @@ export const viewPDF = async (id) => {
   const response = await axios.get(`/admin/marriages/${id}/pdf/view`, { responseType: 'blob' });
   return response.data;
 };
-
-// Public API - Search marriage
-export const searchMarriage = async (params) => {
-  const response = await axios.get('/public/marriages/search', { params });
-  return response.data;
-};

@@ -56,7 +56,8 @@ const PublicPortalSettings = () => {
     }
   };
 
-  const portalUrl = form?.slug ? `${window.location.origin}/portal?t=${form.slug}` : '';
+  const portalBaseUrl = import.meta.env.VITE_PORTAL_URL || 'https://mahalluconnect.com';
+  const portalUrl = form?.slug ? `${portalBaseUrl}/portal?t=${form.slug}` : '';
 
   const handleCopy = () => {
     if (!portalUrl) return;

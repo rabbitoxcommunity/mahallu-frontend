@@ -11,10 +11,6 @@ export const getPdfUrl = (pdfFile) => {
   return /^https?:\/\//i.test(pdfFile) ? pdfFile : `${BACKEND}/uploads/islamic/${pdfFile}`;
 };
 
-const slug = () =>
-  localStorage.getItem('portal_tenant') ||
-  new URLSearchParams(window.location.search).get('t') || '';
-
 // ── Admin — Surah ─────────────────────────────────────────────────────────────
 
 export const listSurahs = (params = {}) =>
@@ -50,15 +46,3 @@ export const updateDua = (id, formData) =>
 
 export const deleteDua = (id) =>
   axios.delete(`/islamic-library/dua/${id}`).then((r) => r.data);
-
-// ── Public ────────────────────────────────────────────────────────────────────
-
-export const getPublicSurahs = (params = {}) =>
-  axios
-    .get('/islamic-library/public/surahs', { params: { t: slug(), ...params } })
-    .then((r) => r.data);
-
-export const getPublicDuas = (params = {}) =>
-  axios
-    .get('/islamic-library/public/duas', { params: { t: slug(), ...params } })
-    .then((r) => r.data);
