@@ -180,6 +180,7 @@ const ProgramFormModal = ({ isOpen, onClose, onSubmit, initialData }) => {
                       type="number"
                       min="0"
                       step="0.01"
+                      onWheel={(e) => e.target.blur()}
                       {...register('budget', { min: { value: 0, message: 'Must be 0 or more' } })}
                       placeholder="0.00"
                       className={inputClass(errors.budget) + ' pl-8'}

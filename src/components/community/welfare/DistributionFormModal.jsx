@@ -373,6 +373,7 @@ const DistributionFormModal = ({ isOpen, onClose, onSubmit, initialData, presele
                     type="number"
                     min="0.01"
                     step="0.01"
+                    onWheel={(e) => e.target.blur()}
                     {...register('amount', {
                       required: t('welfare.distribution.amountRequired'),
                       min: { value: 0.01, message: t('welfare.distribution.amountPositive') }
