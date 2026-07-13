@@ -1,16 +1,17 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Printer, Home, Phone, MapPin, Users } from 'lucide-react';
+import { X, Download, Home, Phone, MapPin, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
+import html2canvas from 'html2canvas';
 
 const Card = ({ house, orgName }) => {
     const { t } = useTranslation();
 
     const economicColor =
         house.economic_status === 'Poor' ? '#ef4444' :
-        house.economic_status === 'Miskeen' ? '#f97316' :
-        '#0B65F6';
+            house.economic_status === 'Miskeen' ? '#f97316' :
+                '#0B65F6';
 
     return (
         <div
@@ -127,7 +128,7 @@ const Card = ({ house, orgName }) => {
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8mm' }}>
                     <div style={{ width: '18mm', borderBottom: '0.3mm solid #9ca3af' }} />
                     <span style={{ fontSize: '1.8mm', color: '#9ca3af', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                        Signature
+                        {t('common.signature')}
                     </span>
                 </div>
             </div>
@@ -138,34 +139,37 @@ const Card = ({ house, orgName }) => {
 const HouseMembershipCard = ({ isOpen, onClose, house }) => {
     const { t } = useTranslation();
     const { user } = useAuth();
+    const [isDownloading, setIsDownloading] = useState(false);
     const orgName = user?.tenant_name || '';
 
-    const handlePrint = () => {
+    const handleDownload = async () => {
         const cardEl = document.getElementById('membership-card');
         if (!cardEl) return;
-        const win = window.open('', '_blank', 'width=400,height=300');
-        win.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>House Card – ${house?.house_code}</title>
-                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-                <style>
-                    * { margin: 0; padding: 0; box-sizing: border-box; }
-                    body { background: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-                    @page { size: 85.6mm 53.98mm; margin: 0; }
-                    @media print {
-                        body { min-height: unset; }
-                    }
-                </style>
-            </head>
-            <body>
-                ${cardEl.outerHTML}
-                <script>window.onload = () => { window.print(); window.close(); }<\/script>
-            </body>
-            </html>
-        `);
-        win.document.close();
+        
+        try {
+            setIsDownloading(true);
+            
+            // To achieve roughly 4K resolution (around 3840px width for the card)
+            // The card is 85.6mm which is ~323px at 96dpi. So a scale of 12 gives ~3876px.
+            const canvas = await html2canvas(cardEl, {
+                scale: 12,
+                useCORS: true,
+                backgroundColor: null, // Keep transparent edges if any
+                logging: false
+            });
+            
+            const image = canvas.toDataURL('image/png', 1.0);
+            const link = document.createElement('a');
+            link.href = image;
+            link.download = `House_Membership_Card_${house?.house_code || 'Card'}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error("Error downloading image:", error);
+        } finally {
+            setIsDownloading(false);
+        }
     };
 
     return (
@@ -204,16 +208,25 @@ const HouseMembershipCard = ({ isOpen, onClose, house }) => {
                         <div className="flex gap-3">
                             <button
                                 onClick={onClose}
-                                className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                                disabled={isDownloading}
+                                className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50"
                             >
                                 {t('common.cancel')}
                             </button>
                             <button
-                                onClick={handlePrint}
-                                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors"
+                                onClick={handleDownload}
+                                disabled={isDownloading}
+                                className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
                             >
-                                <Printer size={15} />
-                                {t('common.print')}
+                                {isDownloading ? (
+                                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                ) : (
+                                    <Download size={15} />
+                                )}
+                                {isDownloading ? t('common.downloading') : t('common.download4K')}
                             </button>
                         </div>
                     </motion.div>
