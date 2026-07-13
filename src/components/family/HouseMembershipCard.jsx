@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Download, Home, Phone, MapPin, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 
 const Card = ({ house, orgName }) => {
     const { t } = useTranslation();
@@ -149,18 +149,13 @@ const HouseMembershipCard = ({ isOpen, onClose, house }) => {
         try {
             setIsDownloading(true);
             
-            // To achieve roughly 4K resolution (around 3840px width for the card)
-            // The card is 85.6mm which is ~323px at 96dpi. So a scale of 12 gives ~3876px.
-            const canvas = await html2canvas(cardEl, {
-                scale: 12,
-                useCORS: true,
-                backgroundColor: null, // Keep transparent edges if any
-                logging: false
+            const dataUrl = await toPng(cardEl, {
+                pixelRatio: 4,
+                cacheBust: true,
             });
             
-            const image = canvas.toDataURL('image/png', 1.0);
             const link = document.createElement('a');
-            link.href = image;
+            link.href = dataUrl;
             link.download = `House_Membership_Card_${house?.house_code || 'Card'}.png`;
             document.body.appendChild(link);
             link.click();
