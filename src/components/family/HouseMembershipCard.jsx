@@ -7,11 +7,10 @@ import { toPng } from 'html-to-image';
 import axios from '../../api/axios';
 
 const Card = ({ house, orgName, signatoryTitle, signatureUrl }) => {
-    const { t } = useTranslation();
-
-    const signatureLabel = signatoryTitle === 'President' ? t('common.president')
-        : signatoryTitle === 'Secretary' ? t('common.secretary')
-            : t('common.signature');
+    // The membership card is intentionally not translated — always English.
+    const signatureLabel = signatoryTitle === 'President' ? 'President'
+        : signatoryTitle === 'Secretary' ? 'Secretary'
+            : 'Signature';
 
     const economicColor =
         house.economic_status === 'Poor' ? '#ef4444' :
@@ -60,7 +59,7 @@ const Card = ({ house, orgName, signatoryTitle, signatureUrl }) => {
                             {orgName || 'Mahallu'}
                         </div>
                         <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '2mm', lineHeight: 1.2, fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-                            {t('family.houseDetail.pageTitle')}
+                            House Details
                         </div>
                     </div>
                 </div>
