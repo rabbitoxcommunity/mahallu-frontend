@@ -76,7 +76,8 @@ export const permissionModules = [
       { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] },
       { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] },
       { label: 'noc.sidebarLabel', path: '/admin/marriage-noc', roles: ['admin', 'superAdmin'] },
-      { label: 'nikahRegister.sidebarLabel', path: '/admin/nikah-register', roles: ['admin', 'superAdmin'] }
+      { label: 'nikahRegister.sidebarLabel', path: '/admin/nikah-register', roles: ['admin', 'superAdmin'] },
+      { label: 'generalCert.sidebarLabel', path: '/admin/general-certificate', roles: ['admin', 'superAdmin'] }
     ]
   },
   {

@@ -74,6 +74,7 @@ const DuaLibrary = lazy(() => import("./pages/IslamicLibrary/DuaLibrary"));
 const Marriages = lazy(() => import("./pages/Admin/Marriages"));
 const MarriageNoc = lazy(() => import("./pages/Admin/MarriageNoc"));
 const NikahRegister = lazy(() => import("./pages/Admin/NikahRegister"));
+const GeneralCertificate = lazy(() => import("./pages/Admin/GeneralCertificate"));
 
 function App() {
     return (
@@ -156,6 +157,7 @@ function App() {
                                 <Route path="/admin/marriages" element={<Marriages />} />
                                 <Route path="/admin/marriage-noc" element={<MarriageNoc />} />
                                 <Route path="/admin/nikah-register" element={<NikahRegister />} />
+                                <Route path="/admin/general-certificate" element={<GeneralCertificate />} />
 
                                 {/* Add other protected pages here */}
                             </Route>

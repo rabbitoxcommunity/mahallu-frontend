@@ -1047,6 +1047,25 @@
   "marriage": {
     "title": "Marriage"
   },
+  "generalCert": {
+    "sidebarLabel": "General Certificate",
+    "title": "General Certificate",
+    "description": "Enter a title and body, then download or preview a certificate",
+    "certificateNo": "Certificate No",
+    "certificateNoPlaceholder": "e.g. GC-014 (optional)",
+    "certTitle": "Certificate Title",
+    "certTitlePlaceholder": "e.g. Character Certificate",
+    "titleRequired": "Certificate title is required",
+    "body": "Body / Content",
+    "bodyPlaceholder": "Type the certificate content here…",
+    "bodyRequired": "Body content is required",
+    "note": "The date is set automatically to today. President and Secretary signature lines are left blank for signing after printing.",
+    "preview": "Preview",
+    "download": "Download",
+    "opening": "Opening preview…",
+    "downloaded": "Downloading certificate…",
+    "failed": "Failed to generate the certificate. Please try again."
+  },
   "nikahRegister": {
     "sidebarLabel": "Nikah Register",
     "title": "Nikah Register",
