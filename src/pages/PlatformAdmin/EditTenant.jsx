@@ -7,7 +7,8 @@ import {
   Building2,
   User,
   Shield,
-  ArrowLeft
+  ArrowLeft,
+  PenTool
 } from 'lucide-react';
 import axios from '../../api/axios';
 
@@ -17,6 +18,8 @@ export default function EditTenant() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
   const [slug, setSlug] = useState('');
+  const [signaturePreview, setSignaturePreview] = useState('');
+  const [signatureFile, setSignatureFile] = useState(null);
 
   const {
     register,
@@ -31,12 +34,15 @@ export default function EditTenant() {
         const response = await axios.get(`/tenants/${id}`);
         const tenant = response.data.tenant;
         setSlug(tenant.slug);
+        setSignaturePreview(tenant.signatorySignature || '');
         reset({
           name: tenant.name,
           nameMalayalam: tenant.nameMalayalam,
           address: tenant.address,
           addressMalayalam: tenant.addressMalayalam,
-          regNo: tenant.regNo
+          regNo: tenant.regNo,
+          signatoryName: tenant.signatoryName,
+          signatoryTitle: tenant.signatoryTitle || 'Secretary'
         });
       } catch (error) {
         console.error('Error fetching tenant:', error);
@@ -50,15 +56,28 @@ export default function EditTenant() {
     fetchTenant();
   }, [id, navigate, reset]);
 
+  const handleSignatureChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setSignatureFile(file);
+    setSignaturePreview(URL.createObjectURL(file));
+  };
+
   const onSubmit = async (data) => {
     setLoading(true);
     try {
-      await axios.put(`/tenants/${id}`, {
-        name: data.name,
-        nameMalayalam: data.nameMalayalam,
-        address: data.address,
-        addressMalayalam: data.addressMalayalam,
-        regNo: data.regNo
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('nameMalayalam', data.nameMalayalam || '');
+      formData.append('address', data.address || '');
+      formData.append('addressMalayalam', data.addressMalayalam || '');
+      formData.append('regNo', data.regNo || '');
+      formData.append('signatoryName', data.signatoryName || '');
+      formData.append('signatoryTitle', data.signatoryTitle || 'Secretary');
+      if (signatureFile) formData.append('signatorySignature', signatureFile);
+
+      await axios.put(`/tenants/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
       });
 
       toast.success('Tenant updated successfully!');
@@ -179,6 +198,65 @@ export default function EditTenant() {
                   className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] dark:bg-[#252731] dark:border-gray-800/60 dark:text-white border-gray-300"
                   placeholder="Enter registration number"
                 />
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-gray-100 dark:border-gray-800/60">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
+                <PenTool size={16} />
+                Signatory (shown on membership cards)
+              </h3>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Name
+                  </label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                    <input
+                      type="text"
+                      {...register('signatoryName')}
+                      className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] dark:bg-[#252731] dark:border-gray-800/60 dark:text-white border-gray-300"
+                      placeholder="Enter signatory's name"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Title
+                  </label>
+                  <div className="relative">
+                    <Shield className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+                    <select
+                      {...register('signatoryTitle')}
+                      className="w-full pl-10 pr-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B65F6] dark:bg-[#252731] dark:border-gray-800/60 dark:text-white border-gray-300"
+                    >
+                      <option value="Secretary">Secretary</option>
+                      <option value="President">President</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 mt-3">
+                {signaturePreview && (
+                  <img
+                    src={signaturePreview}
+                    alt="Signatory signature"
+                    className="h-10 border border-gray-200 dark:border-gray-700 rounded-lg bg-white object-contain px-2"
+                  />
+                )}
+                <label className="text-sm text-[#0B65F6] cursor-pointer hover:underline">
+                  {signaturePreview ? 'Replace signature image' : 'Upload signature image'} (300x170px recommended)
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleSignatureChange}
+                    className="hidden"
+                  />
+                </label>
               </div>
             </div>
 

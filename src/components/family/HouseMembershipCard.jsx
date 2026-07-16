@@ -1,12 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Download, Home, Phone, MapPin, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../context/AuthContext';
 import { toPng } from 'html-to-image';
+import axios from '../../api/axios';
 
-const Card = ({ house, orgName }) => {
+const Card = ({ house, orgName, signatoryTitle, signatureUrl }) => {
     const { t } = useTranslation();
+
+    const signatureLabel = signatoryTitle === 'President' ? t('common.president')
+        : signatoryTitle === 'Secretary' ? t('common.secretary')
+            : t('common.signature');
 
     const economicColor =
         house.economic_status === 'Poor' ? '#ef4444' :
@@ -37,10 +42,11 @@ const Card = ({ house, orgName }) => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexShrink: 0,
+                minWidth: 0,
             }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2mm' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '2mm', minWidth: 0, overflow: 'hidden' }}>
                     <div style={{
-                        width: '7mm', height: '7mm',
+                        width: '7mm', height: '7mm', flexShrink: 0,
                         background: 'rgba(255,255,255,0.2)',
                         borderRadius: '1.5mm',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -49,11 +55,11 @@ const Card = ({ house, orgName }) => {
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
                         </svg>
                     </div>
-                    <div>
-                        <div style={{ color: '#fff', fontSize: '3.2mm', fontWeight: 700, lineHeight: 1.1, letterSpacing: '0.02em' }}>
+                    <div style={{ minWidth: 0, overflow: 'hidden' }}>
+                        <div style={{ color: '#fff', fontSize: '3.2mm', fontWeight: 700, lineHeight: 1.15, letterSpacing: '0.02em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {orgName || 'Mahallu'}
                         </div>
-                        <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '2mm', fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                        <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '2mm', lineHeight: 1.2, fontWeight: 500, letterSpacing: '0.05em', textTransform: 'uppercase' }}>
                             {t('family.houseDetail.pageTitle')}
                         </div>
                     </div>
@@ -66,21 +72,23 @@ const Card = ({ house, orgName }) => {
                     fontSize: '3.5mm',
                     fontWeight: 800,
                     letterSpacing: '0.08em',
+                    flexShrink: 0,
+                    marginLeft: '2mm',
                 }}>
                     {house.house_code}
                 </div>
             </div>
 
             {/* Body */}
-            <div style={{ padding: '3mm 4mm', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div style={{ padding: '3mm 4mm', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '0.5mm', overflow: 'hidden' }}>
                 {/* Name block */}
-                <div>
-                    <div style={{ fontSize: '5mm', fontWeight: 800, color: '#111827', lineHeight: 1.15, marginBottom: '0.8mm' }}>
+                <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: '5mm', fontWeight: 800, color: '#111827', lineHeight: 1.15, marginBottom: '2.3mm', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {house.householder_name}
                     </div>
                     {house.family_id?.family_name && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1mm', color: '#6b7280', fontSize: '2.8mm', fontWeight: 500 }}>
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1mm', color: '#6b7280', fontSize: '2.8mm', fontWeight: 500, lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" />
                             </svg>
                             {house.family_id.family_name}
@@ -95,12 +103,18 @@ const Card = ({ house, orgName }) => {
                             <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#0B65F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: '0.5mm', flexShrink: 0 }}>
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
                             </svg>
-                            <span style={{ lineHeight: 1.3 }}>{house.address}</span>
+                            <span style={{
+                                lineHeight: 1.3,
+                                display: '-webkit-box',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                            }}>{house.address}</span>
                         </div>
                     )}
                     {house.primary_contact && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5mm', color: '#374151', fontSize: '2.6mm' }}>
-                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#0B65F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5mm', color: '#374151', fontSize: '2.6mm', lineHeight: 1.2, whiteSpace: 'nowrap' }}>
+                            <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#0B65F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
                                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.14 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z" />
                             </svg>
                             {house.primary_contact}
@@ -113,22 +127,40 @@ const Card = ({ house, orgName }) => {
             <div style={{
                 background: '#f9fafb',
                 borderTop: '0.3mm solid #e5e7eb',
-                padding: '2mm 4mm',
+                padding: '3.2mm 4mm',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 flexShrink: 0,
+                minWidth: 0,
             }}>
                 {/* Org name — left */}
-                <div style={{ fontSize: '2.4mm', color: '#374151', fontWeight: 700, letterSpacing: '0.02em' }}>
+                <div style={{ fontSize: '2.4mm', color: '#374151', fontWeight: 700, letterSpacing: '0.02em', lineHeight: 1.2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0, marginRight: '2mm' }}>
                     {orgName || 'Mahallu'}
                 </div>
 
-                {/* Signature area — right */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8mm' }}>
+                {/* Signature area — right. The signature image is absolutely positioned so it
+                    doesn't add footer height; it overlaps the line/label above, which is fine. */}
+                <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.8mm', flexShrink: 0 }}>
+                    {signatureUrl && (
+                        <img
+                            src={signatureUrl}
+                            alt={signatureLabel}
+                            style={{
+                                position: 'absolute',
+                                bottom: '2.8mm',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                maxWidth: '22mm',
+                                maxHeight: '9mm',
+                                objectFit: 'contain',
+                                pointerEvents: 'none',
+                            }}
+                        />
+                    )}
                     <div style={{ width: '18mm', borderBottom: '0.3mm solid #9ca3af' }} />
-                    <span style={{ fontSize: '1.8mm', color: '#9ca3af', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                        {t('common.signature')}
+                    <span style={{ fontSize: '1.8mm', lineHeight: 1.2, color: '#9ca3af', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                        {signatureLabel}
                     </span>
                 </div>
             </div>
@@ -140,7 +172,33 @@ const HouseMembershipCard = ({ isOpen, onClose, house }) => {
     const { t } = useTranslation();
     const { user } = useAuth();
     const [isDownloading, setIsDownloading] = useState(false);
+    const [signatureUrl, setSignatureUrl] = useState('');
     const orgName = user?.tenant_name || '';
+
+    useEffect(() => {
+        if (!isOpen || !user?.signatorySignature) return;
+
+        let cancelled = false;
+
+        // Read the signature into a base64 data URL (not a blob object URL): html-to-image
+        // embeds data URLs inline, whereas it tries to re-fetch blob URLs during export and
+        // its cacheBust option appends a query string that makes the blob URL invalid.
+        axios.get('/tenants/signature', { responseType: 'blob' })
+            .then((response) => new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = reject;
+                reader.readAsDataURL(response.data);
+            }))
+            .then((dataUrl) => {
+                if (!cancelled) setSignatureUrl(dataUrl);
+            })
+            .catch((error) => console.error('Error loading signature:', error));
+
+        return () => {
+            cancelled = true;
+        };
+    }, [isOpen, user?.signatorySignature]);
 
     const handleDownload = async () => {
         const cardEl = document.getElementById('membership-card');
@@ -149,9 +207,14 @@ const HouseMembershipCard = ({ isOpen, onClose, house }) => {
         try {
             setIsDownloading(true);
             
+            // skipFonts: the card uses only system fonts (Inter/Segoe UI/sans-serif), so we
+            // don't need web-font embedding — and skipping it avoids html-to-image throwing
+            // on cross-origin stylesheets (Google Fonts, cdnjs) whose cssRules can't be read.
             const dataUrl = await toPng(cardEl, {
-                pixelRatio: 4,
-                cacheBust: true,
+                pixelRatio: 12,
+                skipFonts: true,
+                // Square corners in the downloaded image; the on-screen preview stays rounded.
+                style: { borderRadius: '0' },
             });
             
             const link = document.createElement('a');
@@ -196,7 +259,14 @@ const HouseMembershipCard = ({ isOpen, onClose, house }) => {
 
                         {/* Card preview */}
                         <div className="flex justify-center mb-5">
-                            {house && <Card house={house} orgName={orgName} />}
+                            {house && (
+                                <Card
+                                    house={house}
+                                    orgName={orgName}
+                                    signatoryTitle={user?.signatoryTitle}
+                                    signatureUrl={signatureUrl}
+                                />
+                            )}
                         </div>
 
                         {/* Actions */}

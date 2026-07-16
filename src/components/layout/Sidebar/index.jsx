@@ -190,23 +190,14 @@ const Sidebar = () => {
                     {!isCollapsed ? (
                         <div className="space-y-2">
                             {/* Language Selector */}
-                            <div className="relative group">
-                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <Globe size={16} className="text-gray-400 group-hover:text-blue-500 transition-colors" />
-                                </div>
-                                <select
-                                    value={i18n.language}
-                                    onChange={(e) => i18n.changeLanguage(e.target.value)}
-                                    className="w-full pl-9 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0B65F6] appearance-none cursor-pointer transition-all shadow-sm hover:border-blue-300 dark:hover:border-gray-600"
-                                >
-                                    <option value="en">English</option>
-                                    <option value="ml">മലയാളം</option>
-                                </select>
-                                {/* Custom arrow to replace native select arrow */}
-                                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                    <ChevronRight size={14} className="text-gray-400 rotate-90" />
-                                </div>
-                            </div>
+                            <button
+                                onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'ml' : 'en')}
+                                className="w-full flex items-center gap-2 pl-3 pr-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-300 transition-all shadow-sm hover:border-blue-300 dark:hover:border-gray-600 hover:text-blue-600"
+                                title="Switch Language"
+                            >
+                                <Globe size={16} className="text-gray-400" />
+                                {i18n.language === 'en' ? 'മലയാളം' : 'English'}
+                            </button>
 
                             {/* Logout Button */}
                             <button 
