@@ -72,6 +72,7 @@ const DuaLibrary = lazy(() => import("./pages/IslamicLibrary/DuaLibrary"));
 
 // Admin
 const Marriages = lazy(() => import("./pages/Admin/Marriages"));
+const MarriageNoc = lazy(() => import("./pages/Admin/MarriageNoc"));
 
 function App() {
     return (
@@ -152,6 +153,7 @@ function App() {
 
                                 {/* Admin Routes */}
                                 <Route path="/admin/marriages" element={<Marriages />} />
+                                <Route path="/admin/marriage-noc" element={<MarriageNoc />} />
 
                                 {/* Add other protected pages here */}
                             </Route>

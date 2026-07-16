@@ -74,7 +74,8 @@ export const permissionModules = [
     roles: ['admin', 'superAdmin'],
     subItems: [
       { label: 'sidebar.deathRegistry', path: '/community/death-registry', roles: ['admin', 'superAdmin'] },
-      { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] }
+      { label: 'marriage.title', path: '/admin/marriages', roles: ['admin', 'superAdmin'] },
+      { label: 'noc.sidebarLabel', path: '/admin/marriage-noc', roles: ['admin', 'superAdmin'] }
     ]
   },
   {
