@@ -36,14 +36,3 @@ export const searchTenants = async (query, page = 1, limit = 10) => {
   return response.data;
 };
 
-// Get current user's own tenant org info
-export const getMyOrgInfo = async () => {
-  const response = await axios.get('/tenants/my-org');
-  return response.data;
-};
-
-// Update current user's own tenant org info (nameMalayalam, addressMalayalam, regNo)
-export const updateMyOrgInfo = async (data) => {
-  const response = await axios.patch('/tenants/my-org', data);
-  return response.data;
-};
