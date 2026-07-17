@@ -54,6 +54,7 @@ const Reports = lazy(() => import("./pages/Finance/Reports"));
 
 // Settings
 const GeneralSettings = lazy(() => import("./pages/Settings/GeneralSettings"));
+const OrganizationInfo = lazy(() => import("./pages/Settings/OrganizationInfo"));
 const VarisankhyaConfig = lazy(() => import("./pages/Settings/VarisankhyaConfig"));
 const PublicPortalSettings = lazy(() => import("./pages/Settings/PublicPortalSettings"));
 
@@ -137,6 +138,7 @@ function App() {
 
                                 {/* Settings Routes */}
                                 <Route path="/settings/general" element={<GeneralSettings />} />
+                                <Route path="/settings/organization" element={<OrganizationInfo />} />
                                 <Route path="/settings/varisankhya-config" element={<VarisankhyaConfig />} />
                                 <Route path="/settings/public-portal" element={<PublicPortalSettings />} />
 

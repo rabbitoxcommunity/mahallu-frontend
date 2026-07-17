@@ -101,6 +101,7 @@ export const permissionModules = [
     description: 'Manage general settings',
     roles: ["admin", "superAdmin"],
     subItems: [
+      { label: "sidebar.organizationInfo", path: "/settings/organization", roles: ["admin", "superAdmin"] },
       { label: "sidebar.incomeCategory", path: "/settings/general", roles: ["admin", "superAdmin"] },
       { label: "finance.settings.varisankhyaConfig.title", path: "/settings/varisankhya-config", roles: ["admin", "superAdmin"] },
       { label: "settings.portalSettings", path: "/settings/public-portal", roles: ["admin", "superAdmin"] }

@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Pencil, Trash2, X, Calendar, Wallet, CreditCard, Building2 } from 'lucide-react';
+import { Plus, Pencil, Trash2, X, Calendar, Wallet, CreditCard } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getIncomeCategories, createIncomeCategory, updateIncomeCategory, deleteIncomeCategory } from '../../api/incomeCategoryService';
 import { getExpenseCategories, createExpenseCategory, updateExpenseCategory, deleteExpenseCategory } from '../../api/expenseCategoryService';
-import { getMyOrgInfo, updateMyOrgInfo } from '../../api/tenantService';
 
 const GeneralSettings = () => {
   const { t } = useTranslation();
@@ -16,40 +15,11 @@ const GeneralSettings = () => {
   const [editModal, setEditModal] = useState({ isOpen: false, category: null, categoryType: 'income' });
   const [deleteModal, setDeleteModal] = useState({ isOpen: false, category: null, categoryType: 'income' });
 
-  const [orgInfo, setOrgInfo] = useState({ nameMalayalam: '', addressMalayalam: '', regNo: '' });
-  const [orgSaving, setOrgSaving] = useState(false);
-
   const [formData, setFormData] = useState({
     name: '',
     type: 'due',
     description: ''
   });
-
-  const fetchOrgInfo = async () => {
-    try {
-      const data = await getMyOrgInfo();
-      setOrgInfo({
-        nameMalayalam: data.tenant.nameMalayalam || '',
-        addressMalayalam: data.tenant.addressMalayalam || '',
-        regNo: data.tenant.regNo || '',
-      });
-    } catch (error) {
-      console.error('Error fetching org info:', error);
-    }
-  };
-
-  const handleOrgSave = async (e) => {
-    e.preventDefault();
-    setOrgSaving(true);
-    try {
-      await updateMyOrgInfo(orgInfo);
-      toast.success('Organization info updated successfully');
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to update organization info');
-    } finally {
-      setOrgSaving(false);
-    }
-  };
 
   const fetchCategories = async () => {
     setLoading(true);
@@ -78,7 +48,6 @@ const GeneralSettings = () => {
   };
 
   useEffect(() => {
-    fetchOrgInfo();
     fetchCategories();
     fetchExpenseCategories();
   }, []);
@@ -169,70 +138,7 @@ const GeneralSettings = () => {
   const directExpenseCategories = expenseCategories.filter(c => c.type !== 'due');
 
   return (
-    <div className="w-full space-y-6">
-
-      {/* Organization Info Section */}
-      <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
-        <div className="p-6 border-b border-gray-100 dark:border-gray-800">
-          <div className="flex items-center gap-2">
-            <Building2 size={22} className="text-[#0B65F6]" />
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Organization Info</h2>
-          </div>
-          <p className="text-gray-600 dark:text-gray-400 mt-1">
-            This information appears in the header of PDF certificates (Nikah Register, etc.).
-          </p>
-        </div>
-        <form onSubmit={handleOrgSave} className="p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="md:col-span-2">
-              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Organization Name (Malayalam)
-              </label>
-              <input
-                type="text"
-                value={orgInfo.nameMalayalam}
-                onChange={(e) => setOrgInfo({ ...orgInfo, nameMalayalam: e.target.value })}
-                placeholder="e.g. എടക്കുളം സുന്നി മഹല്ല്"
-                className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Address (Malayalam)
-              </label>
-              <input
-                type="text"
-                value={orgInfo.addressMalayalam}
-                onChange={(e) => setOrgInfo({ ...orgInfo, addressMalayalam: e.target.value })}
-                placeholder="e.g. എടക്കുളം, മലപ്പുറം"
-                className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-              />
-            </div>
-            <div>
-              <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Registration No.
-              </label>
-              <input
-                type="text"
-                value={orgInfo.regNo}
-                onChange={(e) => setOrgInfo({ ...orgInfo, regNo: e.target.value })}
-                placeholder="e.g. MLP/123/2020"
-                className="w-full px-4 py-2 bg-white dark:bg-[#252731] border border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#0B65F6]"
-              />
-            </div>
-          </div>
-          <div className="mt-4 flex justify-end">
-            <button
-              type="submit"
-              disabled={orgSaving}
-              className="px-6 py-2 bg-[#0B65F6] text-white rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-60"
-            >
-              {orgSaving ? 'Saving...' : 'Save Organization Info'}
-            </button>
-          </div>
-        </form>
-      </div>
-
+    <div className="w-full">
       <div className="bg-white dark:bg-[#1e1f25] rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
         <div className="p-6 border-b border-gray-100 dark:border-gray-800">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t('finance.settings.categories.title')}</h2>
